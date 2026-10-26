@@ -74,7 +74,7 @@ const formatDisplayDate = (dateStr: string) => {
 // 🌟 2. 特效组件
 // ==========================================
 const BlinkingPoints = ({ geometry, color, size, opacity }: any) => {
-  const materialRef = useRef<any>();
+  const materialRef = useRef<any>(null);
   useMemo(() => {
     if (!geometry.hasAttribute('aPhase')) {
       const count = geometry.attributes.position.count;

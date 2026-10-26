@@ -13,7 +13,7 @@ export default function ProjectsPage() {
     <div className="min-h-screen relative pb-20">
       <Navbar />
       <PageTransition>
-        <div className="mt-28">
+        <div className="mt-6">
           <ProjectsBoard />
         </div>
       </PageTransition>

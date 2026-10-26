@@ -76,7 +76,7 @@ export default function TimelineClient({ posts: initialPosts, tags }: { posts: a
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto mt-28 px-4 sm:px-10 relative z-10">
+    <div className="w-full max-w-5xl mx-auto mt-6 px-4 sm:px-10 relative z-10">
 
       <div className="text-center mb-12 relative z-20">
         <h1 className="text-5xl font-black text-slate-900 dark:text-white tracking-tighter mb-4">归档与探索</h1>

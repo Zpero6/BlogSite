@@ -38,7 +38,7 @@ export default function ChatterBoard({ chatters }: { chatters: Chatter[] }) {
 
   return (
     // 🌟 核心修改：缩紧整体容器的左右边距 px-3 md:px-10
-    <div className="w-full max-w-7xl mx-auto px-3 sm:px-10 py-6 md:py-10 pt-24 md:pt-28 relative z-10">
+    <div className="w-full max-w-7xl mx-auto px-3 sm:px-10 py-6 md:py-10 pt-6 md:pt-8 relative z-10">
 
       <div className="mb-8 md:mb-14 text-center">
         {/* 🌟 核心修改：标题字号响应式 */}

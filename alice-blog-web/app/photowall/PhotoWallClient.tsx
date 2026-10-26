@@ -44,7 +44,7 @@ export default function PhotoWallClient() {
       <Navbar />
 
       <PageTransition>
-        <div className="w-full max-w-7xl mx-auto mt-28 px-4 sm:px-10 relative z-10">
+        <div className="w-full max-w-7xl mx-auto mt-6 px-4 sm:px-10 relative z-10">
 
           {!currentAlbum && (
             <div className="animate-fade-in-up">

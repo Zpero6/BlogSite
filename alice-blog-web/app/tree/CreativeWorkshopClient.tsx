@@ -90,7 +90,7 @@ export default function CreativeWorkshopClient({ posts = [], chatters = [], mome
       <Navbar />
 
       <PageTransition>
-        <div className="w-full max-w-7xl mx-auto mt-24 px-4 sm:px-10 relative z-10 flex flex-col items-center">
+        <div className="w-full max-w-7xl mx-auto mt-6 px-4 sm:px-10 relative z-10 flex flex-col items-center">
 
           {/* 顶部标题栏 */}
           <div className="w-full flex flex-col items-center mb-16 animate-fade-in-up text-center">

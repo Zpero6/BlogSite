@@ -67,3 +67,4 @@ alice-blog-web-before-xhblogs/
 .artifacts/
 *.cpuprofile
 lighthouse-report*.json
+lighthouse-*.json

@@ -103,7 +103,7 @@ export default async function AboutPage() {
     <div className="min-h-screen relative pb-20">
       <Navbar />
       <PageTransition>
-        <main className="w-[95%] md:w-[90%] max-w-4xl mx-auto mt-24 md:mt-28 relative z-10">
+        <main className="w-[95%] md:w-[90%] max-w-4xl mx-auto mt-6 md:mt-8 relative z-10">
 
           {/* 🌟 注入 About 页面专用的高颜值 Prose 全局样式 */}
           <style dangerouslySetInnerHTML={{ __html: `

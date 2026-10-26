@@ -1,6 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Link from "next/link";
 
 export default function TimelineNode({ post, index }: { post: any, index: number }) {
@@ -8,11 +5,7 @@ export default function TimelineNode({ post, index }: { post: any, index: number
   const isLeft = index % 2 === 0;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+    <div
       className={`mb-12 flex justify-between items-center w-full ${isLeft ? 'md:flex-row-reverse' : 'flex-row'}`}
     >
       {/* 留出对面的一半空白 */}
@@ -69,6 +62,6 @@ export default function TimelineNode({ post, index }: { post: any, index: number
 
         </div>
       </Link>
-    </motion.div>
+    </div>
   );
 }

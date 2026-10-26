@@ -1,23 +1,32 @@
 @import "tailwindcss";
 
-/* 1. 声明暗黑模式变体 */
+/* 1. 暗色变体（站点固定使用深色亚克力主题） */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* 2. 基础环境与性能优化 */
 @layer base {
   :root {
     --font-serif: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --site-bg: #050a12;
+    --site-panel: rgba(9, 17, 29, 0.7);
+    color-scheme: dark;
+  }
+
+  html {
+    min-height: 100%;
+    background-color: var(--site-bg);
   }
 
   body {
+    margin: 0;
+    min-height: 100%;
     font-family: var(--font-serif);
-    @apply transition-colors duration-1000 text-slate-900 bg-slate-50;
+    background-color: var(--site-bg);
+    background-image:
+      radial-gradient(circle at 15% 5%, rgba(14, 116, 144, 0.16), transparent 42%),
+      radial-gradient(circle at 88% 92%, rgba(16, 185, 129, 0.1), transparent 38%);
+    color: #e2e8f0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-  }
-
-  .dark body {
-    @apply text-slate-100 bg-slate-950;
   }
 
   h1, h2, h3, h4 {
@@ -25,54 +34,57 @@
     letter-spacing: -0.02em;
   }
 
+  ::selection {
+    background: rgba(34, 211, 238, 0.3);
+    color: #f8fafc;
+  }
+
+  a, button, [tabindex]:not([tabindex="-1"]) {
+    outline: none;
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: 2px solid rgba(34, 211, 238, 0.85);
+    outline-offset: 3px;
+    border-radius: 0.5rem;
+  }
+
   .dark .prose {
     --tw-prose-body: var(--color-slate-200);
     --tw-prose-headings: var(--color-white);
-    --tw-prose-links: var(--color-indigo-400);
-  }
-
-  [class*="backdrop-blur-"] {
-    will-change: backdrop-filter;
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  .group:hover img {
-    will-change: transform;
+    --tw-prose-links: var(--color-cyan-400);
   }
 }
 
-/* 3. 音乐播放器进度条样式 */
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  background: #6366f1;
-  cursor: pointer;
+/* 2. 页面进入只做一次轻量透明度动画 */
+@keyframes pageIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* 4. 火狐专项优化与布局兜底 */
-@layer base {
-  [class*="backdrop-blur-"] {
-    will-change: backdrop-filter;
-  }
-
-  @-moz-document url-prefix() {
-    [class*="backdrop-blur-md"] {
-      backdrop-filter: blur(8px) !important;
-    }
-  }
-
-  html, body {
-    min-height: 100%;
-    margin: 0;
-    padding: 0;
-  }
+.page-enter {
+  animation: pageIn 180ms ease-out both;
 }
 
-/* ========================================================
-   5. 全局滚动条美化 (Chrome, Edge, Safari)
-   ======================================================== */
+/*
+ * Inner pages reuse many legacy translucent cards. Drop their nested
+ * backdrop filters and keep the translucent surface colour instead; this
+ * avoids re-compositing large blur areas while scrolling.
+ */
+.inner-page [class*="backdrop-blur"] {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* 3. 离屏模块延迟渲染，减轻首屏与滚动负担 */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 600px;
+}
+
+/* 4. 滚动条 */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -81,17 +93,26 @@ input[type=range]::-webkit-slider-thumb {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(99, 102, 241, 0.3);
+  background: rgba(34, 211, 238, 0.28);
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(99, 102, 241, 0.8);
+  background: rgba(34, 211, 238, 0.6);
 }
 
-/* ========================================================
-   6. Firefox 浏览器的兼容写法
-   ======================================================== */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(99, 102, 241, 0.3) transparent;
+  scrollbar-color: rgba(34, 211, 238, 0.28) transparent;
+}
+
+/* 5. 尊重“减少动态效果”设置 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

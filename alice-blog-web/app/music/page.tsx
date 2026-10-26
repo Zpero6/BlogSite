@@ -1,5 +1,6 @@
 import { siteConfig } from "@/siteConfig";
 import MusicClient from "./MusicClient";
+import { MusicProvider } from "@/components/MusicProvider";
 
 // 🌟 这里是服务端渲染，完美支持 metadata
 export const metadata = {
@@ -7,5 +8,9 @@ export const metadata = {
 };
 
 export default function MusicPage() {
-  return <MusicClient />;
+  return (
+    <MusicProvider>
+      <MusicClient />
+    </MusicProvider>
+  );
 }

@@ -14,6 +14,7 @@ import rehypeKatex from 'rehype-katex';
 
 // 引入高亮主题
 import 'highlight.js/styles/atom-one-dark.css';
+import 'katex/dist/katex.min.css';
 
 import Navbar from '../../../components/Navbar';
 import PageTransition from '../../../components/PageTransition';
@@ -22,7 +23,6 @@ import ClientSocials from '../../../components/ClientSocials';
 import ClientTOC from '../../../components/ClientTOC';
 import BackButton from '../../../components/BackButton';
 import Comments from '../../../components/Comments';
-import SidebarLyric from '../../../components/SidebarLyric';
 
 export async function generateStaticParams() {
   const postsDirectory = path.join(process.cwd(), 'posts');
@@ -146,7 +146,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
     <div className="min-h-screen relative pb-20">
       <Navbar />
       <PageTransition>
-        <main className="w-[95%] md:w-[90%] max-w-6xl mx-auto mt-24 md:mt-28 flex flex-col lg:flex-row gap-6 md:gap-8 relative z-10">
+        <main className="w-[95%] md:w-[90%] max-w-6xl mx-auto mt-6 md:mt-8 flex flex-col lg:flex-row gap-6 md:gap-8 relative z-10">
 
           <article className="flex-1 bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700">
             <div className="w-full aspect-video bg-slate-200 dark:bg-slate-700 relative group">
@@ -309,8 +309,6 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
               <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed font-medium mb-4">{siteConfig.bio}</p>
               <ClientSocials />
             </div>
-
-            <SidebarLyric />
 
             <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl p-6 border border-white/40 dark:border-white/10 shadow-xl">
               <h3 className="font-black text-slate-900 dark:text-white mb-4 border-l-4 border-indigo-500 pl-2 text-sm">RECOMMENDED</h3>

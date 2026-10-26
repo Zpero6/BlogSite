@@ -12,7 +12,7 @@ export default function MusicClient() {
   const {
     playlist, currentSong, isPlaying, progress, currentTime, duration, currentLyric,
     isLoading, togglePlay, nextSong, prevSong, handleSeek,
-    playSong, selectSong,
+    playSong,
     playMode, togglePlayMode,
     volume, setVolume, isMuted, toggleMute
   } = useMusic();
@@ -102,8 +102,7 @@ export default function MusicClient() {
   };
 
   const handlePlaySong = (index: number) => {
-    if (typeof playSong === 'function') playSong(index);
-    else if (typeof selectSong === 'function') selectSong(index);
+    playSong(index);
   };
 
   const filteredPlaylist = useMemo(() => {
@@ -139,7 +138,7 @@ export default function MusicClient() {
       <Navbar />
 
       <PageTransition>
-        <div className="w-full max-w-7xl mx-auto mt-24 md:mt-28 px-4 sm:px-6 md:px-10 relative z-10">
+        <div className="w-full max-w-7xl mx-auto mt-6 md:mt-8 px-4 sm:px-6 md:px-10 relative z-10">
           <div className="animate-fade-in-up mb-6 md:mb-10 text-center md:text-left">
             <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-widest mb-1 md:mb-2 transition-colors duration-700">云端乐律</h1>
             <p className="text-xs md:text-base text-slate-600 dark:text-slate-400 font-medium tracking-wider transition-colors duration-700">在代码的缝隙中寻找灵魂的共鸣</p>

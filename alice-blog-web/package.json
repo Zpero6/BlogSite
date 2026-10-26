@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "wallpapers": "node scripts/optimize-wallpapers.mjs",
+    "lighthouse:desktop": "lighthouse http://localhost:3000/ --only-categories=performance,accessibility --preset=desktop --output=json --output-path=./lighthouse-desktop.json --chrome-flags=\"--headless=new --no-sandbox --disable-gpu\" --quiet",
+    "lighthouse:mobile": "lighthouse http://localhost:3000/ --only-categories=performance,accessibility --output=json --output-path=./lighthouse-mobile.json --chrome-flags=\"--headless=new --no-sandbox --disable-gpu\" --quiet"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
@@ -57,6 +61,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
+    "lighthouse": "^13.5.0",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
