@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import Navbar from '../../components/Navbar';
 import PageTransition from '../../components/PageTransition';
+import InnerPageShell from '../../components/InnerPageShell';
 import { siteConfig } from '../../siteConfig';
 import TimelineClient from '../../components/TimelineClient';
 // 🌟 1. 引入 ToastProvider 喵！
@@ -60,12 +60,11 @@ export default function Timeline() {
   return (
     // 🌟 2. 在最外层用 ToastProvider 包裹整个页面
     <ToastProvider>
-      <div className="min-h-screen relative pb-32">
-        <Navbar />
+      <InnerPageShell>
         <PageTransition>
           <TimelineClient posts={posts} tags={tagsArray} />
         </PageTransition>
-      </div>
+      </InnerPageShell>
     </ToastProvider>
   );
 }

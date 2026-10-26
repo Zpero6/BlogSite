@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0369a1"/>
+      <stop offset="1" stop-color="#082f49"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.35" cy="0.25" r="0.8">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect x="4" y="4" width="112" height="112" rx="30" fill="url(#bg)"/>
+  <rect x="4" y="4" width="112" height="112" rx="30" fill="url(#glow)"/>
+  <rect x="4" y="4" width="112" height="112" rx="30" fill="none" stroke="#e5f6ff" stroke-opacity="0.16" stroke-width="2"/>
+  <circle cx="92" cy="26" r="2.2" fill="#ffffff" opacity="0.55"/>
+  <circle cx="26" cy="88" r="1.5" fill="#ffffff" opacity="0.35"/>
+
+  <path d="M37 46 L33 24 L55 36 Z" fill="#7dd3fc"/>
+  <path d="M83 46 L87 24 L65 36 Z" fill="#7dd3fc"/>
+  <path d="M39 43 L37 31 L49 38 Z" fill="#f9a8c4" opacity="0.65"/>
+  <path d="M81 43 L83 31 L71 38 Z" fill="#f9a8c4" opacity="0.65"/>
+  <ellipse cx="60" cy="63" rx="29" ry="27" fill="#fff5e8"/>
+  <path d="M32 51 Q39 31 60 30 Q81 31 88 51 Q77 41 60 41 Q43 41 32 51 Z" fill="#7dd3fc" opacity="0.95"/>
+  <ellipse cx="49" cy="61" rx="3.2" ry="4.4" fill="#172033"/>
+  <ellipse cx="71" cy="61" rx="3.2" ry="4.4" fill="#172033"/>
+  <circle cx="50.2" cy="59.8" r="1" fill="#ffffff"/>
+  <circle cx="72.2" cy="59.8" r="1" fill="#ffffff"/>
+  <circle cx="43" cy="69" r="3.4" fill="#f9a8c4" opacity="0.55"/>
+  <circle cx="77" cy="69" r="3.4" fill="#f9a8c4" opacity="0.55"/>
+  <path d="M56 69 Q60 73 64 69" fill="none" stroke="#172033" stroke-width="2" stroke-linecap="round"/>
+
+  <circle cx="88" cy="88" r="17" fill="#08131f" stroke="#38bdf8" stroke-opacity="0.55" stroke-width="2"/>
+  <g transform="translate(76 76)" stroke="#38bdf8" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.2 13.8a4.6 4.6 0 0 0 6.5 0l1.9-1.9a4.6 4.6 0 0 0-6.5-6.5l-1 1"/><path d="M13.8 10.2a4.6 4.6 0 0 0-6.5 0l-1.9 1.9a4.6 4.6 0 0 0 6.5 6.5l1-1"/></g>
+</svg>

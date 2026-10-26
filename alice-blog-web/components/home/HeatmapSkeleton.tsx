@@ -1,7 +1,7 @@
 export default function HeatmapSkeleton() {
   return (
     <section
-      className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 sm:p-5"
+      className="acrylic-panel p-4 sm:p-5"
       aria-busy="true"
       aria-label="正在加载 GitHub 贡献数据"
     >

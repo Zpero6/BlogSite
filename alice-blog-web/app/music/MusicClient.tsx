@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, SkipBack, SkipForward, Repeat, Shuffle, RefreshCcw, ListMusic, Mic2, Disc3, Volume2, VolumeX, Search, X, MessageSquare } from 'lucide-react';
-import Navbar from '../../components/Navbar';
+import { Play, Pause, SkipBack, SkipForward, Repeat, Shuffle, RefreshCcw, ListMusic, Mic2, Disc3, Volume2, VolumeX, Search, X, MessageSquare, Music } from 'lucide-react';
+import Link from 'next/link';
+import InnerPageShell from '../../components/InnerPageShell';
 import PageTransition from '../../components/PageTransition';
 import { useMusic } from '../../components/MusicProvider';
 import Comments from '../../components/Comments';
@@ -114,31 +115,47 @@ export default function MusicClient() {
     );
   }, [playlist, searchQuery]);
 
-  if (isLoading || !currentSong) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen relative pb-32 flex flex-col">
-        <Navbar />
-        <div className="flex-1 flex flex-col items-center justify-center animate-pulse gap-4">
-          <Disc3 size={48} className="text-indigo-500 animate-spin" />
-          <span className="font-black text-slate-500 tracking-widest text-sm">唤醒音频引擎中...</span>
+      <InnerPageShell>
+        <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 animate-pulse">
+          <Disc3 size={48} className="text-cyan-300 animate-spin" />
+          <span className="text-sm font-bold tracking-widest text-slate-400">唤醒音频引擎中...</span>
         </div>
-      </div>
+      </InnerPageShell>
+    );
+  }
+
+  if (!currentSong) {
+    return (
+      <InnerPageShell>
+        <PageTransition>
+          <div className="flex min-h-[55vh] flex-col items-center justify-center text-center">
+            <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200">
+              <Music size={26} aria-hidden="true" />
+            </span>
+            <h1 className="mt-5 text-2xl font-black text-white">音乐馆</h1>
+            <p className="mt-2 max-w-md text-sm leading-6 text-slate-400">
+              播放列表还没有配置。等选好曲目后，这里会显示播放器与歌词。
+            </p>
+            <Link
+              href="/"
+              className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 transition-colors duration-200 hover:bg-cyan-200"
+            >
+              返回菜单
+            </Link>
+          </div>
+        </PageTransition>
+      </InnerPageShell>
     );
   }
 
   const songCover = currentSong.cover || currentSong.pic || "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1000&auto=format&fit=crop";
 
   return (
-    <div className="min-h-screen relative pb-10 flex flex-col">
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute inset-[-10%] bg-cover bg-center transition-all duration-1000 blur-[50px] opacity-40 dark:opacity-20 saturate-150" style={{ backgroundImage: `url(${songCover})` }} />
-        <div className="absolute inset-0 bg-white/40 dark:bg-black/40 backdrop-blur-sm" />
-      </div>
-
-      <Navbar />
-
+    <InnerPageShell size="wide">
       <PageTransition>
-        <div className="w-full max-w-7xl mx-auto mt-6 md:mt-8 px-4 sm:px-6 md:px-10 relative z-10">
+        <div className="relative z-10 w-full">
           <div className="animate-fade-in-up mb-6 md:mb-10 text-center md:text-left">
             <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-widest mb-1 md:mb-2 transition-colors duration-700">云端乐律</h1>
             <p className="text-xs md:text-base text-slate-600 dark:text-slate-400 font-medium tracking-wider transition-colors duration-700">在代码的缝隙中寻找灵魂的共鸣</p>
@@ -147,7 +164,7 @@ export default function MusicClient() {
           <div className="flex flex-col md:grid md:grid-cols-12 gap-6 md:gap-8 w-full md:items-stretch md:h-[calc(100vh-320px)] md:min-h-[600px] md:max-h-[720px]">
 
             {/* ====== 左侧/顶部：播放控制台 ====== */}
-            <div className="md:col-span-5 flex flex-col bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 rounded-[32px] shadow-2xl p-6 md:p-10 relative overflow-hidden transition-all duration-500 shrink-0 min-h-[460px] sm:min-h-[500px] md:min-h-0">
+            <div className="md:col-span-5 flex flex-col bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 rounded-[18px] shadow-2xl p-6 md:p-10 relative overflow-hidden transition-all duration-500 shrink-0 min-h-[460px] sm:min-h-[500px] md:min-h-0">
 
               <div className="flex-1 flex flex-col items-center justify-center relative z-10 w-full overflow-hidden py-4 md:py-0">
                 <div className="relative w-40 h-40 sm:w-48 sm:h-48 lg:w-64 lg:h-64 flex-shrink-0 aspect-square mb-6 md:mb-10 flex items-center justify-center">
@@ -195,7 +212,7 @@ export default function MusicClient() {
             </div>
 
             {/* ====== 右侧/底部：歌词与歌单面板 ====== */}
-            <div className="md:col-span-7 flex flex-col bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 rounded-[32px] shadow-2xl relative transition-colors duration-700 overflow-hidden h-[450px] md:h-auto shrink-0">
+            <div className="md:col-span-7 flex flex-col bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 rounded-[18px] shadow-2xl relative transition-colors duration-700 overflow-hidden h-[450px] md:h-auto shrink-0">
               <div className="flex items-center justify-center gap-1 p-1 mt-4 md:mt-6 mx-auto bg-white/50 dark:bg-slate-900/50 rounded-full shadow-inner border border-white/40 w-48 md:w-64 z-20 shrink-0">
                 <button onClick={() => setActiveTab('lyrics')} className={`flex-1 py-1.5 md:py-2 rounded-full font-black text-xs md:text-[13px] transition-all ${activeTab === 'lyrics' ? 'bg-indigo-500 text-white shadow-md' : 'text-slate-500'}`}>歌词</button>
                 <button onClick={() => setActiveTab('playlist')} className={`flex-1 py-1.5 md:py-2 rounded-full font-black text-xs md:text-[13px] transition-all ${activeTab === 'playlist' ? 'bg-indigo-500 text-white shadow-md' : 'text-slate-500'}`}>歌单</button>
@@ -266,7 +283,7 @@ export default function MusicClient() {
           </div>
 
           {/* ====== 留言板 ====== */}
-          <div className="mt-8 md:mt-12 mb-20 bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[32px] md:rounded-[40px] shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700 relative">
+          <div className="mt-8 md:mt-12 mb-20 bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[18px] md:rounded-[18px] shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700 relative">
              <div className="px-5 sm:px-8 md:px-16 py-8 md:py-12 relative">
                 <div className="flex items-center gap-3 mb-6 md:mb-8 border-b border-slate-300/50 dark:border-slate-700 pb-4 md:pb-6">
                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-indigo-500/10 flex items-center justify-center"><MessageSquare className="text-indigo-500 w-5 h-5 md:w-6 md:h-6" /></div>
@@ -288,6 +305,6 @@ export default function MusicClient() {
           mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
         }
       `}</style>
-    </div>
+    </InnerPageShell>
   );
 }

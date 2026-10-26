@@ -24,8 +24,7 @@ export function HeatmapGrid({ data }: { data: ContributionData }) {
       <div
         role="list"
         aria-label={`${data.username} 近一年的 GitHub 贡献热力图，共 ${data.total} 次贡献`}
-        className="grid w-max grid-flow-col grid-rows-7 gap-[3px]"
-        style={{ gridAutoColumns: "11px" }}
+        className="heatmap-grid grid w-max grid-flow-col grid-rows-7"
       >
         {cells.map((day, index) =>
           day ? (
@@ -34,12 +33,12 @@ export function HeatmapGrid({ data }: { data: ContributionData }) {
               role="listitem"
               aria-label={`${day.date}，${day.count} 次贡献`}
               title={`${day.date} · ${day.count} 次贡献`}
-              className={`h-[11px] w-[11px] rounded-[2px] transition-[box-shadow] duration-150 hover:ring-1 hover:ring-cyan-300/80 ${
+              className={`heatmap-cell rounded-[2px] transition-[box-shadow] duration-150 hover:ring-1 hover:ring-cyan-300/80 ${
                 LEVEL_CLASSES[day.level] ?? LEVEL_CLASSES[0]
               }`}
             />
           ) : (
-            <div key={`pad-${index}`} className="h-[11px] w-[11px]" aria-hidden="true" />
+            <div key={`pad-${index}`} className="heatmap-cell" aria-hidden="true" />
           )
         )}
       </div>

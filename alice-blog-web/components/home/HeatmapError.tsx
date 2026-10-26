@@ -33,13 +33,13 @@ export default function HeatmapError({ initialError }: { initialError: string })
 
   return (
     <section
-      className="rounded-2xl border border-white/10 bg-white/[0.035] p-4 sm:p-5"
+      className="acrylic-panel p-4 sm:p-5"
       aria-labelledby="contribution-heading"
     >
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 id="contribution-heading" className="text-sm font-black tracking-widest text-slate-200">
-            GITHUB 贡献
+          <h2 id="contribution-heading" className="text-sm font-black text-slate-100">
+            GitHub 贡献
           </h2>
           <p className="mt-0.5 text-[11px] text-slate-400">过去 365 天的公开贡献</p>
         </div>

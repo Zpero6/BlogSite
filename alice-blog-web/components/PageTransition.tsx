@@ -11,5 +11,5 @@ export default function PageTransition({
   children: ReactNode;
   className?: string;
 }) {
-  return <div className={`page-enter inner-page ${className}`}>{children}</div>;
+  return <div className={`page-enter ${className}`}>{children}</div>;
 }

@@ -121,9 +121,9 @@ export default function ClientTOC({ toc }: { toc: TocItem[] }) {
   if (!toc || toc.length === 0) return null;
 
   return (
-    <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl p-6 border border-white/40 dark:border-white/10 shadow-xl sticky top-28 transition-colors duration-700 max-h-[75vh] overflow-y-auto custom-scrollbar">
-      <h3 className="font-black text-slate-900 dark:text-white mb-4 border-l-4 border-indigo-500 pl-2 text-sm uppercase tracking-widest">
-        Table of Contents
+    <div className="sticky top-28 max-h-[75vh] overflow-y-auto rounded-[18px] border border-white/10 bg-slate-800/50 p-6 shadow-xl custom-scrollbar">
+      <h3 className="mb-4 border-l-2 border-cyan-300 pl-2 text-sm font-black text-white">
+        目录
       </h3>
       <nav className="flex flex-col gap-2 relative">
         <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-slate-200 dark:bg-slate-700/50 rounded-full"></div>

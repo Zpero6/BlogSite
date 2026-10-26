@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
-import Navbar from '../../components/Navbar';
+import Link from 'next/link';
+import { Image as ImageIcon } from 'lucide-react';
+import InnerPageShell from '../../components/InnerPageShell';
 import PageTransition from '../../components/PageTransition';
 import { albums, Album } from '../../data/albums';
 
@@ -14,8 +16,6 @@ export default function PhotoWallClient() {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
-    setIsTransitioning(true);
-
     const timer = setTimeout(() => {
       setActiveQuery(searchQuery.toLowerCase());
       setIsTransitioning(false);
@@ -40,11 +40,9 @@ export default function PhotoWallClient() {
   }, [activeQuery]);
 
   return (
-    <div className="min-h-screen relative pb-32">
-      <Navbar />
-
+    <InnerPageShell size="wide">
       <PageTransition>
-        <div className="w-full max-w-7xl mx-auto mt-6 px-4 sm:px-10 relative z-10">
+        <div className="relative z-10 w-full">
 
           {!currentAlbum && (
             <div className="animate-fade-in-up">
@@ -54,7 +52,7 @@ export default function PhotoWallClient() {
                   <p className="text-slate-600 dark:text-slate-400 font-medium tracking-wider transition-colors duration-700">定格时间，封存泰拉与现实的每一次心跳</p>
                 </div>
 
-                <div className="relative w-full md:w-80 group">
+                {albums.length > 0 && <div className="relative w-full md:w-80 group">
                   <svg className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 z-10 pointer-events-none text-slate-500 dark:text-slate-400 group-focus-within:text-indigo-500 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                   </svg>
@@ -62,11 +60,32 @@ export default function PhotoWallClient() {
                     type="text"
                     placeholder="搜索相册名或照片描述..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      setIsTransitioning(true);
+                      setSearchQuery(e.target.value);
+                    }}
                     className="w-full h-12 pl-12 pr-4 bg-white/40 dark:bg-slate-800/40 backdrop-blur-md border border-white/50 dark:border-white/10 rounded-full text-sm text-slate-800 dark:text-white placeholder-slate-500 dark:placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 shadow-sm transition-all duration-700"
                   />
-                </div>
+                </div>}
               </div>
+
+              {albums.length === 0 && (
+                <div className="mt-4 flex flex-col items-center justify-center rounded-[18px] border border-dashed border-white/10 px-6 py-16 text-center">
+                  <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-cyan-300/10 text-cyan-200">
+                    <ImageIcon className="h-6 w-6" aria-hidden="true" />
+                  </span>
+                  <h2 className="mt-4 text-xl font-black text-white">照片墙还在布置中</h2>
+                  <p className="mt-2 max-w-md text-sm leading-6 text-slate-400">
+                    等照片整理完成后会显示在这里。
+                  </p>
+                  <Link
+                    href="/"
+                    className="mt-6 inline-flex items-center rounded-full bg-cyan-300 px-4 py-2 text-sm font-black text-slate-950 transition-colors duration-200 hover:bg-cyan-200"
+                  >
+                    返回菜单
+                  </Link>
+                </div>
+              )}
 
               <div className={`transition-opacity duration-300 ease-in-out ${isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
 
@@ -227,6 +246,6 @@ export default function PhotoWallClient() {
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
       `}</style>
-    </div>
+    </InnerPageShell>
   );
 }

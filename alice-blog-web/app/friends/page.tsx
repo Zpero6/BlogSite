@@ -1,7 +1,7 @@
-import Navbar from '../../components/Navbar';
+import InnerPageShell from '../../components/InnerPageShell';
 import PageTransition from '../../components/PageTransition';
 import FriendsBoard from './FriendsBoard';
-import {siteConfig} from "@/siteConfig";
+import { siteConfig } from '@/siteConfig';
 
 export const metadata = {
   title: "友链 | " + siteConfig.title,
@@ -10,13 +10,10 @@ export const metadata = {
 
 export default function FriendsPage() {
   return (
-    <div className="min-h-screen relative pb-20">
-      <Navbar />
+    <InnerPageShell>
       <PageTransition>
-        <div className="mt-6">
-          <FriendsBoard />
-        </div>
+        <FriendsBoard />
       </PageTransition>
-    </div>
+    </InnerPageShell>
   );
 }

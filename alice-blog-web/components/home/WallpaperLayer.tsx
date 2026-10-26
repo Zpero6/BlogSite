@@ -26,16 +26,16 @@ function WallpaperPicture({
       <source
         media="(max-width: 767px)"
         type="image/avif"
-        srcSet={`${wallpaper.mobile}.avif`}
+        srcSet={`${wallpaper.mobileBlur}.avif`}
       />
       <source
         media="(max-width: 767px)"
         type="image/webp"
-        srcSet={`${wallpaper.mobile}.webp`}
+        srcSet={`${wallpaper.mobileBlur}.webp`}
       />
-      <source type="image/avif" srcSet={`${wallpaper.desktop}.avif`} />
+      <source type="image/avif" srcSet={`${wallpaper.desktopBlur}.avif`} />
       <img
-        src={`${wallpaper.desktop}.webp`}
+        src={`${wallpaper.desktopBlur}.webp`}
         alt=""
         aria-hidden="true"
         className="h-full w-full object-cover"
@@ -139,7 +139,7 @@ export default function WallpaperLayer() {
   }, [count]);
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden bg-[#050a12]" aria-hidden="true">
+    <div className="fixed inset-0 z-0 overflow-hidden bg-[#07111f]" aria-hidden="true">
       <WallpaperPicture
         wallpaper={siteConfig.wallpapers[front]}
         priority
@@ -157,8 +157,7 @@ export default function WallpaperLayer() {
         />
       )}
 
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/62 via-slate-950/38 to-slate-950/82" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_12%,rgba(34,211,238,0.12),transparent_45%),radial-gradient(circle_at_85%_88%,rgba(16,185,129,0.1),transparent_40%)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/45 via-slate-950/25 to-slate-950/65" />
     </div>
   );
 }

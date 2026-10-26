@@ -10,13 +10,13 @@ type LatestPost = {
 export default function LatestPostsPanel({ posts }: { posts: LatestPost[] }) {
   return (
     <section
-      className="cv-auto rounded-2xl border border-white/10 bg-white/[0.035] p-5"
+      className="acrylic-panel cv-auto p-5"
       aria-labelledby="latest-posts-heading"
     >
       <div className="flex items-center justify-between gap-3">
-        <h2 id="latest-posts-heading" className="flex items-center gap-2 text-sm font-black tracking-widest text-slate-200">
-          <BookOpen className="h-4 w-4 text-cyan-300" aria-hidden="true" />
-          最新文章
+        <h2 id="latest-posts-heading" className="flex items-center gap-2 text-sm font-black text-slate-100">
+          <BookOpen className="h-4 w-4 text-cyan-200" aria-hidden="true" />
+          最近更新
         </h2>
         <Link
           href="/timeline"

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import Navbar from '../../components/Navbar';
+import InnerPageShell from '../../components/InnerPageShell';
 import PageTransition from '../../components/PageTransition';
 import { motion, AnimatePresence } from 'framer-motion';
 import {Beaker, Rocket, Trees, Wrench} from 'lucide-react'; // 🌟 暂时移除了 Sofa 图标
@@ -86,11 +86,9 @@ export default function CreativeWorkshopClient({ posts = [], chatters = [], mome
   // =========================================================
 
   return (
-    <div className="min-h-screen relative pb-32 overflow-x-hidden">
-      <Navbar />
-
+    <InnerPageShell size="wide">
       <PageTransition>
-        <div className="w-full max-w-7xl mx-auto mt-6 px-4 sm:px-10 relative z-10 flex flex-col items-center">
+        <div className="relative z-10 flex w-full flex-col items-center overflow-x-hidden">
 
           {/* 顶部标题栏 */}
           <div className="w-full flex flex-col items-center mb-16 animate-fade-in-up text-center">
@@ -151,6 +149,6 @@ export default function CreativeWorkshopClient({ posts = [], chatters = [], mome
         @keyframes potion-wave { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
         @keyframes bubble-rise { 0% { transform: translateY(0) scale(1); opacity: 0; } 20% { opacity: 0.8; } 100% { transform: translateY(-40px) scale(0.5); opacity: 0; } }
       `}</style>
-    </div>
+    </InnerPageShell>
   );
 }

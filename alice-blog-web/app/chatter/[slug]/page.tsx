@@ -17,11 +17,10 @@ import rehypeKatex from 'rehype-katex';
 import 'highlight.js/styles/atom-one-dark.css';
 import 'katex/dist/katex.min.css';
 
-import Navbar from '../../../components/Navbar';
+import InnerPageShell from '../../../components/InnerPageShell';
 import PageTransition from '../../../components/PageTransition';
 import { siteConfig } from '../../../siteConfig';
 import ClientSocials from '../../../components/ClientSocials';
-import BackButton from '../../../components/BackButton';
 import Comments from '../../../components/Comments';
 
 export async function generateStaticParams() {
@@ -141,13 +140,11 @@ export default async function ChatterDetail({ params }: { params: Promise<{ slug
   const weekDays = ['一', '二', '三', '四', '五', '六', '日'];
 
   return (
-    <div className="min-h-screen relative pb-20">
-      <Navbar />
-
+    <InnerPageShell size="wide">
       <PageTransition>
-        <main className="w-[95%] md:w-[90%] max-w-6xl mx-auto mt-6 md:mt-8 flex flex-col lg:flex-row gap-6 md:gap-8 relative z-10">
+        <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-6 md:gap-8 lg:flex-row">
 
-          <article className="flex-1 bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[40px] shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700">
+          <article className="flex-1 bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[18px] shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700">
             {chatterData.cover && (
               <div className="w-full aspect-video bg-slate-200 dark:bg-slate-700 relative group">
                 <img src={chatterData.cover} alt="封面" className="w-full h-full object-cover opacity-90 transition-transform duration-1000 group-hover:scale-105" />
@@ -155,7 +152,6 @@ export default async function ChatterDetail({ params }: { params: Promise<{ slug
             )}
 
             <div className="p-5 md:p-14 relative">
-              <BackButton />
 
               <header className="mb-6 md:mb-10 border-b border-slate-300/30 dark:border-slate-700/50 pb-5 md:pb-8 relative">
                 <h1 className="text-2xl md:text-5xl font-black text-slate-900 dark:text-white mb-4 md:mb-6 tracking-tight transition-colors duration-700 pr-16 md:pr-24 leading-snug md:leading-tight">
@@ -294,7 +290,7 @@ export default async function ChatterDetail({ params }: { params: Promise<{ slug
                 `}</style>
 
                 <div
-                  className="prose prose-slate dark:prose-invert prose-base md:prose-lg max-w-none text-slate-800 dark:text-slate-200 font-serif transition-colors duration-700 leading-relaxed scroll-smooth"
+                  className="prose prose-slate dark:prose-invert prose-base md:prose-lg max-w-none text-slate-800 dark:text-slate-200 transition-colors duration-700 leading-relaxed scroll-smooth"
                   dangerouslySetInnerHTML={{ __html: chatterData.contentHtml }}
                 />
               </div>
@@ -307,7 +303,7 @@ export default async function ChatterDetail({ params }: { params: Promise<{ slug
           </article>
 
           <aside className="w-full lg:w-[320px] flex flex-col gap-6 flex-shrink-0">
-            <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl p-6 border border-white/40 dark:border-white/10 shadow-xl text-center">
+            <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[18px] p-6 border border-white/40 dark:border-white/10 shadow-xl text-center">
               <div className="w-20 h-20 mx-auto rounded-full p-1 bg-gradient-to-tr from-indigo-500 to-purple-500 shadow-md mb-4 hover:rotate-3 transition-transform">
                 <img src={siteConfig.avatarUrl} alt="avatar" className="w-full h-full rounded-full object-cover bg-white" />
               </div>
@@ -317,7 +313,7 @@ export default async function ChatterDetail({ params }: { params: Promise<{ slug
             </div>
 
 
-            <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl p-6 border border-white/40 dark:border-white/10 shadow-xl">
+            <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[18px] p-6 border border-white/40 dark:border-white/10 shadow-xl">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-lg font-black text-slate-800 dark:text-white tracking-wider">{yearStr}年{monthNum}月</h3>
               </div>
@@ -338,8 +334,8 @@ export default async function ChatterDetail({ params }: { params: Promise<{ slug
               </div>
             </div>
 
-            <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl p-6 border border-white/40 dark:border-white/10 shadow-xl">
-              <h3 className="font-black text-slate-900 dark:text-white mb-4 border-l-4 border-indigo-500 pl-2 text-xs tracking-widest uppercase">Recent Records</h3>
+            <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[18px] p-6 border border-white/40 dark:border-white/10 shadow-xl">
+              <h3 className="mb-4 border-l-2 border-cyan-300 pl-2 text-xs font-black text-white">最近记录</h3>
               <div className="space-y-4">
                 {recentChatters.map(p => (
                   <Link key={p.slug} href={`/chatter/${p.slug}`} className="group block">
@@ -352,6 +348,6 @@ export default async function ChatterDetail({ params }: { params: Promise<{ slug
           </aside>
         </main>
       </PageTransition>
-    </div>
+    </InnerPageShell>
   );
 }

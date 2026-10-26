@@ -28,6 +28,10 @@ const wallpapers = [
 const variants = [
   { suffix: '1920', width: 1920, avifQuality: 52, webpQuality: 78 },
   { suffix: '1080', width: 1080, avifQuality: 48, webpQuality: 74 },
+  // Pre-blurred variants are what the site backdrop actually uses. Baking the
+  // blur in avoids a full-screen runtime filter on every page.
+  { suffix: '1920-blur', width: 1920, blur: 18, avifQuality: 48, webpQuality: 74 },
+  { suffix: '1080-blur', width: 1080, blur: 14, avifQuality: 44, webpQuality: 70 },
 ];
 
 await fs.mkdir(outputDir, { recursive: true });
@@ -46,12 +50,21 @@ for (const wallpaper of wallpapers) {
   console.log(`${wallpaper.name}: ${metadata.width}x${metadata.height}`);
 
   for (const variant of variants) {
-    const resized = () =>
-      sharp(input).resize({
+    const resized = () => {
+      let image = sharp(input).resize({
         width: variant.width,
         withoutEnlargement: true,
         fit: 'inside',
       });
+
+      if (variant.blur) {
+        image = image
+          .blur(variant.blur)
+          .modulate({ saturation: 0.82, brightness: 0.66 });
+      }
+
+      return image;
+    };
 
     const avifPath = path.join(outputDir, `${wallpaper.name}-${variant.suffix}.avif`);
     const webpPath = path.join(outputDir, `${wallpaper.name}-${variant.suffix}.webp`);

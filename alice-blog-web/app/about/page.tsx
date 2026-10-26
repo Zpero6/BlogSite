@@ -15,7 +15,7 @@ import rehypeStringify from 'rehype-stringify';
 import 'highlight.js/styles/atom-one-dark.css';
 import 'katex/dist/katex.min.css';
 
-import Navbar from '../../components/Navbar';
+import InnerPageShell from '../../components/InnerPageShell';
 import PageTransition from '../../components/PageTransition';
 import AboutClient from '../../components/AboutClient';
 import { Suspense } from 'react';
@@ -100,10 +100,9 @@ export default async function AboutPage() {
   });
 
   return (
-    <div className="min-h-screen relative pb-20">
-      <Navbar />
+    <InnerPageShell>
       <PageTransition>
-        <main className="w-[95%] md:w-[90%] max-w-4xl mx-auto mt-6 md:mt-8 relative z-10">
+        <main className="relative z-10 mx-auto w-full max-w-4xl">
 
           {/* 🌟 注入 About 页面专用的高颜值 Prose 全局样式 */}
           <style dangerouslySetInnerHTML={{ __html: `
@@ -226,6 +225,6 @@ export default async function AboutPage() {
           </Suspense>
         </main>
       </PageTransition>
-    </div>
+    </InnerPageShell>
   );
 }

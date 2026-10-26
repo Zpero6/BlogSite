@@ -18,5 +18,9 @@ XinghuisamaBlogs project and are not covered by that project's CC BY-NC 4.0
 license. Replace or remove them if the distribution rights change.
 
 Each image is generated at two long-edge sizes (1920 desktop, 1080 mobile) in
-AVIF and WebP. Only the first wallpaper is preloaded; the next one is loaded
-when the rotation is about to start.
+AVIF and WebP. The site backdrop uses the `-blur` variants (pre-blurred 18px /
+14px plus reduced saturation and brightness), so no full-screen runtime
+`filter: blur()` is needed and scrolling stays cheap.
+
+Only the first wallpaper is preloaded; the next one is loaded when the rotation
+is about to start. The sharp variants are kept for future non-background uses.

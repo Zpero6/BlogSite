@@ -5,9 +5,20 @@
 
 @layer base {
   :root {
-    --font-serif: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
-    --site-bg: #050a12;
-    --site-panel: rgba(9, 17, 29, 0.7);
+    --font-sans: Inter, "Noto Sans SC", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
+    --font-display: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong", serif;
+    --site-bg: #07111f;
+    --ink-950: #07111f;
+    --glass-strong: rgba(12, 25, 38, 0.68);
+    --glass-soft: rgba(20, 36, 50, 0.46);
+    --glass-border: rgba(229, 246, 255, 0.16);
+    --accent-cyan: #67d8f0;
+    --status-mint: #77e2b3;
+    --text-main: #f3f7fa;
+    --text-muted: #b5c1cc;
+    --radius-panel: 18px;
+    --radius-card: 14px;
+    --shadow-panel: 0 18px 50px rgba(3, 10, 18, 0.28);
     color-scheme: dark;
   }
 
@@ -19,12 +30,12 @@
   body {
     margin: 0;
     min-height: 100%;
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
     background-color: var(--site-bg);
     background-image:
       radial-gradient(circle at 15% 5%, rgba(14, 116, 144, 0.16), transparent 42%),
       radial-gradient(circle at 88% 92%, rgba(16, 185, 129, 0.1), transparent 38%);
-    color: #e2e8f0;
+    color: var(--text-main);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -68,6 +79,59 @@
   animation: pageIn 180ms ease-out both;
 }
 
+/* 2.1 亚克力表面。背景已经是预模糊图片，因此首页岛屿只做半透明填充。 */
+.acrylic-panel {
+  background: var(--glass-strong);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
+}
+
+/* 内页只有这一层运行时玻璃；内部旧卡片不再叠加 blur。 */
+.acrylic-panel--inner {
+  -webkit-backdrop-filter: blur(14px) saturate(1.05);
+  backdrop-filter: blur(14px) saturate(1.05);
+}
+
+.acrylic-card {
+  background: var(--glass-soft);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-card);
+}
+
+.acrylic-strip {
+  background: rgba(18, 34, 48, 0.56);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+}
+
+.brand-display {
+  font-family: var(--font-display);
+}
+
+/* Compact heatmap at tablet widths, fuller cells on wide desktops. */
+.heatmap-grid {
+  grid-auto-columns: 9px;
+  gap: 2px;
+}
+
+.heatmap-cell {
+  width: 9px;
+  height: 9px;
+}
+
+@media (min-width: 1280px) {
+  .heatmap-grid {
+    grid-auto-columns: 12px;
+    gap: 3px;
+  }
+
+  .heatmap-cell {
+    width: 12px;
+    height: 12px;
+  }
+}
+
 /*
  * Inner pages reuse many legacy translucent cards. Drop their nested
  * backdrop filters and keep the translucent surface colour instead; this
@@ -76,6 +140,20 @@
 .inner-page [class*="backdrop-blur"] {
   -webkit-backdrop-filter: none !important;
   backdrop-filter: none !important;
+}
+
+@media (max-width: 1023px) {
+  .acrylic-panel--inner {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: rgba(9, 17, 29, 0.86);
+  }
+}
+
+/* Gitalk ships its own indigo button style; darken it slightly for AA contrast. */
+.gt-btn,
+.gt-btn:hover {
+  background-color: #4f46e5 !important;
 }
 
 /* 3. 离屏模块延迟渲染，减轻首屏与滚动负担 */

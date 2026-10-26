@@ -213,7 +213,7 @@ export default function TimelineClient({ posts: initialPosts, tags }: { posts: a
 
                         {/* 🌟 文本边距和字号全方位缩放 */}
                         <div className="p-3 md:p-5 flex-1 flex flex-col">
-                          <h3 className="text-xs sm:text-sm md:text-lg font-bold text-slate-800 dark:text-slate-100 mb-1 md:mb-2 line-clamp-2 transition-colors group-hover:text-indigo-500">{post.title}</h3>
+                          <h2 className="text-xs sm:text-sm md:text-lg font-bold text-slate-800 dark:text-slate-100 mb-1 md:mb-2 line-clamp-2 transition-colors group-hover:text-indigo-500">{post.title}</h2>
                           <p className="text-[10px] sm:text-xs md:text-sm text-slate-500 dark:text-slate-400 mb-2 md:mb-4 line-clamp-2 flex-1 leading-snug">{post.description || "暂时没有描述喵..."}</p>
                           <div className="flex flex-wrap gap-1 sm:gap-2 mt-auto">
                             {post.tags.map((tag: string) => (

@@ -16,12 +16,11 @@ import rehypeKatex from 'rehype-katex';
 import 'highlight.js/styles/atom-one-dark.css';
 import 'katex/dist/katex.min.css';
 
-import Navbar from '../../../components/Navbar';
+import InnerPageShell from '../../../components/InnerPageShell';
 import PageTransition from '../../../components/PageTransition';
 import { siteConfig } from '../../../siteConfig';
 import ClientSocials from '../../../components/ClientSocials';
 import ClientTOC from '../../../components/ClientTOC';
-import BackButton from '../../../components/BackButton';
 import Comments from '../../../components/Comments';
 
 export async function generateStaticParams() {
@@ -143,18 +142,16 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
   const recentPosts = getRecentPosts(resolvedParams.slug);
 
   return (
-    <div className="min-h-screen relative pb-20">
-      <Navbar />
+    <InnerPageShell size="wide">
       <PageTransition>
-        <main className="w-[95%] md:w-[90%] max-w-6xl mx-auto mt-6 md:mt-8 flex flex-col lg:flex-row gap-6 md:gap-8 relative z-10">
+        <main className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-6 md:gap-8 lg:flex-row">
 
-          <article className="flex-1 bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700">
+          <article className="flex-1 bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[18px] shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700">
             <div className="w-full aspect-video bg-slate-200 dark:bg-slate-700 relative group">
               <img src={postData.cover} alt="封面" className="w-full h-full object-cover opacity-90 transition-transform duration-1000 group-hover:scale-105" />
             </div>
 
             <div className="p-5 md:p-12 relative">
-              <BackButton />
 
               <header className="mb-6 md:mb-8 border-b border-slate-300/50 dark:border-slate-700 pb-5 md:pb-6 relative">
                 <h1 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4 tracking-tight transition-colors duration-700 pr-16 md:pr-24 leading-snug">
@@ -301,7 +298,7 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
           </article>
 
           <aside className="w-full lg:w-[320px] flex flex-col gap-6 flex-shrink-0">
-            <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl p-6 border border-white/40 dark:border-white/10 shadow-xl text-center">
+            <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[18px] p-6 border border-white/40 dark:border-white/10 shadow-xl text-center">
               <div className="w-20 h-20 mx-auto rounded-full p-1 bg-gradient-to-tr from-indigo-500 to-purple-500 shadow-md mb-4 transition-transform duration-500 hover:rotate-3">
                 <img src={siteConfig.avatarUrl} alt="avatar" className="w-full h-full rounded-full object-cover bg-white" />
               </div>
@@ -310,8 +307,8 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
               <ClientSocials />
             </div>
 
-            <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl p-6 border border-white/40 dark:border-white/10 shadow-xl">
-              <h3 className="font-black text-slate-900 dark:text-white mb-4 border-l-4 border-indigo-500 pl-2 text-sm">RECOMMENDED</h3>
+            <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[18px] p-6 border border-white/40 dark:border-white/10 shadow-xl">
+              <h3 className="mb-4 border-l-2 border-cyan-300 pl-2 text-sm font-black text-white">推荐阅读</h3>
               <div className="space-y-4">
                 {recentPosts.map(p => (
                   <Link key={p.slug} href={`/posts/${p.slug}`} className="group block">
@@ -328,6 +325,6 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
           </aside>
         </main>
       </PageTransition>
-    </div>
+    </InnerPageShell>
   );
 }

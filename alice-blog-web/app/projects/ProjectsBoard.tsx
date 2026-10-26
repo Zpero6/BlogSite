@@ -2,7 +2,6 @@
 
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import BackButton from '../../components/BackButton'; // 注意层级路径
 import { projectsData } from '../../data/projects';
 
 export default function ProjectsBoard() {
@@ -25,14 +24,11 @@ export default function ProjectsBoard() {
 
       {/* 顶部返回按钮与标题 */}
       <div className="mb-8 flex flex-col items-center md:items-start">
-        <div className="w-full flex justify-start mb-6">
-          <BackButton />
-        </div>
-        <div className="text-center md:text-left w-full">
-          <h1 className="text-4xl font-black text-slate-900 dark:text-white mb-4 tracking-widest drop-shadow-sm uppercase">
-            Projects Matrix
+        <div className="w-full text-center md:text-left">
+          <h1 className="text-4xl font-black text-white mb-4 tracking-tight">
+            项目矩阵
           </h1>
-          <p className="text-slate-600 dark:text-slate-400 font-serif">
+          <p className="text-slate-400">
             开源项目、科研代码与实验室折腾记录。
           </p>
         </div>
@@ -46,7 +42,7 @@ export default function ProjectsBoard() {
             placeholder="搜索项目名称、描述或技术栈..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 rounded-full px-6 py-3 pl-12 text-slate-800 dark:text-white shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder-slate-500 font-serif"
+            className="w-full bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 rounded-full px-6 py-3 pl-12 text-slate-800 dark:text-white shadow-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder-slate-500"
           />
           <svg className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -71,15 +67,15 @@ export default function ProjectsBoard() {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block h-full rounded-3xl bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-xl overflow-hidden hover:shadow-indigo-500/20 transition-all duration-700 hover:-translate-y-1 group relative p-6 md:p-8"
+                className="block h-full rounded-[18px] bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-xl overflow-hidden hover:shadow-indigo-500/20 transition-all duration-700 hover:-translate-y-1 group relative p-6 md:p-8"
               >
                 {/* 装饰性光晕 */}
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-colors duration-700"></div>
 
                 <div className="flex items-start justify-between mb-4 relative z-10">
-                  <div className="flex items-center gap-4">
-                    <span className="text-4xl">{project.icon}</span>
-                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  <div className="flex min-w-0 items-center gap-3 md:gap-4">
+                    <span className="text-3xl md:text-4xl">{project.icon}</span>
+                    <h2 className="min-w-0 break-words text-xl font-bold text-white transition-colors group-hover:text-cyan-200 md:text-2xl">
                       {project.name}
                     </h2>
                   </div>
@@ -89,7 +85,7 @@ export default function ProjectsBoard() {
                   </svg>
                 </div>
 
-                <p className="text-sm text-slate-700 dark:text-slate-300 font-serif leading-relaxed line-clamp-3 mb-6 relative z-10 min-h-[60px]">
+                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed line-clamp-3 mb-6 relative z-10 min-h-[60px]">
                   {project.description}
                 </p>
 
@@ -109,7 +105,7 @@ export default function ProjectsBoard() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="col-span-full text-center py-20 text-slate-500 font-serif w-full"
+            className="col-span-full text-center py-20 text-slate-500 w-full"
           >
             云端尚未建立代号为 [{searchQuery}] 的档案...
           </motion.div>

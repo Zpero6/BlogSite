@@ -16,7 +16,7 @@ export default function TimelineNode({ post, index }: { post: any, index: number
 
       {/* 卡片实体 */}
       <Link href={`/posts/${post.slug}`} className="order-1 w-full md:w-5/12 group">
-        <div className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-lg rounded-3xl shadow-lg border border-white/60 dark:border-white/10 transition-all duration-500 hover:scale-[1.03] hover:bg-white/70 dark:hover:bg-slate-800/70 hover:shadow-2xl overflow-hidden flex flex-col">
+        <div className="bg-white/50 dark:bg-slate-800/50 backdrop-blur-lg rounded-[18px] shadow-lg border border-white/60 dark:border-white/10 transition-all duration-500 hover:scale-[1.03] hover:bg-white/70 dark:hover:bg-slate-800/70 hover:shadow-2xl overflow-hidden flex flex-col">
 
           {/* 上半部分：封面图 */}
           <div className="w-full h-40 sm:h-48 overflow-hidden relative bg-slate-200 dark:bg-slate-700">
@@ -37,9 +37,9 @@ export default function TimelineNode({ post, index }: { post: any, index: number
               </div>
             </div>
 
-            <h3 className="font-bold text-lg text-slate-800 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2 leading-tight">
+            <h2 className="font-bold text-lg text-slate-800 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors line-clamp-2 leading-tight">
               {post.title}
-            </h3>
+            </h2>
 
             {/* 【核心新增】：文章标签展示 */}
             {post.tags && post.tags.length > 0 && (

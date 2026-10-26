@@ -95,7 +95,7 @@ export default function ChatterBoard({ chatters }: { chatters: Chatter[] }) {
               {/* 🌟 核心修改 2：卡片圆角缩小 rounded-2xl */}
               <Link
                 href={`/chatter/${chatter.slug}`}
-                className="block rounded-2xl md:rounded-[32px] bg-white/40 dark:bg-slate-800/40 backdrop-blur-2xl border border-white/50 dark:border-white/5 shadow-md md:shadow-xl hover:shadow-2xl transition-all duration-500 group relative overflow-hidden"
+                className="block rounded-2xl md:rounded-[18px] bg-white/40 dark:bg-slate-800/40 backdrop-blur-2xl border border-white/50 dark:border-white/5 shadow-md md:shadow-xl hover:shadow-2xl transition-all duration-500 group relative overflow-hidden"
               >
                 {chatter.cover && (
                   // 🌟 核心修改 3：图片高度自适应 h-28 -> h-52

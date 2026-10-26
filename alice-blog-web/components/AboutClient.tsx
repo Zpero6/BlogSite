@@ -124,7 +124,7 @@ export default function AboutClient({
   };
 
   return (
-    <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[40px] shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700 relative">
+    <div className="bg-white/60 dark:bg-slate-800/50 backdrop-blur-xl rounded-[18px] shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700 relative">
 
       <div className="w-full h-40 sm:h-48 md:h-64 relative bg-slate-200 dark:bg-slate-700 overflow-hidden group">
         <img src={coverImage} alt="About Hero" className="w-full h-full object-cover opacity-90 transition-transform duration-1000 group-hover:scale-105" />
@@ -140,7 +140,7 @@ export default function AboutClient({
         <div className="mt-4 md:mt-6 mb-6 md:mb-8 relative flex flex-col md:flex-row md:items-end justify-between gap-5 md:gap-4">
           <div className="text-center md:text-left">
             <h1 className="text-3xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-1 md:mb-3 transition-colors duration-700">关于我</h1>
-            <p className="text-sm md:text-lg text-indigo-600 dark:text-indigo-400 font-bold tracking-widest uppercase transition-colors duration-700">Hello World, I'm {siteConfig.authorName}</p>
+            <p className="text-sm md:text-lg text-cyan-200 font-bold transition-colors duration-700">你好，我是 {siteConfig.authorName}</p>
           </div>
 
           <div className="flex items-center w-full md:w-auto gap-1 bg-white/50 dark:bg-slate-900/50 p-1 md:p-1.5 rounded-xl md:rounded-2xl shadow-inner border border-white/40 dark:border-white/5">
@@ -212,7 +212,7 @@ export default function AboutClient({
                     .prose pre code { font-size: 0.9em !important; }
                   }
                 `}</style>
-                <div className="prose prose-slate dark:prose-invert prose-base md:prose-lg max-w-none text-slate-800 dark:text-slate-200 font-serif transition-colors duration-700 leading-relaxed scroll-smooth" dangerouslySetInnerHTML={{ __html: contentHtml }} />
+                <div className="prose prose-slate dark:prose-invert prose-base md:prose-lg max-w-none text-slate-800 dark:text-slate-200 transition-colors duration-700 leading-relaxed scroll-smooth" dangerouslySetInnerHTML={{ __html: contentHtml }} />
               </div>
               <div className="mt-12 md:mt-16"><Comments /></div>
             </motion.div>
@@ -221,7 +221,7 @@ export default function AboutClient({
           {activeTab === 'activity' && (
             <motion.div key="activity" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.3 }}>
 
-              <div className="mb-12 p-5 md:p-8 bg-slate-50/50 dark:bg-slate-900/30 rounded-3xl border border-slate-200/50 dark:border-white/5 shadow-inner">
+              <div className="mb-12 p-5 md:p-8 bg-slate-50/50 dark:bg-slate-900/30 rounded-[18px] border border-slate-200/50 dark:border-white/5 shadow-inner">
                 <h3 className="text-lg font-black text-slate-800 dark:text-white mb-6 flex items-center gap-2">
                   <Activity size={20} className="text-green-500" />
                   {activities.length} contributions in the last year

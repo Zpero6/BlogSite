@@ -1,7 +1,7 @@
-import Navbar from '../../components/Navbar';
+import InnerPageShell from '../../components/InnerPageShell';
 import PageTransition from '../../components/PageTransition';
 import ProjectsBoard from './ProjectsBoard';
-import {siteConfig} from "@/siteConfig";
+import { siteConfig } from '@/siteConfig';
 
 export const metadata = {
   title: "项目矩阵 | " + siteConfig.title,
@@ -10,13 +10,10 @@ export const metadata = {
 
 export default function ProjectsPage() {
   return (
-    <div className="min-h-screen relative pb-20">
-      <Navbar />
+    <InnerPageShell size="wide">
       <PageTransition>
-        <div className="mt-6">
-          <ProjectsBoard />
-        </div>
+        <ProjectsBoard />
       </PageTransition>
-    </div>
+    </InnerPageShell>
   );
 }
