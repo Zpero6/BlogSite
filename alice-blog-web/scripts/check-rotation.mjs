@@ -38,7 +38,7 @@ const before = await send("Runtime.evaluate", {
 });
 console.log("before", before.result.value);
 
-await new Promise((resolve) => setTimeout(resolve, 20_000));
+await new Promise((resolve) => setTimeout(resolve, Number(process.env.WAIT_MS || 20_000)));
 
 const after = await send("Runtime.evaluate", {
   expression: `[...document.querySelectorAll('img[src*="-blur.webp"]')].map((img) => img.currentSrc || img.src)`,

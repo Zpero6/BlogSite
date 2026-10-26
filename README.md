@@ -28,7 +28,7 @@ npm run lighthouse:mobile
 页面与素材说明：
 
 - 壁纸资源位于 `public/wallpapers/`，由 `npm run wallpapers` 从本地原图生成 AVIF/WebP 的 1920/1080 长边版本，以及预模糊的 `-blur` 变体。站点背景直接使用预模糊版本，避免全屏运行时 `filter: blur()`。原图不进入仓库。
-- 背景每 12 秒在五张壁纸之间淡入切换；开启系统“减少动态效果”时固定首张。
+- 背景每 12 秒在五张壁纸之间切换；图片完成加载后才开始淡入。开启系统“减少动态效果”时改为瞬时切换，不播放淡入动画。
 - 站长头像由 `C:\Users\Zpero\Pictures\WallPaper\站长头像.jpeg` 生成 320×320 WebP 与 256×256 PNG，位于 `public/images/zpero-avatar.*`。
 - 导航卡片插画位于 `public/images/nav/`，由 `node scripts/generate-nav-art.mjs` 生成，是本地占位猫贴纸；替换规则见该目录 README。
 - 首页为静态渲染并每 6 小时重新验证；生产构建 TypeScript 检查已开启，不再使用 `ignoreBuildErrors`。
