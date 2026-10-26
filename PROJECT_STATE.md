@@ -4,11 +4,35 @@
 
 ## 1. 交接状态
 
-- 状态：材料已核对，等待接手 AI 核验后执行。
+- 状态：首页重构、性能减法、壁纸管线、GitHub 热力图与占位页已完成；本地 Git 基线已建立，等待最终提交与推送。
 - 更新时间：2026-10-26（Asia/Shanghai）。
 - 项目目录：`D:\ZperoSite`。
-- 本文只制定任务和更改方案；本轮未实施页面重构、Git 初始化或 GitHub 推送。
-- 之前用于预览的本地开发服务已经停止，接手者可自行重新启动。
+- 本地 Git 基线：`4c8e578 chore: establish repository baseline`。
+- 远程仓库：`https://github.com/Zpero6/BlogSite.git`（公开，默认分支 `main`）。
+- 生产预览服务当前运行在本机 `http://localhost:3000`，可随时停止。
+
+### 1.1 本轮实施结果
+
+已完成：
+
+- 根目录统一 Git 仓库、`.gitignore`、CC BY-NC 4.0 `LICENSE` 与第三方声明。
+- 全局布局移除 Navbar 滚动监听、Danmaku、Fireflies、Sakura、WindyGrass、ClickEffect、CyberCat、SplashScreen、FloatingPlayer、GlobalToolbox、BackgroundSlider 等常驻效果。
+- 首页重写为全屏壁纸 + 单个亚克力外壳 + 身份/状态/最新文章 + 热力图 + 导航卡片 + 技能网格。
+- 五张壁纸生成 AVIF/WebP 桌面 1920 / 移动 1080 变体，共 20 个文件、约 1.62 MB；首图移动 AVIF 约 24–35 KB。
+- GitHub 热力图读取 `Zpero6` 的公开贡献日历 HTML，365 天、6 小时缓存、加载/错误/空/重试状态；不使用 token。
+- 收藏、通知、个人中心使用 `/soon/favorites`、`/soon/notifications`、`/soon/account` 占位页。
+- 内页顶部导航改为非固定静态工具条；页面进入动画改为 180ms 透明度；内页嵌套 `backdrop-filter` 统一关闭。
+- `next.config.ts` 已移除 `typescript.ignoreBuildErrors`。
+- 前端 `npm run typecheck`、`npm run build` 通过；所有现有与占位路由返回 200。
+- Lighthouse 13 生产模式：桌面 Performance 100 / Accessibility 100，移动 Performance 97 / Accessibility 100。
+
+遗留问题：
+
+- 未采集改造前 Lighthouse 基线，无法给出严格前后对比。
+- 移动端 LCP 约 2.6s，略高于 2.5s 目标；主要瓶颈是移动网络模拟下的 JS 下载与 React hydration，观测到的 TTFB 约 7ms、元素渲染延迟约 96ms。
+- 仓库级 `npm run lint` 仍因上游遗留组件报错（新首页文件无错误）；`npm run build` 与类型检查已通过。
+- 后端测试结果见第 7 节 P6 记录。
+- GitHub 推送尚未执行。
 
 ## 2. 总目标
 
@@ -48,12 +72,12 @@
 - 后端：`D:\ZperoSite\alice-blog-server`
 - 前端备份：`D:\ZperoSite\alice-blog-web-before-xhblogs`
 - 前端当前来源基线：XinghuisamaBlogs commit `8633e983371acc3b627b88b911143ff0fd31ea23`。
-- 项目根目录和前端目录当前都没有 `.git`。
+- 项目根目录已建立 `.git`，基线提交 `4c8e578`；前端目录仍无独立 `.git`。
 - 全局 Git 身份已配置：`Zpero <Zpero6@outlook.com>`。
 - 本机当前没有可用的 `gh` CLI。
-- 前端之前执行过生产构建并成功；存在 Turbopack 关于 `app/tree/page.tsx` 的 NFT 警告。
-- 当前 Next 配置使用 `typescript.ignoreBuildErrors: true`，不能把“构建成功”当成类型检查完全通过。
-- 后端此前测试通过。
+- 生产构建成功；仍有 Turbopack 关于 `app/tree/page.tsx` 的 NFT 警告（不影响构建）。
+- Next 配置已移除 `typescript.ignoreBuildErrors: true`，构建会执行 TypeScript 检查。
+- 后端 `mvn test` 通过（2 个测试，0 失败）。
 - `/`、`/timeline`、`/posts/building-zpero-site`、`/about` 之前均验证返回 200。
 
 ## 5. 卡顿诊断
@@ -95,7 +119,7 @@
 3. 因 effect 依赖 `lastScrollY`，反复注销并重新注册 scroll listener；
 4. 同时重新合成固定定位、`backdrop-blur-xl`、`transition-all duration-500` 的大面积透明层。
 
-这条链路又与背景粒子、Canvas、壁纸和其他无限动画竞争主线程/GPU，所以滚动时最明显。新设计已经要求删除顶部导航栏，建议直接移除该组件及滚动监听。内部页面如需导航，只保留一个不监听滚动的“返回菜单”按钮或窄型静态工具条。
+这条链路又与背景粒子、Canvas、壁纸和其他无限动画竞争主线程/GPU，所以滚动时最明显。本轮已将 `Navbar` 重写为非固定、非客户端的静态工具条（返回菜单 / 站名 / GitHub），不再监听 scroll，也不再触发 React 状态更新。
 
 ## 6. 建议的新页面结构
 
@@ -127,6 +151,19 @@
 - 每张壁纸允许通过 CSS 变量提供轻微色调适配，但不要让每张卡片拥有互相冲突的随机色。
 
 ## 7. 执行任务清单
+
+### 实施进度（2026-10-26）
+
+| 阶段 | 状态 | 说明 |
+| --- | --- | --- |
+| P0 基线、备份和版本控制 | 已完成 | 根仓库、`.gitignore`、LICENSE、第三方声明、基线提交 |
+| P1 建立性能基线 | 未完成 | 未在改造前采集 Lighthouse/Performance 数据 |
+| P2 性能减法 | 已完成 | 全局重特效、滚动监听、嵌套模糊已移除 |
+| P3 首页结构重构 | 已完成 | 菜单型 Dashboard、导航卡片、技能网格 |
+| P4 壁纸资源管线 | 已完成 | 20 个 AVIF/WebP 文件，首图预加载，18 秒轮播 |
+| P5 GitHub 热力图 | 已完成 | 公开 HTML 方案，365 天、6 小时缓存、无 token |
+| P6 质量与回归 | 部分完成 | 类型检查、构建、后端测试通过；仓库级 lint 仍有上游遗留错误；未做完整浏览器矩阵 |
+| P7 GitHub 发布 | 待执行 | 远程已确认，尚未推送 |
 
 ### P0：基线、备份和版本控制
 
@@ -185,6 +222,7 @@
 
 - [ ] 修复现有 TypeScript 问题，尽量移除 `typescript.ignoreBuildErrors: true` 后再构建。
 - [ ] 执行前端 lint、类型检查、生产构建；执行后端 Java 21 测试。
+  - 已执行：`npm run typecheck`、`npm run build` 通过；`mvn test` 2 个测试通过；`npm run lint` 仍报上游遗留组件错误。
 - [ ] 验证首页、文章、时间线、项目、关于、收藏、通知、登录/个人中心和管理入口权限。
 - [ ] 测试 1440p、1080p、768px、390px 等宽度，以及 Windows 125%/150% 缩放。
 - [ ] 检查键盘焦点、点击热区、正文对比度、屏幕阅读器标签和减少动态效果。
@@ -208,12 +246,21 @@
 - 大面积实时 `backdrop-filter` 不超过一个主要层级，移动端允许降级为半透明纯色。
 - 路由无死链，未登录/普通用户/管理员三种状态显示正确。
 
-## 9. 尚需用户提供的信息
+## 9. 已确认的信息与剩余事项
 
-- GitHub 用户名（热力图数据源）。
-- 要推送的 GitHub 仓库 URL；若新建，还需仓库名和公开/私有选择。
-- 五张壁纸是否允许公开提交到 GitHub；若版权不明确，建议只提交优化脚本和占位资源。
-- 菜单中“项目、收藏、通知”等未完成模块是隐藏、标记“规划中”，还是先做占位页。
+已确认（2026-10-26）：
+
+- GitHub 登录名：`Zpero6`；显示名：`Zpero`。热力图数据源使用 `Zpero6`。
+- 远程仓库：`https://github.com/Zpero6/BlogSite.git`，公开仓库，默认分支 `main`。
+- 五张壁纸允许公开提交与展示；来源映射与授权说明见 `alice-blog-web/public/wallpapers/README.md`。
+- 未完成模块采用占位页方案：`/soon/favorites`、`/soon/notifications`、`/soon/account`。
+
+剩余事项：
+
+- 执行最终 Git 提交并推送到远程 `main`。
+- 如需严格性能前后对比，需补做改造前基线；当前只能提供改造后数据。
+- 仓库级 lint 的上游遗留错误可另开任务清理，不影响生产构建。
+- 生产部署、HTTPS、真实邮件服务与 `REGISTRATION_ENABLED=false` 仍需在上线前配置。
 
 ## 10. 接手 AI 的第一步
 
