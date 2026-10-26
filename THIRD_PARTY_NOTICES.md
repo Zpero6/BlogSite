@@ -26,6 +26,12 @@ locally by `alice-blog-web/scripts/generate-nav-art.mjs`. They are original
 placeholder artwork, not copied from the reference site, and can be replaced
 per the instructions in that directory's README.
 
+## Webmaster avatar
+
+The avatar files `alice-blog-web/public/images/zpero-avatar.webp` and
+`zpero-avatar.png` were generated from `站长头像.jpeg`, supplied by the site
+owner. They are not from the reference project.
+
 ## GitHub contribution calendar
 
 The homepage contribution heatmap reads the public contribution calendar HTML

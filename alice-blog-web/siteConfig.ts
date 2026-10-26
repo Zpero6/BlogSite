@@ -1,10 +1,10 @@
 export const siteConfig = {
   title: "Zpero の 小站",
-  faviconUrl: "/images/zpero-avatar.svg",
+  faviconUrl: "/images/zpero-avatar.png",
   authorName: "Zpero",
   bio: "Javaer，理想不熄，技术不熄。专注 Spring Cloud、分布式事务、Redis 性能优化与 AI 应用开发。",
   navTitle: "Zpero", navSuffix: "の", navAfter: "小站",
-  avatarUrl: "/images/zpero-avatar.svg",
+  avatarUrl: "/images/zpero-avatar.webp",
   githubUsername: "Zpero6",
   useGradient: false,
   themeColors: ["#22d3ee", "#34d399", "#60a5fa", "#a78bfa"],

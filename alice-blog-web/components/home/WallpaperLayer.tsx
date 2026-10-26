@@ -5,7 +5,7 @@ import { siteConfig } from "@/siteConfig";
 
 type Wallpaper = (typeof siteConfig.wallpapers)[number];
 
-const ROTATE_MS = 18_000;
+const ROTATE_MS = 12_000;
 const FADE_MS = 800;
 
 function WallpaperPicture({

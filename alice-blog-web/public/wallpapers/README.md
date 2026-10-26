@@ -23,4 +23,6 @@ AVIF and WebP. The site backdrop uses the `-blur` variants (pre-blurred 18px /
 `filter: blur()` is needed and scrolling stays cheap.
 
 Only the first wallpaper is preloaded; the next one is loaded when the rotation
-is about to start. The sharp variants are kept for future non-background uses.
+is about to start. Rotation runs every 12 seconds and stops when
+`prefers-reduced-motion` is set. The sharp variants are kept for future
+non-background uses.

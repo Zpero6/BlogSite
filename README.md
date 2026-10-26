@@ -28,10 +28,13 @@ npm run lighthouse:mobile
 页面与素材说明：
 
 - 壁纸资源位于 `public/wallpapers/`，由 `npm run wallpapers` 从本地原图生成 AVIF/WebP 的 1920/1080 长边版本，以及预模糊的 `-blur` 变体。站点背景直接使用预模糊版本，避免全屏运行时 `filter: blur()`。原图不进入仓库。
+- 背景每 12 秒在五张壁纸之间淡入切换；开启系统“减少动态效果”时固定首张。
+- 站长头像由 `C:\Users\Zpero\Pictures\WallPaper\站长头像.jpeg` 生成 320×320 WebP 与 256×256 PNG，位于 `public/images/zpero-avatar.*`。
 - 导航卡片插画位于 `public/images/nav/`，由 `node scripts/generate-nav-art.mjs` 生成，是本地占位猫贴纸；替换规则见该目录 README。
 - 首页为静态渲染并每 6 小时重新验证；生产构建 TypeScript 检查已开启，不再使用 `ignoreBuildErrors`。
 - 内页由 `components/InnerPageShell.tsx` 统一提供顶部返回菜单和单层亚克力容器；背景在根布局挂载一次，始终固定。
 - 响应式截图可用 `scripts/capture-screenshots.mjs`（需要先启动带 `--remote-debugging-port=9222` 的 Chrome）。
+- 壁纸轮播可用 `scripts/check-rotation.mjs` 验证（需要 Chrome 调试端口 9223）。
 - 性能参考（本机 Lighthouse 13，生产模式）：桌面 Performance 100 / 可访问性 100，移动 Performance 99 / 可访问性 100，移动 LCP 2.1s、CLS 0、TBT 20ms。时间线、文章详情、关于、照片墙的可访问性复查均为 100。
 
 来源和修改说明见 THIRD_PARTY_NOTICES.md、alice-blog-web/ZPERO_ADAPTATION.md 与 alice-blog-web/LICENSE。

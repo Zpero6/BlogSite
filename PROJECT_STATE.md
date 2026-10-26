@@ -41,6 +41,7 @@
 - 删除首页包住全部内容的大面板，身份、状态、最新文章、公告条、热力图、导航、技能改为彼此分离的亚克力岛。
 - 根布局挂载唯一的全站背景层；所有公开内页共享同一套壁纸，背景固定不随正文滚动。
 - 壁纸新增预模糊 AVIF/WebP 变体（桌面 18px、移动 14px 模糊，sat 0.82 / brightness 0.66），运行时不使用全屏 `filter: blur()`。
+- 背景轮播间隔调整为 12 秒，继续遵守 `prefers-reduced-motion`；站长头像替换为用户提供的 `站长头像.jpeg`，生成 320×320 WebP 与 256×256 PNG。
 - 新增 `InnerPageShell`，timeline、projects、about、chatter、friends、moments、music、photowall、posts、tree、soon 均迁移；旧 `Navbar` 与重复的 `BackButton` 已删除。
 - 站点卡片改为“左侧标题/说明 + 右侧自定义插画”，支持 `imageSrc`、`imageSize`、`imagePosition` 和图标 fallback；新增 11 张本地猫贴纸占位图。
 - 建立 `--glass-strong/soft`、`--glass-border` 等 token，新增 `acrylic-panel`、`acrylic-card`、`acrylic-strip`；内页只保留页面级一层模糊，嵌套 blur 仍关闭。
@@ -188,7 +189,7 @@
 | P1 建立性能基线 | 未完成 | 未在改造前采集 Lighthouse/Performance 数据 |
 | P2 性能减法 | 已完成 | 全局重特效、滚动监听、嵌套模糊已移除 |
 | P3 首页结构重构 | 已完成 | 菜单型 Dashboard、导航卡片、技能网格 |
-| P4 壁纸资源管线 | 已完成 | 20 个 AVIF/WebP 文件，首图预加载，18 秒轮播 |
+| P4 壁纸资源管线 | 已完成 | 40 个 AVIF/WebP 文件（含预模糊），首图预加载，12 秒轮播 |
 | P5 GitHub 热力图 | 已完成 | 公开 HTML 方案，365 天、6 小时缓存、无 token |
 | P6 质量与回归 | 部分完成 | 类型检查、构建、后端测试通过；仓库级 lint 仍有上游遗留错误；未做完整浏览器矩阵 |
 | P7 GitHub 发布 | 待执行 | 远程已确认，尚未推送 |

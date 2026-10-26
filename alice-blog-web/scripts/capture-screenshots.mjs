@@ -82,7 +82,6 @@ for (const viewport of viewports) {
     });
 
     const targetUrl = `${siteBase}${pagePath}`;
-    console.log(`navigate ${targetUrl}`);
     await send("Page.navigate", { url: targetUrl });
     await loaded;
     await new Promise((resolve) => setTimeout(resolve, 1_800));
