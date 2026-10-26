@@ -13,5 +13,11 @@ acrylic menu dashboard homepage, removal of upstream global background effects
 and the scroll-driven navbar, and a GitHub contribution heatmap sourced from the
 public contribution calendar.
 
-The original author's avatars, wallpapers, articles, contact details and music IDs are not used.
+Second visual pass: the single enclosing homepage panel was split into separated
+acrylic islands, a shared pre-blurred wallpaper backdrop now lives in the root
+layout, all public inner pages use `InnerPageShell`, and the site cards use
+locally generated cat-sticker artwork with configurable right-side images.
+
+The original author's avatars, wallpapers, articles, contact details and music
+IDs are not used.
 

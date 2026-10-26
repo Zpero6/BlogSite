@@ -19,6 +19,13 @@ repository and website display (confirmed 2026-10-26). They are not derived
 from the reference project and are not covered by its CC BY-NC 4.0 license.
 See `alice-blog-web/public/wallpapers/README.md` for the source mapping.
 
+## Menu illustrations
+
+The 11 cat-sticker SVGs under `alice-blog-web/public/images/nav/` are generated
+locally by `alice-blog-web/scripts/generate-nav-art.mjs`. They are original
+placeholder artwork, not copied from the reference site, and can be replaced
+per the instructions in that directory's README.
+
 ## GitHub contribution calendar
 
 The homepage contribution heatmap reads the public contribution calendar HTML

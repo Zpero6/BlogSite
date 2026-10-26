@@ -4,8 +4,8 @@
 
 ## 1. 交接状态
 
-- 状态：首页重构、性能减法、壁纸管线、GitHub 热力图与占位页已完成；本地 Git 基线已建立，等待最终提交与推送。
-- 更新时间：2026-10-26（Asia/Shanghai）。
+- 状态：第二轮视觉重构已完成；首页模块分离、共享柔焦壁纸、内页 shell、站点卡片插画均已落地，等待最终提交与推送。
+- 更新时间：2026-10-27（Asia/Shanghai）。
 - 项目目录：`D:\ZperoSite`。
 - 本地 Git 基线：`4c8e578 chore: establish repository baseline`。
 - 远程仓库：`https://github.com/Zpero6/BlogSite.git`（公开，默认分支 `main`）。
@@ -33,6 +33,34 @@
 - 仓库级 `npm run lint` 仍因上游遗留组件报错（新首页文件无错误）；`npm run build` 与类型检查已通过。
 - 后端测试结果见第 7 节 P6 记录。
 - GitHub 推送尚未执行。
+
+### 1.2 第二轮视觉重构（2026-10-27）
+
+已完成：
+
+- 删除首页包住全部内容的大面板，身份、状态、最新文章、公告条、热力图、导航、技能改为彼此分离的亚克力岛。
+- 根布局挂载唯一的全站背景层；所有公开内页共享同一套壁纸，背景固定不随正文滚动。
+- 壁纸新增预模糊 AVIF/WebP 变体（桌面 18px、移动 14px 模糊，sat 0.82 / brightness 0.66），运行时不使用全屏 `filter: blur()`。
+- 新增 `InnerPageShell`，timeline、projects、about、chatter、friends、moments、music、photowall、posts、tree、soon 均迁移；旧 `Navbar` 与重复的 `BackButton` 已删除。
+- 站点卡片改为“左侧标题/说明 + 右侧自定义插画”，支持 `imageSrc`、`imageSize`、`imagePosition` 和图标 fallback；新增 11 张本地猫贴纸占位图。
+- 建立 `--glass-strong/soft`、`--glass-border` 等 token，新增 `acrylic-panel`、`acrylic-card`、`acrylic-strip`；内页只保留页面级一层模糊，嵌套 blur 仍关闭。
+- 字体改为中文无衬线栈，品牌名保留衬线显示体；移除关键页面的全大写模板眉题。
+- 404 之外的空数据状态补齐：音乐馆无播放列表、照片墙无相册均显示明确空状态。
+- 修复 Gitalk 按钮对比度、时间线标题层级、项目卡片移动端标题与 GitHub 图标重叠。
+
+验证：
+
+- `npm run typecheck`、`npm run build` 通过。
+- 首页 Lighthouse 13：桌面 Performance 100 / A11y 100；移动 Performance 99 / A11y 100，LCP 2.1s，CLS 0，TBT 20ms。
+- 内页可访问性复查：timeline 100、posts 100、about 100、photowall 100。
+- 1440×900、1024×768、768×1024、390×844 截图已生成到 `alice-blog-web/screenshots/`（已 gitignore）。
+- 新文件 eslint 无报错；仓库级 lint 仍有上游遗留组件的 108 个错误。
+
+第二轮遗留：
+
+- 时间线桌面端保留左右交替布局，首条卡片会留出半屏空白；如需要可改为单侧时间线或默认矩阵视图。
+- `tree` 的炼金术主题 UI 保留其内部英文标签，作为特殊实验页处理。
+- 仓库级 lint 未整体清理。
 
 ## 2. 总目标
 
@@ -164,6 +192,7 @@
 | P5 GitHub 热力图 | 已完成 | 公开 HTML 方案，365 天、6 小时缓存、无 token |
 | P6 质量与回归 | 部分完成 | 类型检查、构建、后端测试通过；仓库级 lint 仍有上游遗留错误；未做完整浏览器矩阵 |
 | P7 GitHub 发布 | 待执行 | 远程已确认，尚未推送 |
+| 第二轮视觉重构 | 已完成 | 模块分离、共享背景、内页 shell、卡片插画、空状态与对比度修复 |
 
 ### P0：基线、备份和版本控制
 
@@ -222,7 +251,7 @@
 
 - [ ] 修复现有 TypeScript 问题，尽量移除 `typescript.ignoreBuildErrors: true` 后再构建。
 - [ ] 执行前端 lint、类型检查、生产构建；执行后端 Java 21 测试。
-  - 已执行：`npm run typecheck`、`npm run build` 通过；`mvn test` 2 个测试通过；`npm run lint` 仍报上游遗留组件错误。
+  - 已执行：`npm run typecheck`、`npm run build` 通过；`mvn test` 2 个测试通过；`npm run lint` 仍报上游遗留组件错误。第二轮补充：首页桌面 100/100、移动 99/100（LCP 2.1s）；timeline/posts/about/photowall 可访问性均 100。
 - [ ] 验证首页、文章、时间线、项目、关于、收藏、通知、登录/个人中心和管理入口权限。
 - [ ] 测试 1440p、1080p、768px、390px 等宽度，以及 Windows 125%/150% 缩放。
 - [ ] 检查键盘焦点、点击热区、正文对比度、屏幕阅读器标签和减少动态效果。
