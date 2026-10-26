@@ -1,0 +1,26 @@
+{
+  "display": {
+    "enabled": false,
+    "title": "每日选刊",
+    "subtitle": "为兴趣留一点时间",
+    "archiveDays": 90,
+    "carouselDays": 7,
+    "autoPlay": true,
+    "intervalSeconds": 8,
+    "showCovers": true,
+    "showTerraNotes": false
+  },
+  "topics": [],
+  "channels": [
+    {
+      "id": "news",
+      "name": "动态精选",
+      "enabled": true
+    },
+    {
+      "id": "reading",
+      "name": "深度阅读",
+      "enabled": true
+    }
+  ]
+}

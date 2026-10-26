@@ -1,0 +1,49 @@
+CREATE TABLE blog_user (
+ id BIGINT PRIMARY KEY AUTO_INCREMENT,
+ email VARCHAR(254) NOT NULL UNIQUE,
+ password_hash VARCHAR(100) NOT NULL,
+ display_name VARCHAR(60) NOT NULL,
+ role VARCHAR(20) NOT NULL DEFAULT 'USER',
+ status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE category (id BIGINT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(100) NOT NULL UNIQUE);
+CREATE TABLE article (
+ id BIGINT PRIMARY KEY AUTO_INCREMENT,
+ slug VARCHAR(180) NOT NULL UNIQUE,
+ title VARCHAR(200) NOT NULL,
+ summary VARCHAR(600) NOT NULL,
+ markdown LONGTEXT NOT NULL,
+ category_id BIGINT,
+ status VARCHAR(20) NOT NULL DEFAULT 'draft',
+ content_hash CHAR(64) NOT NULL,
+ published_at DATETIME NULL,
+ first_published_at DATETIME NULL,
+ created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ FOREIGN KEY(category_id) REFERENCES category(id),
+ INDEX idx_article_status_published(status,published_at)
+);
+CREATE TABLE tag(id BIGINT PRIMARY KEY AUTO_INCREMENT,name VARCHAR(80) NOT NULL UNIQUE);
+CREATE TABLE article_tag(article_id BIGINT NOT NULL,tag_id BIGINT NOT NULL,PRIMARY KEY(article_id,tag_id),FOREIGN KEY(article_id) REFERENCES article(id),FOREIGN KEY(tag_id) REFERENCES tag(id));
+CREATE TABLE article_like(user_id BIGINT NOT NULL,article_id BIGINT NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(user_id,article_id),FOREIGN KEY(user_id) REFERENCES blog_user(id),FOREIGN KEY(article_id) REFERENCES article(id));
+CREATE TABLE article_favorite LIKE article_like;
+ALTER TABLE article_favorite ADD FOREIGN KEY(user_id) REFERENCES blog_user(id), ADD FOREIGN KEY(article_id) REFERENCES article(id);
+CREATE TABLE article_view(article_id BIGINT NOT NULL,viewer_key VARCHAR(64) NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,PRIMARY KEY(article_id,viewer_key),FOREIGN KEY(article_id) REFERENCES article(id));
+CREATE TABLE comment(
+ id BIGINT PRIMARY KEY AUTO_INCREMENT,article_id BIGINT NOT NULL,user_id BIGINT NOT NULL,
+ root_id BIGINT NULL,reply_to_id BIGINT NULL,reply_to_user_id BIGINT NULL,
+ content VARCHAR(2000) NOT NULL,status VARCHAR(20) NOT NULL DEFAULT 'VISIBLE',
+ deleted_at DATETIME NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ FOREIGN KEY(article_id) REFERENCES article(id),FOREIGN KEY(user_id) REFERENCES blog_user(id),
+ FOREIGN KEY(root_id) REFERENCES comment(id),FOREIGN KEY(reply_to_id) REFERENCES comment(id),
+ FOREIGN KEY(reply_to_user_id) REFERENCES blog_user(id),INDEX idx_comment_article(article_id,created_at)
+);
+CREATE TABLE subscription(user_id BIGINT PRIMARY KEY,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(user_id) REFERENCES blog_user(id));
+CREATE TABLE notification(id BIGINT PRIMARY KEY AUTO_INCREMENT,user_id BIGINT NOT NULL,article_id BIGINT NOT NULL,is_read BOOLEAN NOT NULL DEFAULT FALSE,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,UNIQUE KEY uk_notification(user_id,article_id),FOREIGN KEY(user_id) REFERENCES blog_user(id),FOREIGN KEY(article_id) REFERENCES article(id));
+CREATE TABLE email_verification(id BIGINT PRIMARY KEY AUTO_INCREMENT,email VARCHAR(254) NOT NULL,code_hash CHAR(64) NOT NULL,expires_at DATETIME NOT NULL,attempts INT NOT NULL DEFAULT 0,verified BOOLEAN NOT NULL DEFAULT FALSE,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,INDEX idx_email_created(email,created_at));
+CREATE TABLE markdown_sync_log(id BIGINT PRIMARY KEY AUTO_INCREMENT,operator_id BIGINT NOT NULL,started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,finished_at DATETIME NULL,result_json JSON NULL,FOREIGN KEY(operator_id) REFERENCES blog_user(id));
+CREATE TABLE daily_stat(stat_date DATE PRIMARY KEY,registrations BIGINT NOT NULL DEFAULT 0,views BIGINT NOT NULL DEFAULT 0,interactions BIGINT NOT NULL DEFAULT 0);
+CREATE TABLE site_profile(id BIGINT PRIMARY KEY,display_name VARCHAR(100) NOT NULL,bio VARCHAR(1000) NOT NULL);
+INSERT INTO site_profile VALUES(1,'Zpero','Javaer，理想不熄，技术不熄');
+

@@ -1,0 +1,31 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: lax
+        secure: ${COOKIE_SECURE:false}
+spring:
+  application:
+    name: zpero-blog
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/zpero_blog?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai}
+    username: ${DB_USER:zpero}
+    password: ${DB_PASSWORD}
+  session:
+    jdbc:
+      initialize-schema: never
+  flyway:
+    enabled: true
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+blog:
+  content-directory: ${CONTENT_DIR:../content/posts}
+  registration-enabled: ${REGISTRATION_ENABLED:true}
+  verification-pepper: ${VERIFICATION_PEPPER:dev-only-change-before-production}
+

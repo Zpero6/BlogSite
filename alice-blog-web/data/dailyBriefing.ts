@@ -1,0 +1,18 @@
+import content from './dailyBriefing.json';
+import archive from './dailyBriefingArchive.json';
+import covers from './dailyBriefingCovers.json';
+import config from './briefingConfig.json';
+import { getBriefingWindow } from '../lib/briefingWindow';
+import type { TerraReadingNote } from './terraReadingNotes';
+export type BriefingCategory = string;
+export const briefingDisplay = config.display;
+export const briefingChannels = config.channels.filter(channel => channel.enabled);
+export type BriefingCover = { src:string; alt:string; theme:string; model:string; sha256:string; sourceSha256:string };
+export const briefingCovers: Record<string, BriefingCover> = covers.covers;
+export type BriefingItem = { id:string; category:BriefingCategory; title:string; originalTitle:string; source:string; sourceOrg:string; sourceDate:string; url:string; tags:string[]; summary:string; highlights:string[]; readingNote:string; doi?:string; verifiedAt:string; verificationUrls:string[]; terraNote?:TerraReadingNote; };
+export type BriefingIssue = { edition: { date:string; weekday:string; label:string; notice:string }; items:BriefingItem[] };
+export const briefingEdition = content.edition;
+export const briefingTopics: string[] = config.topics;
+export const briefingItems: BriefingItem[] = content.items as BriefingItem[];
+export const briefingAsOfDate = archive.asOfDate;
+export const briefingIssues: BriefingIssue[] = getBriefingWindow([content as BriefingIssue, ...archive.issues as BriefingIssue[]].filter(issue => issue.items.length > 0), briefingAsOfDate, briefingDisplay.archiveDays);

@@ -1,0 +1,69 @@
+# Dependencies
+node_modules/
+.npm-cache/
+.pnp
+.pnp.*
+.yarn/cache/
+.yarn/install-state.gz
+
+# Build output
+.next/
+out/
+build/
+dist/
+target/
+*.tsbuildinfo
+next-env.d.ts
+
+# Runtime data, logs and caches
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+coverage/
+.vercel/
+__pycache__/
+*.py[cod]
+.manager_data/
+manager_data/briefing/
+*.connection.json
+
+# Local database files and volumes
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+mysql-data/
+postgres-data/
+data/db/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.jks
+
+# IDE / editor
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local backup of the pre-adaptation frontend (kept out of history)
+alice-blog-web-before-xhblogs/
+
+# Local screenshots / performance artifacts
+.artifacts/
+*.cpuprofile
+lighthouse-report*.json
