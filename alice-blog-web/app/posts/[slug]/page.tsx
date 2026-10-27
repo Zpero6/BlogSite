@@ -1,7 +1,6 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
@@ -21,19 +20,30 @@ import PageTransition from '../../../components/PageTransition';
 import { siteConfig } from '../../../siteConfig';
 import ClientSocials from '../../../components/ClientSocials';
 import ClientTOC from '../../../components/ClientTOC';
-import Comments from '../../../components/Comments';
+import CommentSection from '../../../components/comments/CommentSection';
+import InteractionBar from '../../../components/interaction/InteractionBar';
+import SubscribeButton from '../../../components/notification/SubscribeButton';
+import { articleCover, getArticle, getArticleSummaries } from '../../../lib/blogApi';
 
-export async function generateStaticParams() {
-  const postsDirectory = path.join(process.cwd(), 'posts');
-  if (!fs.existsSync(postsDirectory)) return [];
+export const dynamic = 'force-dynamic';
 
-  const filenames = fs.readdirSync(postsDirectory);
-
-  return filenames
-    .filter((name) => name.endsWith('.md'))
-    .map((name) => ({
-      slug: name.replace(/\.md$/, ''),
-    }));
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const article = await getArticle(slug);
+  if (!article) return { title: '文章不存在' };
+  return {
+    title: article.title,
+    description: article.summary,
+    openGraph: {
+      title: article.title,
+      description: article.summary,
+      type: 'article',
+    },
+  };
 }
 
 function extractToc(content: string) {
@@ -64,16 +74,15 @@ function extractToc(content: string) {
 }
 
 async function getPostData(slug: string) {
-  const fullPath = path.join(process.cwd(), 'posts', `${slug}.md`);
-  const fileContents = fs.readFileSync(fullPath, 'utf8');
-  let { data, content } = matter(fileContents);
+  const article = await getArticle(slug);
+  if (!article) return null;
 
   // ==========================================
   // 🌟 前台渲染清洗区：终极防吞换行补丁！
   // ==========================================
 
   // 1. 强行修复数字列表缺少空格导致无法渲染为列表的 Bug (1.百度 -> 1. 百度)
-  content = content.replace(/^(\s*\d+)\.([^ \n])/gm, '$1. $2');
+  let content = article.markdown.replace(/^(\s*\d+)\.([^ \n])/gm, '$1. $2');
 
   // 2. 🌟 拯救被 Markdown 引擎吞噬的“连续空行”！
   // 统一换行符，并清理纯空格的废弃空行
@@ -102,7 +111,6 @@ async function getPostData(slug: string) {
     // 🌟 allowDangerousHtml 必须开启，这样上面生成的 <br/> 才能顺利通过变成真正的换行！
     .use(remarkRehype, { allowDangerousHtml: true })
     // 🌟 核心升级：开启代码语言自动侦测，并限制白名单，大幅提高 C++ 和常用语言的猜中率！
-    // @ts-ignore
     .use(rehypeHighlight, {
       detect: true,
       ignoreMissing: true,
@@ -113,33 +121,42 @@ async function getPostData(slug: string) {
     .process(content);
 
   return {
+    id: article.id,
     slug,
     contentHtml: processedContent.toString(),
     toc: extractToc(content),
-    title: data.title,
-    date: data.date,
-    tags: data.tags && Array.isArray(data.tags) ? data.tags : [],
-    cover: data.cover || siteConfig.defaultPostCover
+    title: article.title,
+    date: article.publishedAt || '',
+    tags: article.tags,
+    cover: articleCover(article),
+    viewCount: article.viewCount,
+    likeCount: article.likeCount,
+    favoriteCount: article.favoriteCount,
   };
 }
 
-function getRecentPosts(currentSlug: string) {
-  const postsDirectory = path.join(process.cwd(), 'posts');
-  let fileNames: string[] = [];
-  try { fileNames = fs.readdirSync(postsDirectory).filter(f => f.endsWith('.md')); } catch(e) {}
-  if (!fileNames) return [];
-  return fileNames.map(f => {
-    const s = f.replace(/\.md$/, '');
-    const c = fs.readFileSync(path.join(postsDirectory, f), 'utf8');
-    const { data } = matter(c);
-    return { slug: s, title: data.title || '无标题', date: data.date };
-  }).filter(p => p.slug !== currentSlug).slice(0, 3);
+async function getRecentPosts(currentSlug: string) {
+  try {
+    const articles = await getArticleSummaries();
+    return articles
+      .filter((article) => article.slug !== currentSlug)
+      .slice(0, 3)
+      .map((article) => ({
+        slug: article.slug,
+        title: article.title || '无标题',
+        date: article.publishedAt || '',
+      }));
+  } catch (error) {
+    console.error('[posts] 无法读取推荐文章', error);
+    return [];
+  }
 }
 
 export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
   const resolvedParams = await params;
   const postData = await getPostData(resolvedParams.slug);
-  const recentPosts = getRecentPosts(resolvedParams.slug);
+  if (!postData) notFound();
+  const recentPosts = await getRecentPosts(resolvedParams.slug);
 
   return (
     <InnerPageShell size="wide">
@@ -290,8 +307,18 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
                 />
               </div>
 
+              <div className="mt-8 space-y-3 border-t border-slate-300/50 pt-5 md:mt-10 dark:border-slate-700/60">
+                <InteractionBar
+                  articleId={postData.id}
+                  initialViewCount={postData.viewCount}
+                  initialLikeCount={postData.likeCount}
+                  initialFavoriteCount={postData.favoriteCount}
+                />
+                <SubscribeButton />
+              </div>
+
               <div className="mt-12 md:mt-16">
-                <Comments />
+                <CommentSection articleId={postData.id} />
               </div>
 
             </div>

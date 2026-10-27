@@ -11,13 +11,21 @@ public class ArticleController {
     public ArticleController(ArticleQueryService service) { this.service = service; }
 
     @GetMapping("/articles")
-    List<ArticleResponse> articles(@RequestParam(required=false) String category, @RequestParam(required=false) String tag) {
+    List<ArticleSummaryResponse> articles(
+        @RequestParam(required = false) String category,
+        @RequestParam(required = false) String tag
+    ) {
         return service.findPublished(category, tag);
     }
+
     @GetMapping("/articles/{slug}")
-    ArticleResponse article(@PathVariable String slug) { return service.findBySlug(slug); }
+    ArticleResponse article(@PathVariable String slug) {
+        return service.findBySlug(slug);
+    }
+
     @GetMapping("/categories")
     List<String> categories() { return service.categories(); }
+
     @GetMapping("/tags")
     List<String> tags() { return service.tags(); }
 }

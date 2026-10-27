@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async rewrites() {
-    return [{ source: '/api/v1/:path*', destination: (process.env.API_BASE_URL || 'http://localhost:8080') + '/api/v1/:path*' }];
+    return [{ source: '/api/v1/:path*', destination: (process.env.API_BASE_URL || 'http://127.0.0.1:8080') + '/api/v1/:path*' }];
   },
   // 🚨 核心修改 1：关掉纯静态导出，让 Vercel 帮你把 API 跑起来！
   // output: 'export',

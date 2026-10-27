@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: ${TEST_DB_URL:jdbc:mysql://localhost:3306/zpero_blog_test?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&createDatabaseIfNotExist=true}
+    username: ${TEST_DB_USER:${DB_USER:zpero}}
+    password: ${TEST_DB_PASSWORD:${DB_PASSWORD:}}
+  flyway:
+    enabled: true
+    clean-disabled: false
+blog:
+  content-directory: ${TEST_CONTENT_DIR:target/integration-content}
+  registration-enabled: true
+  verification-pepper: integration-test-pepper
+  admin-email: ""
+  admin-password: ""
+  admin-display-name: Integration Admin

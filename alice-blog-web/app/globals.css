@@ -7,18 +7,21 @@
   :root {
     --font-sans: Inter, "Noto Sans SC", "Microsoft YaHei", "PingFang SC", system-ui, sans-serif;
     --font-display: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong", serif;
-    --site-bg: #07111f;
-    --ink-950: #07111f;
-    --glass-strong: rgba(12, 25, 38, 0.68);
-    --glass-soft: rgba(20, 36, 50, 0.46);
-    --glass-border: rgba(229, 246, 255, 0.16);
-    --accent-cyan: #67d8f0;
-    --status-mint: #77e2b3;
-    --text-main: #f3f7fa;
-    --text-muted: #b5c1cc;
-    --radius-panel: 18px;
-    --radius-card: 14px;
-    --shadow-panel: 0 18px 50px rgba(3, 10, 18, 0.28);
+    --site-bg: #0a141c;
+    --ink-950: #0a141c;
+    --glass-strong: rgba(35, 50, 58, 0.4);
+    --glass-quiet: rgba(35, 50, 58, 0.34);
+    --glass-soft: rgba(42, 58, 66, 0.36);
+    --glass-surface-hover: rgba(52, 70, 78, 0.46);
+    --glass-border: rgba(255, 255, 255, 0.14);
+    --accent-cyan: #91cbed;
+    --status-mint: #9be6b0;
+    --text-main: #f6f8f8;
+    --text-secondary: #d1dbe0;
+    --text-muted: #b9c8ce;
+    --radius-panel: 15px;
+    --radius-card: 13px;
+    --shadow-panel: 0 16px 42px rgba(6, 17, 24, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.06);
     color-scheme: dark;
   }
 
@@ -79,34 +82,67 @@
   animation: pageIn 180ms ease-out both;
 }
 
-/* 2.1 亚克力表面。背景已经是预模糊图片，因此首页岛屿只做半透明填充。 */
+/* 2.1 亚克力表面。背景图片已经预模糊，首页不重复运行昂贵滤镜。 */
 .acrylic-panel {
-  background: var(--glass-strong);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.035), transparent 42%),
+    var(--glass-strong);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-panel);
   box-shadow: var(--shadow-panel);
 }
 
+.acrylic-panel--quiet {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.025), transparent 40%),
+    var(--glass-quiet);
+  box-shadow: 0 14px 38px rgba(2, 8, 14, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
 /* 内页只有这一层运行时玻璃；内部旧卡片不再叠加 blur。 */
 .acrylic-panel--inner {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.035), transparent 42%),
+    rgba(30, 45, 53, 0.46);
   -webkit-backdrop-filter: blur(14px) saturate(1.05);
   backdrop-filter: blur(14px) saturate(1.05);
 }
 
 .acrylic-card {
-  background: var(--glass-soft);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.025), transparent 55%),
+    var(--glass-soft);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-card);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
 }
 
 .acrylic-strip {
-  background: rgba(18, 34, 48, 0.56);
+  background: rgba(28, 43, 52, 0.38);
   border: 1px solid var(--glass-border);
-  border-radius: 12px;
+  border-radius: 11px;
 }
 
 .brand-display {
   font-family: var(--font-display);
+}
+
+.identity-panel {
+  border-radius: var(--radius-panel);
+}
+
+.text-shadow-soft {
+  text-shadow: 0 2px 20px rgba(5, 15, 22, 0.36);
+}
+
+.text-shadow-strong {
+  text-shadow:
+    0 1px 3px rgba(3, 10, 16, 0.66),
+    0 6px 18px rgba(3, 10, 16, 0.34);
+}
+
+.nav-art {
+  filter: drop-shadow(0 8px 14px rgba(1, 7, 12, 0.22));
 }
 
 /* Compact heatmap at tablet widths, fuller cells on wide desktops. */
@@ -122,8 +158,30 @@
 
 @media (min-width: 1280px) {
   .heatmap-grid {
+    grid-auto-columns: 11px;
+    gap: 2px;
+  }
+
+  .heatmap-cell {
+    width: 11px;
+    height: 11px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .heatmap-grid {
+    grid-auto-columns: 11px;
+  }
+
+  .heatmap-cell {
+    width: 11px;
+    height: 11px;
+  }
+}
+
+@media (min-width: 1680px) {
+  .heatmap-grid {
     grid-auto-columns: 12px;
-    gap: 3px;
   }
 
   .heatmap-cell {
@@ -146,7 +204,7 @@
   .acrylic-panel--inner {
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-    background: rgba(9, 17, 29, 0.86);
+    background: rgba(30, 45, 53, 0.72);
   }
 }
 

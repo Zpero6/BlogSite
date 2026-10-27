@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Sparkles, LayoutGrid, ListTree, Calendar, Hash, ArrowUp } from 'lucide-react';
 import Link from 'next/link';
 
-export default function TimelineClient({ posts: initialPosts, tags }: { posts: any[], tags: { name: string, count: number }[] }) {
+export default function TimelineClient({ posts: initialPosts, tags, error }: { posts: any[], tags: { name: string, count: number }[], error?: string | null }) {
   const [posts, setPosts] = useState(initialPosts);
   const [selectedTag, setSelectedTag] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState("");
@@ -84,6 +84,12 @@ export default function TimelineClient({ posts: initialPosts, tags }: { posts: a
           <Sparkles size={16} className="text-indigo-500" /> 总计 {posts.length} 篇研究记录
         </p>
       </div>
+
+      {error && (
+        <p role="alert" className="mx-auto mb-8 max-w-2xl rounded-2xl border border-rose-200/40 bg-rose-300/10 px-4 py-3 text-center text-sm text-rose-50">
+          {error}
+        </p>
+      )}
 
       <div className="flex flex-col items-center gap-8 mb-16 relative z-[99]">
 

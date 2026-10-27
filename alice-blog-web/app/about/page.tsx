@@ -19,6 +19,9 @@ import InnerPageShell from '../../components/InnerPageShell';
 import PageTransition from '../../components/PageTransition';
 import AboutClient from '../../components/AboutClient';
 import { Suspense } from 'react';
+import { getArticleSummaries } from '../../lib/blogApi';
+
+export const dynamic = 'force-dynamic';
 
 function getDirActivities(dirName: string, typeLabel: '文章' | '杂谈' | '说说', linkPrefix: string) {
   const dirPath = path.join(process.cwd(), dirName);
@@ -47,7 +50,8 @@ export default async function AboutPage() {
   try {
     const fileContents = fs.readFileSync(fullPath, 'utf8');
     // 🌟 改为 let，以便进行文本预清洗
-    let { data, content } = matter(fileContents);
+    const { data, content: rawContent } = matter(fileContents);
+    let content = rawContent;
     if (data.cover) coverImage = data.cover;
 
     // ==========================================
@@ -76,7 +80,6 @@ export default async function AboutPage() {
       .use(remarkMath)
       .use(remarkRehype, { allowDangerousHtml: true })
       // 🌟 核心修复：开启自动语言侦测，并限制语言白名单！
-      // @ts-ignore
       .use(rehypeHighlight, {
         detect: true,
         ignoreMissing: true,
@@ -91,7 +94,18 @@ export default async function AboutPage() {
     console.error("读取 about.md 失败", e);
   }
 
-  const posts = getDirActivities('posts', '文章', 'posts');
+  let posts: Array<{ id: string; type: '文章'; title: string; date: string; url: string }> = [];
+  try {
+    posts = (await getArticleSummaries()).map((article) => ({
+      id: `api-post-${article.slug}`,
+      type: '文章' as const,
+      title: article.title,
+      date: article.publishedAt ? new Date(`${article.publishedAt}T00:00:00+08:00`).toISOString() : '1970-01-01T00:00:00Z',
+      url: `/posts/${article.slug}`,
+    }));
+  } catch (error) {
+    console.error('读取后端文章动态失败', error);
+  }
   const chatters = getDirActivities('chatters', '杂谈', 'chatter');
   const moments = getDirActivities('moments', '说说', 'moments');
 

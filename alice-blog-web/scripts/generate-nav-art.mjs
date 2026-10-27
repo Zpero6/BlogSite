@@ -1,10 +1,9 @@
 /**
  * Generates the local, replaceable artwork used on the homepage site cards.
  *
- * These are deliberately simple cat-sticker placeholders so every module has
- * a right-side image without borrowing any character art from the reference.
- * To use real artwork, replace the generated file or point `imageSrc` in
- * `components/home/NavigationGrid.tsx` at a new asset.
+ * Each entry gets a distinct semantic glyph on its own tinted glass sticker,
+ * so the set does not read as the same face recoloured eleven times. Replace
+ * a file or point `imageSrc` in NavigationGrid.tsx at new art when available.
  */
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -26,24 +25,25 @@ const glyphs = {
 };
 
 const modules = [
-  { name: "timeline", bg: ["#0e7490", "#082f49"], hair: "#67e8f9", accent: "#22d3ee", glyph: "clock" },
-  { name: "projects", bg: ["#4f46e5", "#1e1b4b"], hair: "#a5b4fc", accent: "#818cf8", glyph: "folder" },
-  { name: "about", bg: ["#7c3aed", "#2e1065"], hair: "#d8b4fe", accent: "#c084fc", glyph: "user" },
-  { name: "chatter", bg: ["#0f766e", "#042f2e"], hair: "#5eead4", accent: "#2dd4bf", glyph: "chat" },
-  { name: "moments", bg: ["#b45309", "#451a03"], hair: "#fcd34d", accent: "#fbbf24", glyph: "sparkle" },
-  { name: "photowall", bg: ["#be185d", "#500724"], hair: "#f9a8d4", accent: "#f472b6", glyph: "image" },
-  { name: "music", bg: ["#6d28d9", "#2e1065"], hair: "#c4b5fd", accent: "#a78bfa", glyph: "note" },
-  { name: "friends", bg: ["#0369a1", "#082f49"], hair: "#7dd3fc", accent: "#38bdf8", glyph: "link" },
-  { name: "favorites", bg: ["#9f1239", "#4c0519"], hair: "#fda4af", accent: "#fb7185", glyph: "heart" },
-  { name: "notifications", bg: ["#a16207", "#422006"], hair: "#fde68a", accent: "#facc15", glyph: "bell" },
-  { name: "account", bg: ["#334155", "#0f172a"], hair: "#cbd5e1", accent: "#94a3b8", glyph: "gear" },
+  { name: "timeline", bg: ["#0e7490", "#082f49"], accent: "#67e8f9", glyph: "clock" },
+  { name: "projects", bg: ["#4f46e5", "#1e1b4b"], accent: "#a5b4fc", glyph: "folder" },
+  { name: "about", bg: ["#7c3aed", "#2e1065"], accent: "#d8b4fe", glyph: "user" },
+  { name: "chatter", bg: ["#0f766e", "#042f2e"], accent: "#5eead4", glyph: "chat" },
+  { name: "moments", bg: ["#b45309", "#451a03"], accent: "#fcd34d", glyph: "sparkle" },
+  { name: "photowall", bg: ["#be185d", "#500724"], accent: "#f9a8d4", glyph: "image" },
+  { name: "music", bg: ["#6d28d9", "#2e1065"], accent: "#c4b5fd", glyph: "note" },
+  { name: "friends", bg: ["#0369a1", "#082f49"], accent: "#7dd3fc", glyph: "link" },
+  { name: "favorites", bg: ["#9f1239", "#4c0519"], accent: "#fda4af", glyph: "heart" },
+  { name: "notifications", bg: ["#a16207", "#422006"], accent: "#fde68a", glyph: "bell" },
+  { name: "account", bg: ["#334155", "#0f172a"], accent: "#cbd5e1", glyph: "gear" },
 ];
 
 function buildSvg(item) {
   const [bg1, bg2] = item.bg;
-  const strokeGlyph = ["sparkle", "heart"].includes(item.glyph)
+  const fillGlyph = item.glyph === "sparkle" || item.glyph === "heart";
+  const glyphStyle = fillGlyph
     ? `color="${item.accent}"`
-    : `stroke="${item.accent}" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"`;
+    : `stroke="${item.accent}" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"`;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img">
   <defs>
@@ -51,33 +51,18 @@ function buildSvg(item) {
       <stop offset="0" stop-color="${bg1}"/>
       <stop offset="1" stop-color="${bg2}"/>
     </linearGradient>
-    <radialGradient id="glow" cx="0.35" cy="0.25" r="0.8">
-      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22"/>
+    <radialGradient id="glow" cx="0.32" cy="0.22" r="0.82">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.24"/>
       <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <rect x="4" y="4" width="112" height="112" rx="30" fill="url(#bg)"/>
-  <rect x="4" y="4" width="112" height="112" rx="30" fill="url(#glow)"/>
-  <rect x="4" y="4" width="112" height="112" rx="30" fill="none" stroke="#e5f6ff" stroke-opacity="0.16" stroke-width="2"/>
-  <circle cx="92" cy="26" r="2.2" fill="#ffffff" opacity="0.55"/>
-  <circle cx="26" cy="88" r="1.5" fill="#ffffff" opacity="0.35"/>
-
-  <path d="M37 46 L33 24 L55 36 Z" fill="${item.hair}"/>
-  <path d="M83 46 L87 24 L65 36 Z" fill="${item.hair}"/>
-  <path d="M39 43 L37 31 L49 38 Z" fill="#f9a8c4" opacity="0.65"/>
-  <path d="M81 43 L83 31 L71 38 Z" fill="#f9a8c4" opacity="0.65"/>
-  <ellipse cx="60" cy="63" rx="29" ry="27" fill="#fff5e8"/>
-  <path d="M32 51 Q39 31 60 30 Q81 31 88 51 Q77 41 60 41 Q43 41 32 51 Z" fill="${item.hair}" opacity="0.95"/>
-  <ellipse cx="49" cy="61" rx="3.2" ry="4.4" fill="#172033"/>
-  <ellipse cx="71" cy="61" rx="3.2" ry="4.4" fill="#172033"/>
-  <circle cx="50.2" cy="59.8" r="1" fill="#ffffff"/>
-  <circle cx="72.2" cy="59.8" r="1" fill="#ffffff"/>
-  <circle cx="43" cy="69" r="3.4" fill="#f9a8c4" opacity="0.55"/>
-  <circle cx="77" cy="69" r="3.4" fill="#f9a8c4" opacity="0.55"/>
-  <path d="M56 69 Q60 73 64 69" fill="none" stroke="#172033" stroke-width="2" stroke-linecap="round"/>
-
-  <circle cx="88" cy="88" r="17" fill="#08131f" stroke="${item.accent}" stroke-opacity="0.55" stroke-width="2"/>
-  <g transform="translate(76 76)" ${strokeGlyph}>${glyphs[item.glyph]}</g>
+  <rect x="4" y="4" width="112" height="112" rx="27" fill="url(#bg)"/>
+  <rect x="4" y="4" width="112" height="112" rx="27" fill="url(#glow)"/>
+  <rect x="4" y="4" width="112" height="112" rx="27" fill="none" stroke="#eaf6ff" stroke-opacity="0.17" stroke-width="2"/>
+  <circle cx="60" cy="60" r="31" fill="#ffffff" fill-opacity="0.07"/>
+  <g transform="translate(36 36) scale(2)" ${glyphStyle}>${glyphs[item.glyph]}</g>
+  <circle cx="96" cy="24" r="2" fill="#ffffff" opacity="0.55"/>
+  <circle cx="24" cy="94" r="1.6" fill="#ffffff" opacity="0.35"/>
 </svg>
 `;
 }
@@ -88,4 +73,4 @@ for (const item of modules) {
   await fs.writeFile(path.join(outputDir, `${item.name}.svg`), buildSvg(item), "utf8");
 }
 
-console.log(`generated ${modules.length} nav illustrations in ${outputDir}`);
+console.log(`generated ${modules.length} semantic nav illustrations in ${outputDir}`);

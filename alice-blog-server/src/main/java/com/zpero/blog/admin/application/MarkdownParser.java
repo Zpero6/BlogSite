@@ -33,10 +33,12 @@ class MarkdownParser {
         String summary = required(data, "summary", filename);
         String category = required(data, "category", filename);
         String status = required(data, "status", filename).toLowerCase();
+        String cover = optional(data, "cover");
         if (!SLUG.matcher(slug).matches()) throw invalid(filename, "slug 只能包含小写字母、数字和连字符");
         if (!STATUSES.contains(status)) throw invalid(filename, "status 只能是 draft 或 published");
         if (title.length() > 200 || summary.length() > 600 || category.length() > 100)
             throw invalid(filename, "title、summary 或 category 超出长度限制");
+        if (cover != null && cover.length() > 500) throw invalid(filename, "cover 不能超过 500 个字符");
 
         Object tagValue = data.get("tags");
         List<String> tags = tagValue instanceof List<?> list
@@ -47,7 +49,7 @@ class MarkdownParser {
         LocalDateTime publishedAt = parseDate(data.get("publishedAt"), filename, status);
         String markdown = normalized.substring(end + 5).strip();
         if (markdown.isBlank()) throw invalid(filename, "正文为空");
-        return new MarkdownDocument(title, slug, summary, category, tags, publishedAt, status, markdown, sha256(normalized));
+        return new MarkdownDocument(title, slug, summary, category, cover, tags, publishedAt, status, markdown, sha256(normalized));
     }
 
     private LocalDateTime parseDate(Object value, String filename, String status) {
@@ -70,6 +72,13 @@ class MarkdownParser {
         Object value = data.get(key);
         if (value == null || String.valueOf(value).isBlank()) throw invalid(filename, "缺少 " + key);
         return String.valueOf(value).trim();
+    }
+
+    private String optional(Map<String, Object> data, String key) {
+        Object value = data.get(key);
+        if (value == null) return null;
+        String text = String.valueOf(value).trim();
+        return text.isEmpty() ? null : text;
     }
 
     private String sha256(String value) {

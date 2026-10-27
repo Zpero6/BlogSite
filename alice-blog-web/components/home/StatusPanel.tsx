@@ -1,83 +1,42 @@
 import { siteConfig } from "@/siteConfig";
 
-function getRunningDays() {
-  const start = new Date(siteConfig.buildDate).getTime();
-  if (!Number.isFinite(start)) return 0;
-  return Math.max(0, Math.floor((Date.now() - start) / 86_400_000));
+function formatDate(value: Date) {
+  return new Intl.DateTimeFormat("zh-CN", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  })
+    .format(value)
+    .replaceAll("/", ".");
 }
 
-export default function StatusPanel({
-  postCount,
-  chatterCount,
-  photoCount,
-}: {
-  postCount: number;
-  chatterCount: number;
-  photoCount: number;
-}) {
-  const runningDays = getRunningDays();
+export default function StatusPanel() {
+  const launchDate = formatDate(new Date(siteConfig.buildDate));
 
-  const stats = [
-    { value: postCount, label: "文章" },
-    { value: chatterCount, label: "杂谈" },
-    { value: photoCount, label: "照片" },
-  ];
-
-  const milestones = [
-    { label: "站点上线", date: "2026.10.26" },
-    { label: "首页重构", date: "2026.10.26" },
-    { label: "Git 发布", date: "2026.10.26" },
+  const events = [
+    { label: "站点上线", date: launchDate, active: false },
+    { label: "首页重构", date: "2026.10.26", active: false },
+    { label: "视觉调整", date: "2026.10.27", active: false },
     { label: "持续构建", date: "进行中", active: true },
   ];
 
   return (
-    <section className="acrylic-panel p-5" aria-labelledby="status-heading">
-      <div className="flex items-center justify-between gap-3">
-        <h2 id="status-heading" className="text-sm font-black text-slate-100">
-          站点状态
-        </h2>
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/20 bg-emerald-400/10 px-2.5 py-1 text-[10px] font-bold text-emerald-300">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-          在线
-        </span>
-      </div>
-
-      <p className="mt-2 text-xs leading-6 text-slate-400">
-        {runningDays > 0 ? (
-          <>
-            已运行 <span className="font-bold text-cyan-200">{runningDays}</span> 天
-          </>
-        ) : (
-          <>今日上线，持续构建中</>
-        )}
-      </p>
-
-      <dl className="mt-4 grid grid-cols-3 gap-2 border-y border-white/[0.08] py-3">
-        {stats.map((stat) => (
-          <div key={stat.label} className="text-center">
-            <dt className="sr-only">{stat.label}</dt>
-            <dd>
-              <span className="block text-xl font-black text-white">{stat.value}</span>
-              <span className="mt-0.5 block text-[10px] font-bold text-slate-500">
-                {stat.label}
-              </span>
-            </dd>
-          </div>
-        ))}
-      </dl>
-
-      <ol className="relative mt-4 space-y-3.5 border-l border-white/10 pl-4">
-        {milestones.map((item) => (
-          <li key={item.label} className="relative">
+    <section className="acrylic-panel acrylic-panel--quiet px-5 py-6" aria-label="站点时间线">
+      <ol className="relative space-y-5 border-l border-white/25 pl-4">
+        {events.map((event) => (
+          <li key={event.label} className="relative">
             <span
-              className={`absolute -left-[21px] top-1.5 h-2 w-2 rounded-full border ${
-                item.active
-                  ? "border-emerald-300/60 bg-emerald-400"
-                  : "border-cyan-200/40 bg-cyan-300/70"
+              className={`absolute -left-[21px] top-1.5 h-2 w-2 rounded-full ${
+                event.active
+                  ? "bg-[var(--status-mint)]"
+                  : "bg-white/65"
               }`}
+              aria-hidden="true"
             />
-            <p className="text-xs font-bold text-slate-300">{item.label}</p>
-            <time className="text-[10px] text-slate-500">{item.date}</time>
+            <p className="text-[13px] font-semibold text-white/95">{event.label}</p>
+            <p className="mt-1 text-[11px] text-[var(--text-secondary)]">
+              {event.date}
+            </p>
           </li>
         ))}
       </ol>

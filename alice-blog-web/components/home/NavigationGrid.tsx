@@ -1,164 +1,147 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
+import { LayoutGrid } from "lucide-react";
 
 type NavItem = {
   title: string;
   description: string;
   href: string;
-  imageSrc?: string;
-  imageAlt?: string;
+  imageSrc: string;
+  imageAlt: string;
   imageSize?: number;
   imagePosition?: string;
-  icon?: LucideIcon;
   soon?: boolean;
 };
 
 const items: NavItem[] = [
   {
     title: "时间线",
-    description: "文章归档与更新记录",
+    description: "按日期翻看文章",
     href: "/timeline",
     imageSrc: "/images/nav/timeline.svg",
-    imageAlt: "时间线贴纸",
+    imageAlt: "时间线图标",
   },
   {
     title: "项目",
-    description: "开源项目与技术实验",
+    description: "代码、架构与实验",
     href: "/projects",
     imageSrc: "/images/nav/projects.svg",
-    imageAlt: "项目贴纸",
+    imageAlt: "项目图标",
   },
   {
     title: "关于",
-    description: "关于 Zpero 与这个站点",
+    description: "我的技术与日常",
     href: "/about",
     imageSrc: "/images/nav/about.svg",
-    imageAlt: "关于贴纸",
+    imageAlt: "关于图标",
   },
   {
     title: "杂谈",
-    description: "开发札记与问题记录",
+    description: "踩坑、复盘和随记",
     href: "/chatter",
     imageSrc: "/images/nav/chatter.svg",
-    imageAlt: "杂谈贴纸",
+    imageAlt: "杂谈图标",
   },
   {
     title: "说说",
-    description: "生活动态与灵感碎片",
+    description: "不成篇的生活碎片",
     href: "/moments",
     imageSrc: "/images/nav/moments.svg",
-    imageAlt: "说说贴纸",
+    imageAlt: "说说图标",
   },
   {
     title: "照片墙",
-    description: "记录与收藏的画面",
+    description: "旅途、屏幕和收藏",
     href: "/photowall",
     imageSrc: "/images/nav/photowall.svg",
-    imageAlt: "照片墙贴纸",
+    imageAlt: "照片墙图标",
   },
   {
     title: "音乐馆",
-    description: "播放列表与歌词",
+    description: "最近循环的声音",
     href: "/music",
     imageSrc: "/images/nav/music.svg",
-    imageAlt: "音乐贴纸",
+    imageAlt: "音乐图标",
   },
   {
     title: "友链",
-    description: "有趣灵魂的入口",
+    description: "我常去的站点",
     href: "/friends",
     imageSrc: "/images/nav/friends.svg",
-    imageAlt: "友链贴纸",
+    imageAlt: "友链图标",
   },
   {
     title: "收藏",
-    description: "规划中的内容收藏",
-    href: "/soon/favorites",
+    description: "登录后收藏的文章",
+    href: "/favorites",
     imageSrc: "/images/nav/favorites.svg",
-    imageAlt: "收藏贴纸",
-    soon: true,
+    imageAlt: "收藏图标",
   },
   {
     title: "通知",
-    description: "规划中的消息中心",
-    href: "/soon/notifications",
+    description: "新文章发布提醒",
+    href: "/notifications",
     imageSrc: "/images/nav/notifications.svg",
-    imageAlt: "通知贴纸",
-    soon: true,
+    imageAlt: "通知图标",
   },
   {
     title: "个人中心",
-    description: "规划中的账户入口",
-    href: "/soon/account",
+    description: "登录、账户与管理入口",
+    href: "/account",
     imageSrc: "/images/nav/account.svg",
-    imageAlt: "个人中心贴纸",
-    soon: true,
+    imageAlt: "个人中心图标",
   },
 ];
 
 export default function NavigationGrid() {
   return (
     <section aria-labelledby="navigation-heading">
-      <div className="mb-3 flex items-end justify-between gap-3">
-        <h2 id="navigation-heading" className="text-base font-black text-slate-100">
-          站点
-        </h2>
-        <span className="text-[11px] text-slate-400">常用入口</span>
-      </div>
+      <h2
+        id="navigation-heading"
+        className="text-shadow-strong mb-3.5 flex items-center gap-2 text-[1.5rem] font-bold text-white"
+      >
+        <LayoutGrid className="h-5 w-5 text-white/85" aria-hidden="true" />
+        站点
+      </h2>
 
       <div className="grid grid-cols-1 gap-3 min-[480px]:grid-cols-2 xl:grid-cols-4">
         {items.map((item) => {
-          const Icon = item.icon;
-          const imageSize = item.imageSize ?? 56;
+          const imageSize = item.imageSize ?? 44;
 
           return (
             <Link
               key={item.href}
               href={item.href}
-              className="acrylic-card group flex min-h-[108px] min-w-0 items-center gap-3 p-3.5 transition-[background-color,border-color] duration-200 hover:border-white/25 hover:bg-white/[0.07]"
+              className="acrylic-card group relative flex min-h-[108px] min-w-0 items-center overflow-hidden p-3.5 pr-[62px] transition-[background-color,border-color] duration-200 hover:border-white/25 hover:bg-[var(--glass-surface-hover)]"
             >
-              <span className="min-w-0 flex-1">
+              <span className="relative z-10 min-w-0">
                 <span className="flex flex-wrap items-center gap-1.5">
-                  <span className="truncate text-sm font-bold text-slate-100">
+                  <span className="text-shadow-strong text-base font-semibold text-white">
                     {item.title}
                   </span>
                   {item.soon && (
-                    <span className="shrink-0 rounded-full border border-amber-200/15 bg-amber-300/[0.08] px-1.5 py-0.5 text-[9px] font-bold text-amber-200/75">
+                    <span className="shrink-0 rounded-full bg-white/10 px-1.5 py-0.5 text-[9px] font-semibold text-amber-50/80">
                       规划中
                     </span>
                   )}
                 </span>
-                <span className="mt-1.5 line-clamp-2 text-[11px] leading-5 text-slate-400">
+                <span className="mt-1.5 line-clamp-2 text-xs leading-5 text-[var(--text-secondary)]">
                   {item.description}
                 </span>
               </span>
 
-              {item.imageSrc ? (
-                <Image
-                  src={item.imageSrc}
-                  alt={item.imageAlt || item.title}
-                  width={imageSize}
-                  height={imageSize}
-                  style={{
-                    width: imageSize,
-                    height: imageSize,
-                    objectPosition: item.imagePosition,
-                  }}
-                  className="shrink-0 object-contain transition-transform duration-200 group-hover:translate-x-0.5"
-                />
-              ) : Icon ? (
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] text-slate-300">
-                  <Icon className="h-5 w-5" aria-hidden="true" />
-                </span>
-              ) : (
-                <span
-                  aria-hidden="true"
-                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/[0.05] text-sm font-black text-slate-300"
-                >
-                  {item.title.slice(0, 1)}
-                </span>
-              )}
+              <Image
+                src={item.imageSrc}
+                alt={item.imageAlt}
+                width={imageSize}
+                height={imageSize}
+                style={{
+                  width: imageSize,
+                  height: imageSize,
+                  objectPosition: item.imagePosition,
+                }}
+                className="nav-art absolute bottom-3 right-3 shrink-0 object-contain transition-transform duration-200 group-hover:translate-x-0.5"
+              />
             </Link>
           );
         })}

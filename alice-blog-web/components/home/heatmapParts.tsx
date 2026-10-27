@@ -1,12 +1,32 @@
 import type { ContributionData } from "@/lib/githubContributions";
 
 const LEVEL_CLASSES = [
-  "bg-white/[0.06] border border-white/[0.05]",
-  "bg-cyan-950",
-  "bg-cyan-800",
-  "bg-cyan-600",
-  "bg-emerald-400",
+  "bg-white/25 border border-white/15",
+  "bg-[#c3efcc]/90",
+  "bg-[#89dca0]",
+  "bg-[#4cbb79]",
+  "bg-[#258552]",
 ];
+
+// A seeded pattern keeps the playful fill consistent between server rendering,
+// hydration and refreshes. Actual contribution data is left untouched.
+function decorativeLevel(date: string) {
+  let seed = 2166136261;
+  for (const character of `zpero-garden:${date}`) {
+    seed = Math.imul(seed ^ character.charCodeAt(0), 16777619);
+  }
+  seed ^= seed >>> 16;
+  seed = Math.imul(seed, 0x7feb352d);
+  seed ^= seed >>> 15;
+  seed = Math.imul(seed, 0x846ca68b);
+  seed ^= seed >>> 16;
+  const value = (seed >>> 0) / 4294967296;
+  if (value < 0.6) return 0;
+  if (value < 0.75) return 1;
+  if (value < 0.88) return 2;
+  if (value < 0.96) return 3;
+  return 4;
+}
 
 function buildCells(days: ContributionData["days"]) {
   if (days.length === 0) return [];
@@ -23,7 +43,7 @@ export function HeatmapGrid({ data }: { data: ContributionData }) {
     <div className="overflow-x-auto pb-1">
       <div
         role="list"
-        aria-label={`${data.username} 近一年的 GitHub 贡献热力图，共 ${data.total} 次贡献`}
+        aria-label={`${data.username} 的绿色热力图，包含随机装饰填色`}
         className="heatmap-grid grid w-max grid-flow-col grid-rows-7"
       >
         {cells.map((day, index) =>
@@ -33,8 +53,8 @@ export function HeatmapGrid({ data }: { data: ContributionData }) {
               role="listitem"
               aria-label={`${day.date}，${day.count} 次贡献`}
               title={`${day.date} · ${day.count} 次贡献`}
-              className={`heatmap-cell rounded-[2px] transition-[box-shadow] duration-150 hover:ring-1 hover:ring-cyan-300/80 ${
-                LEVEL_CLASSES[day.level] ?? LEVEL_CLASSES[0]
+              className={`heatmap-cell rounded-[2px] ring-1 ring-black/15 transition-[box-shadow] duration-150 hover:ring-1 hover:ring-cyan-300/80 ${
+                LEVEL_CLASSES[day.level > 0 ? day.level : decorativeLevel(day.date)] ?? LEVEL_CLASSES[0]
               }`}
             />
           ) : (
@@ -42,18 +62,6 @@ export function HeatmapGrid({ data }: { data: ContributionData }) {
           )
         )}
       </div>
-    </div>
-  );
-}
-
-export function Legend() {
-  return (
-    <div className="flex items-center gap-1.5 text-[11px] text-slate-400" aria-hidden="true">
-      <span>少</span>
-      {LEVEL_CLASSES.map((className, index) => (
-        <span key={index} className={`h-[10px] w-[10px] rounded-[2px] ${className}`} />
-      ))}
-      <span>多</span>
     </div>
   );
 }

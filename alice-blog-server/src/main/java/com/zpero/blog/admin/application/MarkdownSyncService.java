@@ -8,11 +8,15 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -81,16 +85,16 @@ public class MarkdownSyncService {
             && (existing.isEmpty() || existing.getFirst().firstPublishedAt() == null);
         if (existing.isEmpty()) {
             jdbc.update("""
-                INSERT INTO article(slug,title,summary,markdown,category_id,status,content_hash,published_at,first_published_at)
-                VALUES(?,?,?,?,?,?,?,?,?)
-                """, doc.slug(), doc.title(), doc.summary(), doc.markdown(), categoryId, doc.status(), doc.hash(),
+                INSERT INTO article(slug,title,summary,cover,markdown,category_id,status,content_hash,published_at,first_published_at)
+                VALUES(?,?,?,?,?,?,?,?,?,?)
+                """, doc.slug(), doc.title(), doc.summary(), doc.cover(), doc.markdown(), categoryId, doc.status(), doc.hash(),
                 doc.publishedAt(), firstPublish ? doc.publishedAt() : null);
         } else {
             jdbc.update("""
-                UPDATE article SET title=?,summary=?,markdown=?,category_id=?,status=?,content_hash=?,published_at=?,
+                UPDATE article SET title=?,summary=?,cover=?,markdown=?,category_id=?,status=?,content_hash=?,published_at=?,
                   first_published_at=CASE WHEN first_published_at IS NULL AND ? THEN ? ELSE first_published_at END
                 WHERE id=?
-                """, doc.title(), doc.summary(), doc.markdown(), categoryId, doc.status(), doc.hash(), doc.publishedAt(),
+                """, doc.title(), doc.summary(), doc.cover(), doc.markdown(), categoryId, doc.status(), doc.hash(), doc.publishedAt(),
                 firstPublish, doc.publishedAt(), existing.getFirst().id());
         }
         long articleId = existing.isEmpty()
@@ -124,8 +128,18 @@ public class MarkdownSyncService {
     }
 
     private long createLog(long operatorId) {
-        jdbc.update("INSERT INTO markdown_sync_log(operator_id) VALUES(?)", operatorId);
-        return jdbc.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
+        KeyHolder keys = new GeneratedKeyHolder();
+        jdbc.update(connection -> {
+            PreparedStatement statement = connection.prepareStatement(
+                "INSERT INTO markdown_sync_log(operator_id) VALUES(?)",
+                Statement.RETURN_GENERATED_KEYS
+            );
+            statement.setLong(1, operatorId);
+            return statement;
+        }, keys);
+        Number key = keys.getKey();
+        if (key == null) throw new IllegalStateException("无法获取同步日志 ID");
+        return key.longValue();
     }
 
     private void finishLog(long logId, SyncResponse response) {

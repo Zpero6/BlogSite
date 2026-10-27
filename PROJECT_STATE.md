@@ -4,7 +4,7 @@
 
 ## 1. 交接状态
 
-- 状态：第二轮视觉重构已完成；首页模块分离、共享柔焦壁纸、内页 shell、站点卡片插画均已落地，等待最终提交与推送。
+- 状态：参考图高保真重构已完成并通过生产构建验证；本轮的本地修改尚未提交/推送。
 - 更新时间：2026-10-27（Asia/Shanghai）。
 - 项目目录：`D:\ZperoSite`。
 - 本地 Git 基线：`4c8e578 chore: establish repository baseline`。
@@ -43,7 +43,7 @@
 - 壁纸新增预模糊 AVIF/WebP 变体（桌面 18px、移动 14px 模糊，sat 0.82 / brightness 0.66），运行时不使用全屏 `filter: blur()`。
 - 背景轮播间隔调整为 12 秒，改为 pending → onLoad → 淡入 → 提升为当前层的三阶段状态机；图片未加载完成前不会切换透明度。`prefers-reduced-motion` 下仍轮播，但改为瞬时切换。站长头像替换为用户提供的 `站长头像.jpeg`，生成 320×320 WebP 与 256×256 PNG。
 - 新增 `InnerPageShell`，timeline、projects、about、chatter、friends、moments、music、photowall、posts、tree、soon 均迁移；旧 `Navbar` 与重复的 `BackButton` 已删除。
-- 站点卡片改为“左侧标题/说明 + 右侧自定义插画”，支持 `imageSrc`、`imageSize`、`imagePosition` 和图标 fallback；新增 11 张本地猫贴纸占位图。
+- 站点卡片改为“左侧标题/说明 + 右侧自定义插画”，支持 `imageSrc`、`imageSize`、`imagePosition` 和图标 fallback；新增 11 张本地占位图（第三轮已改为语义图形）。
 - 建立 `--glass-strong/soft`、`--glass-border` 等 token，新增 `acrylic-panel`、`acrylic-card`、`acrylic-strip`；内页只保留页面级一层模糊，嵌套 blur 仍关闭。
 - 字体改为中文无衬线栈，品牌名保留衬线显示体；移除关键页面的全大写模板眉题。
 - 404 之外的空数据状态补齐：音乐馆无播放列表、照片墙无相册均显示明确空状态。
@@ -62,6 +62,73 @@
 - 时间线桌面端保留左右交替布局，首条卡片会留出半屏空白；如需要可改为单侧时间线或默认矩阵视图。
 - `tree` 的炼金术主题 UI 保留其内部英文标签，作为特殊实验页处理。
 - 仓库级 lint 未整体清理。
+
+### 1.3 参考图高保真重构（2026-10-27）
+
+本轮以 `REFERENCE_UI_EXECUTION_PROMPT.md` 和新的参考图为准，完成：
+
+- 首页重新组织为：左侧独立大头像 + 简洁时间线 + 最近更新；右侧大标题、状态行、两条提示横条、紧凑快捷按钮、无外框热力图、四列站点卡片、品牌技能图标；底部居中页脚。
+- 删除首页身份大卡片，头像直接悬浮；标题统一白色无衬线，不再单独染色“の”。
+- 背景改用 `-blur-v2` 资源：brightness 0.96、saturation 0.94、桌面 16px / 移动 12px 预模糊，全屏遮罩仅保留顶部 8% / 底部 24%。
+- 玻璃 token 调整为可透色的烟灰玻璃；状态行使用局部小玻璃胶囊，热力图单元格增加细描边和强文字阴影以适配明亮壁纸。
+- 轮播重写为双稳定槽：底层恒为 opacity 1，上层预载下一张后 0→1 淡入 2.2 秒；过渡结束在遮住的情况下更新底层，再瞬时复位上层。缓存/SSR 图片通过 `complete` + `decode()` 补判，避免 onLoad 丢失导致轮播卡住。
+- 背景每 10 秒轮换；隐藏标签页暂停新切换；减少动态效果时瞬时换图。
+- 站点卡片插画改为 11 个语义不同的本地贴纸；技能图标改用 `simple-icons` 品牌图形。
+- 内页继续使用 `InnerPageShell`，玻璃颜色随整体 token 提亮；移动端内页背景改为 `rgba(30,45,53,0.72)`，不再近黑。
+- 新增 `scripts/verify-carousel.mjs`、`scripts/capture-wallpaper-cycles.mjs`、`scripts/check-layout.mjs`；`capture-screenshots.mjs` 增加 1920×1080 视口并在截图中移除 Next dev 指示器。
+
+验证：
+
+- `npm run typecheck`、`npm run build` 通过；所有公开路由与 `/api/contributions` 返回 200。
+- 生产预览：`http://localhost:3001`（3000 当前是用户启动的 dev 服务，受权限限制无法由本轮进程终止）。
+- 轮播实测：上层 `transition-duration: 2.2s`，淡入期间底层 opacity 始终为 1；切换完成后底层变为新图、上层复位为下一张且 opacity 0；减少动态效果时底层直接换图。
+- 五张壁纸逐张截图核验（`screenshots/wallpaper-1..5.png`），布局溢出测量：1920/1440/1024/768/390 均无整页横向滚动；390 下热力图在自身容器内滚动（scrollWidth 581 / clientWidth 359）。
+- Lighthouse 13 生产首页：桌面 Performance 100 / A11y 100；移动 Performance 99 / A11y 100，LCP 2.3s，CLS 0，TBT 20ms。
+
+本轮遗留：
+
+- 文章时间线仍保留左右交替布局，桌面首条卡片会留出半屏空白；不属于首页参考图的核心轮廓。
+- `tree` 页面保留其炼金术主题内部 UI。
+- MySQL 品牌图形使用 simple-icons 的字标，36–40px 下较小。
+- 仓库级 `npm run lint` 仍有上游遗留组件错误；本轮修改文件的 ESLint 无错误。
+- 按要求未初始化新仓库、未推送 GitHub；本地改动待用户确认后提交。
+
+### 1.4 后端主链路与互动功能联调（2026-10-27）
+
+已完成：
+
+- Flyway 新增 `V3__article_cover.sql`；`/api/v1/health` 现在同时检查数据库连接和 Flyway 版本。
+- 新增管理员初始化：`ADMIN_EMAIL` / `ADMIN_PASSWORD` 在启动时创建管理员；已存在的普通账号会被提升，密码不被改写。
+- 认证闭环：注册、登录、退出、`/auth/me`、Session JDBC、CSRF Cookie、会话 ID 轮换、JSON 化 401/403。
+- 文章接口：列表返回摘要，详情返回 Markdown、封面和浏览/点赞/收藏计数；前端首页、时间线、文章详情、关于页和 tree 页改为读取 Java API。
+- 统一内容源：`content/posts → 管理员同步 → MySQL → Java API → Next.js`。旧 `alice-blog-web/posts` 已移动到 `content/legacy-web-posts` 归档。
+- Markdown 同步：修复 `LAST_INSERT_ID()` 跨连接问题，改用 GeneratedKeyHolder；支持 cover；重复同步按内容哈希返回 `UNCHANGED`；首次发布才生成订阅通知。
+- 浏览去重：登录用户使用 `U:{userId}`，匿名设备使用 HttpOnly `ZPERO_DEVICE` Cookie + `D:{uuid}`，唯一索引防重复。
+- 点赞/收藏：登录后才能操作，`INSERT IGNORE` 防重复；新增 `/favorites` 收藏列表页，替换原占位页。
+- 两级评论：顶级评论、回复、回复的回复统一挂到根评论；软删除保留占位；管理员可隐藏/删除；评论内容由 React 以纯文本渲染。
+- 订阅与通知：`PUT/DELETE /subscriptions/blog`、`GET /notifications`、标记单条/全部已读；新增通知页。
+- 管理后台：`/admin` 数据概览、`/admin/sync`、`/admin/comments`；统计接口覆盖用户、文章、浏览、互动、评论、订阅和通知。
+- 安全匹配规则：公开只读文章/分类/标签和浏览上报；互动、评论、收藏、订阅、通知需登录；管理端需 ADMIN。
+- SEO：新增 `sitemap.xml`、`robots.txt` 和 `SITE_URL`；文章详情 metadata 使用后端标题/摘要。
+- 测试：`MainFlowIntegrationTest` 覆盖注册/登录/Session/CSRF、同步幂等/草稿、普通用户 403；新增 `InteractionFlowIntegrationTest` 覆盖浏览去重、点赞收藏、两级评论、订阅、首次发布通知、通知已读、管理员隐藏评论和统计。
+
+验证：
+
+- `mvn test` 通过；使用独立临时 MySQL 8.0.46 实例运行 7 个测试（2 个解析器 + 4 个主链路 + 1 个互动/评论/订阅/通知），全部通过。
+- `npm run typecheck`、`npm run build` 通过；新改动文件 ESLint 无错误（仅 `<img>` 性能 warning）。
+- `sitemap.xml` 返回 200 并包含 3 篇文章 URL；`robots.txt` 正确屏蔽后台、账户、收藏、通知和 API。
+- 真实 MySQL 手工联调：健康检查返回 `database=UP, flyway=3`；3 篇文章首次同步 `CREATED`、再次同步 `UNCHANGED`；公开列表只含已发布文章；普通用户同步返回 403；临时草稿详情返回 404。
+- 互动联调：匿名同一设备重复浏览只计 1 次；登录点赞/取消、收藏/取消、收藏列表、计数接口均正确；测试数据已清理。
+- 评论联调：顶级评论、回复、回复的回复均正确归入根评论；软删除占位、管理员隐藏/删除均生效；测试评论已清理。
+- 订阅联调：订阅后首次发布临时文章生成 1 条未读通知，标记已读成功；测试文章、通知、订阅已清理。
+- 浏览器联调：`scripts/verify-ui-interactions.mjs` 通过登录、点赞、收藏、订阅、评论、回复、收藏页、通知页、数据概览和管理员隐藏评论的完整流程；测试数据已清理。
+
+本轮遗留：
+
+- 本机 `8080` 仍是修改前的 IntelliJ 进程，需要重启 Spring Boot 才能加载互动/评论/订阅/统计接口；`8081` 和 `3001` 是验收用临时实例，均已停止。
+- 本机主库账号 `zpero` 仍只拥有 `zpero_blog` 权限；本轮集成测试通过独立临时 MySQL 实例完成。若要在本机测试库直接运行，仍需由管理员创建并授权 `zpero_blog_test`。
+- 生产 HTTPS、真实邮件验证码、限流与部署配置仍未完成。
+- 本轮改动尚未提交或推送；提交时不添加 Claude 署名。
 
 ## 2. 总目标
 
@@ -189,7 +256,7 @@
 | P1 建立性能基线 | 未完成 | 未在改造前采集 Lighthouse/Performance 数据 |
 | P2 性能减法 | 已完成 | 全局重特效、滚动监听、嵌套模糊已移除 |
 | P3 首页结构重构 | 已完成 | 菜单型 Dashboard、导航卡片、技能网格 |
-| P4 壁纸资源管线 | 已完成 | 40 个 AVIF/WebP 文件（含预模糊），首图预加载，12 秒轮播 |
+| P4 壁纸资源管线 | 已完成 | 40 个 AVIF/WebP 文件（含 `-blur-v2`），双槽预载，10 秒轮播 / 2.2 秒淡入 |
 | P5 GitHub 热力图 | 已完成 | 公开 HTML 方案，365 天、6 小时缓存、无 token |
 | P6 质量与回归 | 部分完成 | 类型检查、构建、后端测试通过；仓库级 lint 仍有上游遗留错误；未做完整浏览器矩阵 |
 | P7 GitHub 发布 | 待执行 | 远程已确认，尚未推送 |

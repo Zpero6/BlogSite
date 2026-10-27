@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, BookOpen } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 type LatestPost = {
   slug: string;
@@ -10,17 +10,19 @@ type LatestPost = {
 export default function LatestPostsPanel({ posts }: { posts: LatestPost[] }) {
   return (
     <section
-      className="acrylic-panel cv-auto p-5"
+      className="acrylic-panel acrylic-panel--quiet p-4"
       aria-labelledby="latest-posts-heading"
     >
       <div className="flex items-center justify-between gap-3">
-        <h2 id="latest-posts-heading" className="flex items-center gap-2 text-sm font-black text-slate-100">
-          <BookOpen className="h-4 w-4 text-cyan-200" aria-hidden="true" />
+        <h2
+          id="latest-posts-heading"
+          className="text-shadow-strong text-[13px] font-semibold text-white/95"
+        >
           最近更新
         </h2>
         <Link
           href="/timeline"
-          className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-400 transition-colors duration-200 hover:text-cyan-300"
+          className="inline-flex items-center gap-1 text-[11px] font-medium text-shadow-strong text-white/75 transition-colors duration-200 hover:text-white"
         >
           全部
           <ArrowRight className="h-3 w-3" aria-hidden="true" />
@@ -28,17 +30,17 @@ export default function LatestPostsPanel({ posts }: { posts: LatestPost[] }) {
       </div>
 
       {posts.length > 0 ? (
-        <ul className="mt-3 divide-y divide-white/[0.06]">
+        <ul className="mt-3 space-y-2.5">
           {posts.map((post) => (
             <li key={post.slug}>
               <Link
                 href={`/posts/${post.slug}`}
-                className="group flex flex-col gap-0.5 py-2.5 transition-colors duration-200"
+                className="group flex flex-col gap-0.5"
               >
-                <span className="line-clamp-1 text-sm font-bold text-slate-200 transition-colors duration-200 group-hover:text-cyan-300">
+                <span className="text-shadow-strong line-clamp-2 text-[13px] font-medium text-white/90 transition-colors duration-200 group-hover:text-white">
                   {post.title}
                 </span>
-                <time className="text-[10px] font-bold tracking-wider text-slate-500">
+                <time className="text-[10px] text-shadow-strong text-white/70">
                   {post.formattedDate}
                 </time>
               </Link>
@@ -46,7 +48,7 @@ export default function LatestPostsPanel({ posts }: { posts: LatestPost[] }) {
           ))}
         </ul>
       ) : (
-        <p className="mt-3 text-xs text-slate-500">暂无文章</p>
+        <p className="mt-3 text-xs text-shadow-strong text-white/70">暂无文章</p>
       )}
     </section>
   );

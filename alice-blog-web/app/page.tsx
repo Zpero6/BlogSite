@@ -1,10 +1,7 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
 import Link from "next/link";
 import { Suspense } from "react";
 import { siteConfig } from "../siteConfig";
-import { albums } from "../data/albums";
+import { formatArticleDate, getArticleSummaries, type ArticleSummary } from "../lib/blogApi";
 import IdentityPanel from "../components/home/IdentityPanel";
 import StatusPanel from "../components/home/StatusPanel";
 import LatestPostsPanel from "../components/home/LatestPostsPanel";
@@ -13,94 +10,52 @@ import NavigationGrid from "../components/home/NavigationGrid";
 import SkillsGrid from "../components/home/SkillsGrid";
 import HeatmapSection from "../components/home/HeatmapSection";
 import HeatmapSkeleton from "../components/home/HeatmapSkeleton";
+import WallpaperControl from "../components/home/WallpaperControl";
 
-function formatDate(value: string) {
-  if (!value || value === "1970-01-01") return "刚刚更新";
+export const dynamic = "force-dynamic";
 
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}.${month}.${day}`;
-}
-
-function readPosts() {
-  const directory = path.join(process.cwd(), "posts");
-
+async function readPosts(): Promise<Array<{ slug: string; title: string; formattedDate: string }>> {
   try {
-    if (!fs.existsSync(directory)) return [];
-
-    return fs
-      .readdirSync(directory)
-      .filter((file) => file.endsWith(".md"))
-      .map((file) => {
-        const { data } = matter(fs.readFileSync(path.join(directory, file), "utf8"));
-        const rawDate = data.date || "1970-01-01";
-
-        return {
-          slug: file.replace(/\.md$/, ""),
-          title: data.title || "无标题",
-          date: rawDate,
-          formattedDate: formatDate(rawDate),
-        };
-      })
-      .sort((a, b) => {
-        const byDate = new Date(b.date).getTime() - new Date(a.date).getTime();
-        return byDate !== 0 ? byDate : b.slug.localeCompare(a.slug);
-      });
-  } catch {
+    const articles: ArticleSummary[] = await getArticleSummaries();
+    return articles.slice(0, 4).map((article) => ({
+      slug: article.slug,
+      title: article.title || "无标题",
+      formattedDate: formatArticleDate(article.publishedAt),
+    }));
+  } catch (error) {
+    console.error("[home] 无法读取后端文章列表", error);
     return [];
   }
 }
 
-function countChatters() {
-  const directory = path.join(process.cwd(), "chatters");
-
-  try {
-    if (!fs.existsSync(directory)) return 0;
-    return fs.readdirSync(directory).filter((file) => file.endsWith(".md")).length;
-  } catch {
-    return 0;
-  }
-}
-
-export default function Home() {
-  const posts = readPosts();
-  const chatterCount = countChatters();
-  const photoCount = albums.reduce((total, album) => total + album.photos.length, 0);
-  const latestPosts = posts.slice(0, 4);
+export default async function Home() {
+  const latestPosts = await readPosts();
 
   return (
     <>
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-slate-900 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-cyan-200"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-slate-900 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white"
       >
         跳到主要内容
       </a>
 
       <main
         id="main"
-        className="relative z-10 mx-auto w-full max-w-[1240px] px-4 py-6 sm:px-6 lg:px-8 lg:py-10"
+        className="relative z-10 mx-auto w-[92%] max-w-[1320px] py-6 lg:w-[80%] lg:py-8 xl:w-[76%] 2xl:w-[70%]"
       >
-        <div className="mb-4 lg:hidden">
+        <div className="mb-6 lg:hidden">
           <HomeHeader compact />
         </div>
 
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-5">
-          <aside className="flex flex-col gap-4 lg:col-span-4 xl:col-span-3">
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(170px,20%)_minmax(0,1fr)] lg:gap-6 xl:gap-8">
+          <aside className="flex flex-col gap-5">
             <IdentityPanel />
-            <StatusPanel
-              postCount={posts.length}
-              chatterCount={chatterCount}
-              photoCount={photoCount}
-            />
+            <StatusPanel />
             <LatestPostsPanel posts={latestPosts} />
           </aside>
 
-          <section className="flex min-w-0 flex-col gap-5 lg:col-span-8 xl:col-span-9">
+          <section className="flex min-w-0 flex-col gap-5">
             <div className="hidden lg:block">
               <HomeHeader />
             </div>
@@ -114,25 +69,31 @@ export default function Home() {
           </section>
         </div>
 
-        <footer className="mt-6 flex flex-col gap-3 border-t border-white/10 pt-4 text-[11px] text-slate-500 sm:flex-row sm:items-center sm:justify-between">
+        <footer className="text-shadow-strong mt-9 border-t border-white/15 pt-4 text-center text-[11px] text-white/65">
           <p>
-            © {new Date().getFullYear()} {siteConfig.authorName} · 保持好奇，持续构建
+            © {new Date().getFullYear()} {siteConfig.authorName}
+            <span className="mx-2 text-white/30">·</span>
+            写代码，也记录代码之外的日常
           </p>
-          <nav aria-label="页脚导航" className="flex flex-wrap items-center gap-4">
+          <nav
+            aria-label="页脚导航"
+            className="mt-2 flex flex-wrap items-center justify-center gap-4"
+          >
             <a
               href={siteConfig.social.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="transition-colors duration-200 hover:text-cyan-200"
+              className="transition-colors duration-200 hover:text-white"
             >
               GitHub
             </a>
-            <Link href="/about" className="transition-colors duration-200 hover:text-cyan-200">
+            <Link href="/about" className="transition-colors duration-200 hover:text-white">
               关于
             </Link>
-            <Link href="/timeline" className="transition-colors duration-200 hover:text-cyan-200">
+            <Link href="/timeline" className="transition-colors duration-200 hover:text-white">
               时间线
             </Link>
+            <WallpaperControl />
           </nav>
         </footer>
       </main>
