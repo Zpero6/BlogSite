@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: process.env.SITE_URL || 'https://example.pages.dev',
+  site: process.env.SITE_URL || 'https://zpero-site.pages.dev',
   output: 'static',
   trailingSlash: 'always',
   compressHTML: true,
