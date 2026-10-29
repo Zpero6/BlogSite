@@ -1,0 +1,79 @@
+---
+import { Image } from 'astro:assets';
+import avatar from '../assets/avatar.jpg';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import { getPublishedPosts } from '../lib/posts';
+import { projects } from '../data/projects';
+import { SITE } from '../data/site';
+
+const posts = await getPublishedPosts();
+const latest = posts.slice(0, 4);
+---
+
+<BaseLayout>
+  <main id="home" class="section-anchor mx-auto max-w-[680px]">
+    <section class="flex flex-col items-center pb-[49px] pt-[120px] text-center sm:pb-[58px] sm:pt-[126px]" aria-labelledby="profile-name">
+      <div class="relative flex h-[86px] w-[86px] items-center justify-center rounded-full border-[3px] border-white bg-[#c7eaf2] shadow-[0_0_0_1px_rgba(23,23,23,.08),0_9px_23px_-10px_rgba(61,108,126,.18)]">
+        <div class="h-full w-full overflow-hidden rounded-full"><Image src={avatar} alt="Zpero 的蓝色系插画头像" class="avatar-photo h-full w-full" width={86} height={86} loading="eager" /></div>
+        <span class="absolute bottom-[5px] right-[5px] h-[10px] w-[10px] rounded-full border-[3px] border-[#F7F8F9] bg-[#CBF033] box-content"></span>
+      </div>
+      <h1 id="profile-name" class="mt-5 text-[26px] font-bold leading-tight tracking-[-.055em] text-[#171717]">{SITE.name}</h1>
+      <p class="mt-3 max-w-[460px] text-[13px] leading-[1.95] tracking-[-.005em] text-[#171717]/60">{SITE.intro}<br class="hidden sm:block" />{SITE.subIntro}</p>
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-x-2 text-[10.5px] font-medium text-[#171717]/45">
+        <span>Java / Backend</span><span class="h-[3px] w-[3px] rounded-full bg-zinc-400"></span><span>AI 应用</span><span class="h-[3px] w-[3px] rounded-full bg-zinc-400"></span><span>持续记录中</span>
+      </div>
+      <div class="mt-6 flex items-center gap-3" aria-label="社交与联系">
+        <a href={SITE.github} target="_blank" rel="noopener noreferrer" aria-label="访问 GitHub" class="flex h-9 w-9 items-center justify-center rounded-full text-[#171717]/55 transition-all duration-300 hover:-translate-y-0.5 hover:bg-zinc-100 hover:text-[#171717]"><Icon name="github" size={17} /></a>
+        <button type="button" data-copy={SITE.email} aria-label="复制邮箱" class="flex h-9 w-9 items-center justify-center rounded-full text-[#171717]/55 transition-all duration-300 hover:-translate-y-0.5 hover:bg-zinc-100 hover:text-[#171717]"><Icon name="mail" size={17} /></button>
+      </div>
+    </section>
+
+    <section class="section-anchor mb-[66px]" aria-labelledby="posts-heading" id="posts">
+      <div class="mb-2 flex items-baseline justify-between border-b border-[#171717]/15 pb-4">
+        <h2 id="posts-heading" class="text-[16px] font-bold tracking-[-.035em] text-[#171717]">最近文章 <span class="ml-2 text-[10px] font-medium tracking-[.08em] text-[#171717]/35">/ RECENT POSTS</span></h2>
+        <a href="/blog/" class="flex items-center gap-2 text-[10px] font-medium text-[#171717]/45 transition-colors hover:text-[#171717]"><span class="tabular-nums">{String(posts.length).padStart(2, '0')}</span><span>查看全部 ↗</span></a>
+      </div>
+      <div class="divide-y divide-[#171717]/[0.085]">
+        {latest.map((post, index) => (
+          <a href={`/blog/${post.id}/`} class="group grid min-h-[66px] grid-cols-[56px_minmax(0,1fr)_auto_14px] items-center gap-x-2 py-3 transition-all duration-300 hover:pl-1 sm:grid-cols-[100px_minmax(0,1fr)_auto_16px] sm:gap-x-4">
+            <time datetime={post.data.pubDate.toISOString()} class="text-[10px] font-medium tabular-nums tracking-[-.01em] text-[#171717]/50 sm:text-[11px]"><span class="sm:hidden">{post.data.pubDate.toLocaleDateString('zh-CN', { month: '2-digit', day: '2-digit' }).replace('/', '.')}</span><span class="hidden sm:inline">{post.data.pubDate.toLocaleDateString('zh-CN').replaceAll('/', '.')}</span></time>
+            <span class="min-w-0 truncate text-[12.5px] font-semibold tracking-[-.025em] text-[#171717]/85 transition-colors duration-300 group-hover:text-[#171717] group-hover:underline group-hover:decoration-[#CBF033] group-hover:underline-offset-4 sm:text-[13.5px]">{post.data.title}</span>
+            <span class:list={['max-w-[70px] shrink-0 truncate rounded-[3px] px-[7px] py-[4px] text-[9px] font-medium', index === 0 ? 'bg-[#CBF033]/15 text-zinc-700' : 'bg-zinc-100 text-zinc-500']}>{post.data.category}</span>
+            <span class="text-[#171717]/30 transition-all duration-300 group-hover:translate-x-[2px] group-hover:text-[#171717]"><Icon name="arrow" size={13} /></span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="section-anchor mb-[72px]" aria-labelledby="projects-heading" id="projects">
+      <div class="mb-5 flex items-baseline justify-between border-b border-[#171717]/15 pb-4">
+        <h2 id="projects-heading" class="text-[16px] font-bold tracking-[-.035em] text-[#171717]">精选项目 <span class="ml-2 text-[10px] font-medium tracking-[.08em] text-[#171717]/35">/ SELECTED WORKS</span></h2>
+        <a href="/projects/" class="flex items-center gap-2 text-[10px] font-medium text-[#171717]/45 transition-colors hover:text-[#171717]"><span class="tabular-nums">{String(projects.length).padStart(2, '0')}</span><span>查看全部 ↗</span></a>
+      </div>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {projects.map((project, index) => (
+          <a href="/projects/" class="project-card group flex min-h-[174px] w-full flex-col rounded-[9px] border border-zinc-200/70 bg-white p-[18px] text-left transition-all duration-300 hover:-translate-y-[2px] hover:border-zinc-300">
+            <div class="flex items-center gap-3"><span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-[7px] bg-zinc-100 text-[11px] font-bold text-zinc-600">{['AI', 'TR', 'ZJ', 'GL'][index]}</span><div class="min-w-0 flex-1"><h3 class="truncate text-[13.5px] font-bold tracking-[-.035em]">{project.title}</h3><span class="mt-0.5 block text-[9.5px] text-[#171717]/45">{project.status}</span></div><span class="text-[#171717]/25 group-hover:text-[#171717]"><Icon name="arrow" size={13} /></span></div>
+            <p class="mt-[15px] line-clamp-2 text-[11.5px] leading-[1.75] text-[#171717]/60">{project.description}</p>
+            <div class="mt-auto flex flex-wrap gap-1.5 pt-4">{project.tech.map((tech) => <span class="rounded-[3px] bg-zinc-100 px-[7px] py-[3px] text-[9px] font-medium text-zinc-500">{tech}</span>)}</div>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+  <div id="copy-toast" class="fixed bottom-7 left-1/2 z-[70] hidden -translate-x-1/2 rounded-full bg-[#171717] px-4 py-2.5 text-[11px] font-medium text-white shadow-lg" role="status" aria-live="polite"></div>
+</BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-copy]').forEach((button) => button.addEventListener('click', async () => {
+    const value = button.dataset.copy ?? '';
+    const toast = document.querySelector<HTMLElement>('#copy-toast');
+    try { await navigator.clipboard.writeText(value); }
+    catch { /* Clipboard may be unavailable on local file previews. */ }
+    if (!toast) return;
+    toast.textContent = `已复制：${value}`;
+    toast.classList.remove('hidden');
+    window.setTimeout(() => toast.classList.add('hidden'), 1800);
+  }));
+</script>

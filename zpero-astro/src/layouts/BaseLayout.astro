@@ -1,0 +1,60 @@
+---
+import type { ImageMetadata } from 'astro';
+import Header from '../components/Header.astro';
+import SearchDialog from '../components/SearchDialog.astro';
+import Footer from '../components/Footer.astro';
+import { getPublishedPosts } from '../lib/posts';
+import { SITE } from '../data/site';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: ImageMetadata;
+  article?: boolean;
+}
+
+const {
+  title = SITE.title,
+  description = SITE.description,
+  image,
+  article = false,
+} = Astro.props;
+
+const posts = await getPublishedPosts();
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? new URL(image.src, Astro.site) : new URL('/images/og-default.svg', Astro.site);
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#F7F8F9" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="Zpero RSS" href="/rss.xml" />
+    <meta property="og:type" content={article ? 'article' : 'website'} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen font-sans antialiased">
+    <div class="ambient-light" aria-hidden="true"></div>
+    <Header />
+    <div class="relative mx-auto max-w-[1240px] px-5 sm:px-8 xl:px-10">
+      <slot />
+      <Footer />
+    </div>
+    <SearchDialog posts={posts} />
+  </body>
+</html>

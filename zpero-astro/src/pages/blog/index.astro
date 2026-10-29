@@ -1,0 +1,23 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import Icon from '../../components/Icon.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+const posts = await getPublishedPosts();
+const categories = [...new Set(posts.map((post) => post.data.category))];
+---
+
+<BaseLayout title="文章 · Zpero" description="Zpero 的技术笔记、项目实践和日常记录。">
+  <main class="subpage min-h-[76vh] pb-16 pt-[126px] sm:pt-[140px]">
+    <section aria-label="文章列表">
+      <header class="mb-6 flex flex-wrap items-center justify-between gap-x-5 gap-y-4 sm:mb-7">
+        <a href="/" class="inline-flex h-[36px] shrink-0 items-center gap-2 rounded-[8px] bg-zinc-100 px-2.5 pr-4 text-[12px] font-medium text-zinc-700 transition-colors hover:bg-zinc-200/75"><span class="flex h-[26px] w-[26px] items-center justify-center rounded-[5px] bg-white text-zinc-700 shadow-[0_1px_3px_rgba(0,0,0,.05)]"><Icon name="chevron" size={15} /></span>Back</a>
+        <nav class="order-3 flex min-w-0 flex-1 items-center justify-center gap-x-2.5 overflow-x-auto whitespace-nowrap pb-1 text-[12px] sm:text-[13px] lg:order-none lg:pb-0" aria-label="文章分类"><a href="/blog/" class="font-semibold text-[#171717]">最新</a>{categories.map((category) => <><span class="text-zinc-300">/</span><span class="text-zinc-500">{category}</span></>)}</nav>
+        <span class="inline-flex h-[36px] items-center rounded-[8px] bg-zinc-100 px-3.5 text-[11px] text-zinc-600">{String(posts.length).padStart(2, '0')} 篇文章</span>
+      </header>
+      <div class="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-[18px] xl:gap-5">{posts.map((post) => <PostCard post={post} />)}</div>
+      <div class="mt-7 flex items-center justify-between text-[10px] text-zinc-400"><span>全部文章</span><span>SHOWING {String(posts.length).padStart(2, '0')}</span></div>
+    </section>
+  </main>
+</BaseLayout>
