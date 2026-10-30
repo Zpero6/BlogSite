@@ -51,3 +51,5 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy zpero-astro/dist --project-name=zpero-site --branch=main
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+# Production branch is configured as main in Cloudflare Pages.
