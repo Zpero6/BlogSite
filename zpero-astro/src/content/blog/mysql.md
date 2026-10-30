@@ -1,5 +1,5 @@
 ---
-title: "Mysql"
+title: "MySQL 八股笔记：事务、MVCC 与索引"
 description: "MySQL 事务相关知识整理，涵盖事务特性、MVCC、Undo Log、索引、慢查询与主从复制。"
 pubDate: 2026-10-30
 category: "后端笔记"
