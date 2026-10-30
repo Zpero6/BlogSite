@@ -1,0 +1,1 @@
+ALTER TABLE article ADD COLUMN cover VARCHAR(500) NULL AFTER summary;

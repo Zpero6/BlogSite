@@ -9,11 +9,12 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const debugBase = process.env.CHROME_DEBUG || "http://127.0.0.1:9222";
+const debugBase = process.env.CHROME_DEBUG || "http://127.0.0.1:9223";
 const siteBase = process.env.BASE_URL || "http://localhost:3000";
 const outputDir = process.env.OUT_DIR || path.join(process.cwd(), "screenshots");
 
 const viewports = [
+  { name: "1920x1080", width: 1920, height: 1080, mobile: false },
   { name: "1440x900", width: 1440, height: 900, mobile: false },
   { name: "1024x768", width: 1024, height: 768, mobile: false },
   { name: "768x1024", width: 768, height: 1024, mobile: true },
@@ -85,6 +86,9 @@ for (const viewport of viewports) {
     await send("Page.navigate", { url: targetUrl });
     await loaded;
     await new Promise((resolve) => setTimeout(resolve, 1_800));
+    await send("Runtime.evaluate", {
+      expression: "document.querySelectorAll(\"nextjs-portal\").forEach((el) => el.remove())",
+    });
 
     const screenshot = await send("Page.captureScreenshot", {
       format: "png",

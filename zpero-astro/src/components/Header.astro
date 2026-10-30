@@ -1,0 +1,56 @@
+---
+import Icon from './Icon.astro';
+
+const pathname = Astro.url.pathname;
+const active = pathname === '/' ? 'home' : pathname.startsWith('/blog') ? 'blog' : pathname.startsWith('/projects') ? 'projects' : pathname.startsWith('/about') ? 'about' : '';
+const links = [
+  { key: 'home', label: '首页', href: '/' },
+  { key: 'blog', label: '文章', href: '/blog/' },
+  { key: 'projects', label: '项目', href: '/projects/' },
+  { key: 'about', label: '关于', href: '/about/' },
+];
+---
+
+<header class="floating-nav fixed left-1/2 top-4 z-50 w-max -translate-x-1/2 rounded-full border border-zinc-200/70" style="max-width:calc(100vw - 32px)">
+  <nav class="flex h-[54px] items-center gap-3 px-4 sm:gap-4 sm:px-5" aria-label="主导航">
+    <a href="/" class="shrink-0 text-[16px] font-extrabold tracking-[-.065em] text-[#171717]" aria-label="Zpero 首页">Zpero<span class="text-[#CBF033]">.</span></a>
+    <span class="hidden h-[17px] w-px bg-[#171717]/10 md:block" aria-hidden="true"></span>
+    <div class="hidden items-center gap-[2px] md:flex">
+      {links.map((link) => (
+        <a href={link.href} class:list={['nav-link rounded-full px-3 py-[15px] text-[12px] font-medium', active === link.key && 'is-active']} aria-current={active === link.key ? 'page' : undefined}>{link.label}</a>
+      ))}
+    </div>
+    <span class="hidden h-[17px] w-px bg-[#171717]/10 md:block" aria-hidden="true"></span>
+    <div class="flex items-center gap-1.5">
+      <button id="search-open" type="button" aria-label="搜索文章" title="搜索" class="flex h-8 w-8 items-center justify-center rounded-full text-[#171717]/65 transition-all duration-300 hover:bg-zinc-100 hover:text-[#171717]"><Icon name="search" size={18} /></button>
+      <button id="mobile-menu-toggle" type="button" aria-label="展开导航菜单" aria-expanded="false" aria-controls="mobile-menu" class="flex h-8 w-8 items-center justify-center rounded-full text-[#171717]/65 transition-all duration-300 hover:bg-zinc-100 hover:text-[#171717] md:hidden"><Icon name="menu" size={18} /></button>
+    </div>
+  </nav>
+  <div id="mobile-menu" class="absolute right-0 top-[calc(100%+9px)] hidden w-[184px] rounded-[17px] border border-zinc-200 bg-white/95 p-2 shadow-[0_18px_36px_-19px_rgba(0,0,0,.14)] backdrop-blur-xl md:hidden">
+    {links.map((link) => (
+      <a href={link.href} class:list={['mobile-nav-link block rounded-[9px] px-4 py-2.5 text-[12px] text-[#171717]/65 hover:bg-zinc-100', active === link.key && 'bg-zinc-100 text-[#171717]']}>{link.label}</a>
+    ))}
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('#mobile-menu-toggle');
+  const menu = document.querySelector<HTMLElement>('#mobile-menu');
+
+  const closeMenu = () => {
+    menu?.classList.add('hidden');
+    toggle?.setAttribute('aria-expanded', 'false');
+    toggle?.setAttribute('aria-label', '展开导航菜单');
+  };
+
+  toggle?.addEventListener('click', () => {
+    const opening = menu?.classList.contains('hidden') ?? false;
+    menu?.classList.toggle('hidden', !opening);
+    toggle.setAttribute('aria-expanded', String(opening));
+    toggle.setAttribute('aria-label', opening ? '收起导航菜单' : '展开导航菜单');
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!(event.target as Element).closest('header.floating-nav')) closeMenu();
+  });
+</script>

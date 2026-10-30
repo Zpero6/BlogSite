@@ -21,10 +21,16 @@ See `alice-blog-web/public/wallpapers/README.md` for the source mapping.
 
 ## Menu illustrations
 
-The 11 cat-sticker SVGs under `alice-blog-web/public/images/nav/` are generated
+The 11 semantic glyph SVGs under `alice-blog-web/public/images/nav/` are generated
 locally by `alice-blog-web/scripts/generate-nav-art.mjs`. They are original
 placeholder artwork, not copied from the reference site, and can be replaced
 per the instructions in that directory's README.
+
+## Technology brand icons
+
+The skills strip uses SVG marks from the `simple-icons` package (CC0-1.0).
+The technology names and logos are trademarks of their respective owners and
+are used only to identify the technologies the site owner uses.
 
 ## Webmaster avatar
 

@@ -28,4 +28,7 @@ blog:
   content-directory: ${CONTENT_DIR:../content/posts}
   registration-enabled: ${REGISTRATION_ENABLED:true}
   verification-pepper: ${VERIFICATION_PEPPER:dev-only-change-before-production}
+  admin-email: ${ADMIN_EMAIL:}
+  admin-password: ${ADMIN_PASSWORD:}
+  admin-display-name: ${ADMIN_DISPLAY_NAME:Zpero}
 

@@ -2,10 +2,11 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ChevronLeft, ExternalLink } from "lucide-react";
 import { siteConfig } from "@/siteConfig";
+import AccountMenu from "@/components/account/AccountMenu";
 
 /**
  * Shared frame for every public inner page. The blurred wallpaper is mounted
- * once in the root layout; this shell adds a single acrylic content panel and
+ * once in the root layout; this shell adds a single frosted content panel and
  * a permanent, explicit way back to the menu.
  */
 export default function InnerPageShell({
@@ -19,10 +20,10 @@ export default function InnerPageShell({
 
   return (
     <div className="relative z-10 flex min-h-dvh flex-col">
-      <header className="mx-auto flex w-[95%] max-w-6xl items-center justify-between gap-3 py-4">
+      <header className="mx-auto flex w-[92%] max-w-6xl items-center justify-between gap-3 py-4">
         <Link
           href="/"
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-sm font-bold text-slate-200 transition-colors duration-200 hover:border-cyan-300/30 hover:text-cyan-200"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-[10px] border border-white/15 bg-white/10 px-3 py-1.5 text-sm font-medium text-white/90 transition-colors duration-200 hover:border-white/30 hover:bg-white/20 hover:text-white"
         >
           <ChevronLeft className="h-4 w-4" aria-hidden="true" />
           返回菜单
@@ -30,50 +31,51 @@ export default function InnerPageShell({
 
         <Link
           href="/"
-          className="truncate text-sm font-black tracking-wide text-slate-200 transition-colors duration-200 hover:text-cyan-200"
+          className="text-shadow-strong truncate text-sm font-semibold tracking-wide text-white/90 transition-colors duration-200 hover:text-white"
         >
           {siteConfig.navTitle}
-          <span className="mx-1 text-cyan-300">{siteConfig.navSuffix}</span>
+          <span className="mx-1">{siteConfig.navSuffix}</span>
           {siteConfig.navAfter}
         </Link>
 
-        <a
-          href={siteConfig.social.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/10 bg-slate-950/35 px-3 py-1.5 text-xs font-bold text-slate-300 transition-colors duration-200 hover:border-cyan-300/30 hover:text-cyan-200"
-        >
-          GitHub
-          <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
-        </a>
+        <div className="flex shrink-0 items-center gap-2">
+          <AccountMenu />
+          <a
+            href={siteConfig.social.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden shrink-0 items-center gap-1.5 rounded-[10px] border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/85 transition-colors duration-200 hover:border-white/30 hover:bg-white/20 hover:text-white sm:inline-flex"
+          >
+            GitHub
+            <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+          </a>
+        </div>
       </header>
 
-      <main className={`mx-auto w-[95%] ${pageWidth} flex-1 pb-8`}>
+      <main className={`mx-auto w-[92%] ${pageWidth} flex-1 pb-8`}>
         <div className="acrylic-panel acrylic-panel--inner p-4 sm:p-6 lg:p-8">
           <div className="inner-page">{children}</div>
         </div>
       </main>
 
-      <footer className="mx-auto flex w-[95%] max-w-6xl flex-wrap items-center justify-between gap-3 py-5 text-[11px] text-slate-500">
+      <footer className="mx-auto flex w-[92%] max-w-6xl flex-wrap items-center justify-center gap-x-4 gap-y-2 py-5 text-center text-[11px] text-shadow-strong text-white/65">
         <span>
-          © {new Date().getFullYear()} {siteConfig.authorName} · 保持好奇，持续构建
+          © {new Date().getFullYear()} {siteConfig.authorName}
         </span>
-        <nav aria-label="页脚导航" className="flex items-center gap-4">
-          <Link href="/" className="transition-colors duration-200 hover:text-cyan-200">
-            菜单
-          </Link>
-          <Link href="/about" className="transition-colors duration-200 hover:text-cyan-200">
-            关于
-          </Link>
-          <a
-            href={siteConfig.social.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="transition-colors duration-200 hover:text-cyan-200"
-          >
-            GitHub
-          </a>
-        </nav>
+        <Link href="/" className="transition-colors duration-200 hover:text-white">
+          菜单
+        </Link>
+        <Link href="/about" className="transition-colors duration-200 hover:text-white">
+          关于
+        </Link>
+        <a
+          href={siteConfig.social.github}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="transition-colors duration-200 hover:text-white"
+        >
+          GitHub
+        </a>
       </footer>
     </div>
   );

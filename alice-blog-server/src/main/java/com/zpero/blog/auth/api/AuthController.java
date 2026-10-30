@@ -59,6 +59,9 @@ public class AuthController {
         var context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authentication);
         SecurityContextHolder.setContext(context);
+        // Rotate the session identifier after registration/login to prevent session fixation.
+        request.getSession(true);
+        request.changeSessionId();
         repository.saveContext(context, request, response);
     }
 }

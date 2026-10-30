@@ -29,9 +29,10 @@ const variants = [
   { suffix: '1920', width: 1920, avifQuality: 52, webpQuality: 78 },
   { suffix: '1080', width: 1080, avifQuality: 48, webpQuality: 74 },
   // Pre-blurred variants are what the site backdrop actually uses. Baking the
-  // blur in avoids a full-screen runtime filter on every page.
-  { suffix: '1920-blur', width: 1920, blur: 18, avifQuality: 48, webpQuality: 74 },
-  { suffix: '1080-blur', width: 1080, blur: 14, avifQuality: 44, webpQuality: 70 },
+  // blur in avoids a full-screen runtime filter on every page. Keep the image
+  // bright and saturated; readability comes from the glass, not a dark overlay.
+  { suffix: '1920-blur-v2', width: 1920, blur: 16, avifQuality: 50, webpQuality: 78 },
+  { suffix: '1080-blur-v2', width: 1080, blur: 12, avifQuality: 46, webpQuality: 74 },
 ];
 
 await fs.mkdir(outputDir, { recursive: true });
@@ -60,7 +61,7 @@ for (const wallpaper of wallpapers) {
       if (variant.blur) {
         image = image
           .blur(variant.blur)
-          .modulate({ saturation: 0.82, brightness: 0.66 });
+          .modulate({ saturation: 0.94, brightness: 0.96 });
       }
 
       return image;

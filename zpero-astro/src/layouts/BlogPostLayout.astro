@@ -1,0 +1,91 @@
+---
+import { Image } from 'astro:assets';
+import type { MarkdownHeading } from 'astro';
+import type { BlogPost } from '../lib/posts';
+import { getReadingMinutes } from '../lib/posts';
+import { resolveCover } from '../lib/covers';
+import BaseLayout from './BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+
+interface Props {
+  post: BlogPost;
+  headings: MarkdownHeading[];
+  nextPost?: BlogPost;
+}
+
+const { post, headings, nextPost } = Astro.props;
+const cover = resolveCover(post.data.cover, post.id);
+const minutes = getReadingMinutes(post.body ?? '');
+const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
+const formattedDate = post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout title={`${post.data.title} · Zpero`} description={post.data.description} image={cover} article>
+  <main class="subpage mx-auto min-h-[76vh] max-w-[910px] pb-16 pt-[126px] sm:pt-[140px]">
+    <div class="grid items-start lg:grid-cols-[minmax(0,1fr)_204px] lg:gap-10">
+      <article class="mx-auto w-full max-w-[680px] min-w-0 lg:mx-0">
+        <a href="/blog/" class="mb-8 inline-flex items-center gap-2 text-[11px] text-[#171717]/45 transition-colors hover:text-[#171717]"><span class="rotate-180"><Icon name="arrow" size={13} /></span>返回文章列表</a>
+        <div class="mb-4 flex flex-wrap items-center gap-3 text-[11px] font-medium text-[#171717]/45 sm:text-[12px]">
+          <span class="rounded bg-[#CBF033]/15 px-3 py-1.5 text-zinc-700">{post.data.category}</span>
+          <time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>
+          <span>{minutes} MIN READ</span>
+        </div>
+        <h1 class="max-w-[640px] text-[29px] font-extrabold leading-[1.4] tracking-[-.055em] text-[#171717] sm:text-[38px]">{post.data.title}</h1>
+        <p class="mt-4 text-[13px] leading-[1.9] text-[#171717]/50">{post.data.description}</p>
+        <div class="mt-5 flex flex-wrap gap-3 text-[11px] text-[#171717]/45 sm:text-[12px]">
+          {post.data.tags.map((tag) => <span>#{tag}</span>)}
+        </div>
+        <div class="mt-9 aspect-video overflow-hidden rounded-[10px] bg-zinc-100">
+          <Image src={cover} alt={post.data.coverAlt ?? post.data.title} widths={[680, 960, 1200]} sizes="(max-width: 760px) 100vw, 680px" class="h-full w-full object-cover" />
+        </div>
+
+        {toc.length > 0 && (
+          <details class="my-9 rounded-xl border border-zinc-200/70 bg-white p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,.02)] lg:hidden">
+            <summary class="cursor-pointer text-[13px] font-semibold text-[#171717]">文章目录 <span class="ml-2 text-[11px] font-normal text-zinc-400">/ {toc.length} 个章节</span></summary>
+            <nav class="mt-4" aria-label="移动端文章目录">
+              {toc.map((heading) => <a href={`#${heading.slug}`} class:list={['toc-link', heading.depth === 3 && 'is-child']}>{heading.text}</a>)}
+            </nav>
+          </details>
+        )}
+
+        <div class="article-copy mt-10 lg:mt-12"><slot /></div>
+
+        <div class="mt-12 border-t border-[#171717]/10 pt-6">
+          <p class="text-[10px] leading-[1.8] text-[#171717]/35">文章与封面由 Git 管理，提交后自动生成静态页面。</p>
+          {nextPost && (
+            <a href={`/blog/${nextPost.id}/`} class="group mt-7 flex items-center justify-between gap-6 rounded-lg border border-zinc-200/70 bg-white px-5 py-4">
+              <span><span class="block text-[9px] text-[#171717]/40">继续阅读 / NEXT POST</span><strong class="mt-1 block text-[12px] font-semibold text-[#171717]/80 group-hover:text-[#171717]">{nextPost.data.title}</strong></span>
+              <Icon name="arrow" size={15} />
+            </a>
+          )}
+        </div>
+      </article>
+
+      {toc.length > 0 && (
+        <aside class="sticky top-[112px] hidden rounded-xl border border-zinc-200/60 bg-white p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,.02)] lg:block" aria-label="文章目录">
+          <div class="mb-1.5 flex items-center gap-2.5 text-[13px] font-bold text-[#171717]"><span class="h-1.5 w-1.5 rounded-full bg-[#CBF033]"></span>目录</div>
+          <p class="mb-5 text-[10px] font-medium tracking-[.1em] text-[#171717]/35">TABLE OF CONTENTS</p>
+          <nav>{toc.map((heading) => <a href={`#${heading.slug}`} data-toc={heading.slug} class:list={['toc-link', heading.depth === 3 && 'is-child']}>{heading.text}</a>)}</nav>
+        </aside>
+      )}
+    </div>
+  </main>
+</BaseLayout>
+
+<script>
+  const updateToc = () => {
+    const links = [...document.querySelectorAll<HTMLElement>('[data-toc]')];
+    const headings = links.map((link) => document.getElementById(link.dataset.toc ?? '')).filter(Boolean) as HTMLElement[];
+    if (!headings.length) return;
+    let current = headings[0].id;
+    for (const heading of headings) if (heading.getBoundingClientRect().top <= 170) current = heading.id;
+    links.forEach((link) => link.classList.toggle('is-current', link.dataset.toc === current));
+  };
+  let pending = false;
+  addEventListener('scroll', () => {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(() => { pending = false; updateToc(); });
+  }, { passive: true });
+  updateToc();
+</script>

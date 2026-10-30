@@ -1,0 +1,25 @@
+---
+import { Image } from 'astro:assets';
+import type { BlogPost } from '../lib/posts';
+import { resolveCover } from '../lib/covers';
+
+interface Props { post: BlogPost }
+const { post } = Astro.props;
+const cover = resolveCover(post.data.cover, post.id);
+const date = post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replaceAll('/', '/');
+---
+
+<a href={`/blog/${post.id}/`} class="group flex h-full min-w-0 flex-col overflow-hidden rounded-[6px] border-[1.5px] border-[#E1E4E7] bg-white shadow-[0_3px_9px_-6px_rgba(24,24,27,.12)] transition-[transform,border-color,box-shadow] duration-300 ease-out hover:-translate-y-[3px] hover:border-[#829B17] hover:shadow-[0_12px_25px_-14px_rgba(24,30,16,.24)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#829B17] motion-reduce:hover:translate-y-0">
+  <div class="aspect-video w-full shrink-0 overflow-hidden border-b border-zinc-200/60 bg-zinc-100">
+    <Image src={cover} alt={post.data.coverAlt ?? ''} widths={[360, 560, 760]} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" class="block h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.025]" loading="lazy" />
+  </div>
+  <div class="flex min-h-[132px] flex-1 flex-col px-4 pb-4 pt-4">
+    <h2 class="line-clamp-2 min-h-[49px] text-[16.5px] font-medium leading-[1.47] tracking-[-.028em] text-zinc-900 transition-colors duration-300 group-hover:text-[#27300E]">{post.data.title}</h2>
+    <p class="mt-2 line-clamp-2 text-[11px] leading-[1.65] text-[#171717]/48">{post.data.description}</p>
+    <div class="mt-auto flex min-w-0 items-center gap-[6px] overflow-hidden whitespace-nowrap pt-4 text-[10px]">
+      <span class="max-w-[76px] shrink-0 truncate rounded-[3px] bg-emerald-50 px-[7px] py-[3px] text-emerald-700">{post.data.category}</span>
+      <time datetime={post.data.pubDate.toISOString()} class="shrink-0 tabular-nums tracking-[-.04em] text-zinc-400">{date}</time>
+      <span class="flex min-w-0 flex-1 gap-1 overflow-hidden">{post.data.tags.slice(0, 2).map((tag) => <span class="max-w-[58px] truncate rounded-[3px] bg-sky-50 px-1.5 py-[2px] text-[9px] text-sky-600">{tag}</span>)}</span>
+    </div>
+  </div>
+</a>

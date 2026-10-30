@@ -4,10 +4,23 @@ import matter from 'gray-matter';
 
 // 引入前台客户端组件
 import CreativeWorkshopClient from './CreativeWorkshopClient';
+import { getArticleSummaries } from '../../lib/blogApi';
 
-function getLocalItems(directoryName: string, typeName: string) {
+export const dynamic = 'force-dynamic';
+
+type LocalItem = {
+  id: string;
+  slug: string;
+  title: string;
+  type: string;
+  date: string;
+  cover: string | null;
+  content: string;
+};
+
+function getLocalItems(directoryName: string, typeName: string): LocalItem[] {
   const dirPath = path.join(process.cwd(), directoryName);
-  let items: any[] = [];
+  let items: LocalItem[] = [];
   try {
     if (fs.existsSync(dirPath)) {
       const fileNames = fs.readdirSync(dirPath).filter(f => f.endsWith('.md'));
@@ -38,8 +51,25 @@ function getLocalItems(directoryName: string, typeName: string) {
   return items;
 }
 
-export default function CreativeWorkshopPage() {
-  const posts = getLocalItems('posts', 'post');
+async function getBackendPosts() {
+  try {
+    return (await getArticleSummaries()).map((article) => ({
+      id: article.slug,
+      slug: article.slug,
+      title: article.title,
+      type: 'post',
+      date: article.publishedAt || '2026-05-01',
+      cover: article.cover || null,
+      content: article.summary || '',
+    }));
+  } catch (error) {
+    console.error('读取后端文章失败', error);
+    return [];
+  }
+}
+
+export default async function CreativeWorkshopPage() {
+  const posts = await getBackendPosts();
   const chatters = getLocalItems('chatters', 'chatter');
   const moments = getLocalItems('moments', 'moment');
 

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { siteConfig } from "../siteConfig";
+import { siteUrl } from "../lib/siteUrl";
 import WallpaperLayer from "../components/home/WallpaperLayer";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: siteConfig.title,
     template: `%s | ${siteConfig.title}`,
