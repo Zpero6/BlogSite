@@ -1,32 +1,22 @@
 ---
 import { Image } from 'astro:assets';
-import avatar from '../assets/avatar.jpg';
+import hero from '../assets/covers/paper-clouds.webp';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import Icon from '../components/Icon.astro';
-import TopicTag from '../components/TopicTag.astro';
+import PostCard from '../components/PostCard.astro';
+import JournalColumns from '../components/JournalColumns.astro';
 import { getPublishedPosts } from '../lib/posts';
-import { projects } from '../data/projects';
-import { SITE } from '../data/site';
 import '../styles/discovery.css';
 const posts = await getPublishedPosts();
 ---
-<BaseLayout>
-  <main class="home-page discovery-page">
-    <section class="home-profile" aria-labelledby="profile-name">
-      <Image src={avatar} alt="Zpero 的头像" width={88} height={88} loading="eager" />
-      <h1 id="profile-name">Zpero<span>.</span></h1>
-      <p>{SITE.intro}<br />{SITE.subIntro}</p>
-      <div class="home-profile__topics">Java / Backend <span>·</span> AI 应用 <span>·</span> 持续记录中</div>
-      <a class="intro-link" href="/blog/">阅读笔记 <Icon name="arrow" size={18} /></a>
+<BaseLayout journal><JournalColumns />
+  <main class="discovery-page journal-home">
+    <section class="journal-hero" aria-label="云景横幅"><Image src={hero} alt="云层与飞鸟构成的画作" widths={[800, 1200, 1800]} sizes="(max-width: 1056px) 100vw, 1024px" loading="eager" fetchpriority="high" /></section>
+    <section class="journal-intro" aria-labelledby="profile-name">
+      <div><h1 id="profile-name" class="journal-wordmark">Zpero<span>’s</span> <em>Journal</em></h1><p>写一些代码，也写下自己的理解。</p><div class="journal-pill-row"><span>后端笔记</span><span>人工智能</span><span>项目与生活</span></div><a class="journal-social" href="https://github.com/Zpero6" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
+      <aside class="journal-terminal" aria-label="写作寄语"><div class="journal-terminal__bar"><i></i><i></i><i></i><span>notes / zpero</span></div><p><span class="terminal-prompt">❯</span> 把零散的知识，整理成自己的笔记。</p><span class="terminal-comment">// 持续学习，慢慢积累。</span></aside>
     </section>
-    <section class="home-posts" aria-labelledby="posts-heading">
-      <div class="discovery-section-head"><div><h2 id="posts-heading">最近文章<span class="section-count">{posts.length}</span></h2><p>整理知识，也记录思考的过程。</p></div><a href="/blog/">查看全部 <span aria-hidden="true">↗</span></a></div>
-      <div class="home-post-list">{posts.slice(0, 4).map((post) => <article class="home-post-row"><div class="home-post-row__meta"><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN').replaceAll('/', '.')}</time><a class="category-badge" href={`/blog/?category=${encodeURIComponent(post.data.category)}`}>{post.data.category}</a></div><a class="home-post-row__link" href={`/blog/${post.id}/`}><h3>{post.data.title}</h3><p>{post.data.description}</p><span class="home-post-row__arrow" aria-hidden="true">↗</span></a><div class="home-post-row__tags">{post.data.tags.map((tag) => <TopicTag label={tag} />)}</div></article>)}</div>
-    </section>
-    <section class="home-projects" aria-labelledby="projects-heading">
-      <div class="discovery-section-head"><div><h2 id="projects-heading">项目与探索</h2><p>一些构建中的想法与设计。</p></div><a href="/projects/">查看项目 <span aria-hidden="true">↗</span></a></div>
-      <div class="project-preview-grid">{projects.slice(0, 2).map((project) => <a class="project-preview" href="/projects/"><span class="project-preview__status">{project.status}</span><h3>{project.title}</h3><p>{project.description}</p><div>{project.tech.map((tech) => <span>{tech}</span>)}</div></a>)}</div>
-    </section>
+    <div class="journal-dot-band" aria-hidden="true"></div>
+    <section class="journal-latest" aria-labelledby="posts-heading"><div class="journal-section-heading"><h2 id="posts-heading">最近文章</h2><a class="journal-button" href="/blog/">查看全部 <span aria-hidden="true">→</span></a></div><div class="journal-home-posts">{posts.slice(0, 6).map((post) => <PostCard post={post} preview />)}</div></section>
   </main>
 </BaseLayout>
 

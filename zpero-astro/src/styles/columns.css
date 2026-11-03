@@ -1,0 +1,178 @@
+.parthenon-grp {
+	position: fixed;
+	top: 5.5rem;
+	height: min(66vh, 700px);
+	width: clamp(96px, 10vw, 170px);
+	z-index: -1;
+	display: none;
+	pointer-events: none;
+	user-select: none;
+	color: rgba(148, 148, 158, 0.62);
+	--col-gold: rgba(180, 126, 36, 0.8);
+}
+
+html.dark .parthenon-grp {
+	color: rgba(113, 113, 122, 0.52);
+	--col-gold: rgba(226, 190, 110, 0.66);
+}
+
+@media (min-width: 1280px) {
+	.parthenon-grp {
+		display: block;
+		animation: parthenon-rise 1100ms cubic-bezier(0.22, 1, 0.36, 1) 250ms both;
+	}
+}
+
+.parthenon-grp-left {
+	left: calc(25vw - 256px);
+	transform: translateX(-50%);
+}
+
+.parthenon-grp-right {
+	right: calc(25vw - 256px);
+	transform: translateX(50%);
+}
+
+.pc-column {
+	position: absolute;
+}
+
+.pc-column svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+/* Architectural line-weight hierarchy: bold contours read as load-bearing,
+   faint lines as surface detail. --lw-scale thins the receding columns. */
+.pc-line,
+.pc-line-bold,
+.pc-line-gold {
+	fill: none;
+	stroke: currentColor;
+	stroke-linecap: round;
+}
+
+.pc-line {
+	stroke-width: calc(1.1px * var(--lw-scale, 1));
+}
+
+.pc-line-bold {
+	stroke-width: calc(2.3px * var(--lw-scale, 1));
+}
+
+.pc-line-faint {
+	stroke-width: calc(0.7px * var(--lw-scale, 1));
+	opacity: 0.6;
+}
+
+.pc-line-gold {
+	stroke: var(--col-gold);
+	stroke-width: calc(1.7px * var(--lw-scale, 1));
+}
+
+/* Depth: the near column sits toward the content, the far one recedes outward
+   — smaller, fainter, fully separated horizontally so lines never cross. */
+.pc-near {
+	top: 0;
+	width: 58%;
+	height: 100%;
+	opacity: 0.9;
+}
+
+.pc-far {
+	top: 6%;
+	width: 36%;
+	height: 80%;
+	opacity: 0.38;
+	--lw-scale: 0.72;
+}
+
+.parthenon-grp-left .pc-near {
+	right: 0;
+}
+
+.parthenon-grp-left .pc-far {
+	right: 64%;
+}
+
+.parthenon-grp-right .pc-near {
+	left: 0;
+}
+
+.parthenon-grp-right .pc-far {
+	left: 64%;
+}
+
+/* Volute eyes: the spiral's resting point, drawn as filled dots. */
+.pc-eye {
+	fill: currentColor;
+	stroke: none;
+}
+
+/* Pooled soft shadow under the ground line anchors the column to the floor. */
+.pc-ground-shadow {
+	fill: currentColor;
+	stroke: none;
+	opacity: 0.1;
+}
+
+.pc-ground-shadow-wide {
+	opacity: 0.05;
+}
+
+/* Pop-dot shimmer: breathe, then a quick "flip" at the bright peak,
+   like gold leaf catching the light. */
+.pc-spark {
+	position: absolute;
+	width: 4.5px;
+	height: 4.5px;
+	margin: -2px 0 0 -2px;
+	border-radius: 9999px;
+	background: var(--col-gold);
+	opacity: 0.15;
+	animation: pc-spark-shimmer 3.8s ease-in-out infinite;
+}
+
+.pc-spark-sm {
+	width: 3px;
+	height: 3px;
+}
+
+@keyframes pc-spark-shimmer {
+	0%,
+	100% {
+		opacity: 0.1;
+		transform: scale(0.7) scaleX(1);
+	}
+	38% {
+		opacity: 0.95;
+		transform: scale(1.15) scaleX(1);
+	}
+	47% {
+		opacity: 0.65;
+		transform: scale(1.05) scaleX(0.18);
+	}
+	56% {
+		opacity: 0.95;
+		transform: scale(1.15) scaleX(1);
+	}
+	76% {
+		opacity: 0.35;
+		transform: scale(0.9) scaleX(1);
+	}
+}
+
+@keyframes parthenon-rise {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+
+.parthenon-grp { z-index: 0; opacity: .55; }
+@media (prefers-reduced-motion: reduce) { .parthenon-grp, .pc-spark { animation: none; } }

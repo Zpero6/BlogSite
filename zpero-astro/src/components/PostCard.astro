@@ -1,23 +1,32 @@
 ---
 import { Image } from 'astro:assets';
 import type { BlogPost } from '../lib/posts';
-import { getReadingMinutes } from '../lib/posts';
 import { resolveCover } from '../lib/covers';
-import TopicTag from './TopicTag.astro';
-interface Props { post: BlogPost }
-const { post } = Astro.props;
+interface Props { post: BlogPost; preview?: boolean }
+const { post, preview = false } = Astro.props;
 const cover = resolveCover(post.data.cover, post.id);
 const date = post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
 ---
-<a href={`/blog/${post.id}/`} class="note-card">
-  <div class="note-card__image">
-    <Image src={cover} alt={post.data.coverAlt ?? ''} widths={[400, 640, 800]} sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, (min-width: 1440px) 25vw, 33vw" loading="lazy" />
-  </div>
-  <div class="note-card__body">
-    <span class="note-card__category">{post.data.category}</span>
-    <h2>{post.data.title}</h2>
-    <p>{post.data.description}</p>
-    <div class="note-card__tags">{post.data.tags.map((tag) => <TopicTag label={tag} />)}</div>
-    <div class="note-card__meta"><time datetime={post.data.pubDate.toISOString()}>{date}</time><span>{getReadingMinutes(post.body ?? '')} 分钟阅读</span></div>
-  </div>
-</a>
+<article class:list={['note-card', 'card-spotlight', preview && 'note-card--preview']}>
+  <a href={`/blog/${post.id}/`} class="note-card__link">
+    {!preview && <div class="note-card__image"><Image src={cover} alt={post.data.coverAlt ?? ''} widths={[400, 640, 800]} sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 25vw" loading="lazy" /></div>}
+    <div class="note-card__body">
+      {preview && <time class="note-card__date" datetime={post.data.pubDate.toISOString()}>{date}</time>}
+      <h2>{post.data.title}</h2>
+      {preview && <p>{post.data.description}</p>}
+    </div>
+  </a>
+  <div class="note-card__footer"><a class="note-card__category" href={`/blog/?category=${encodeURIComponent(post.data.category)}`}>{post.data.category}</a>{!preview && <time datetime={post.data.pubDate.toISOString()}>{date}</time>}<div class="note-card__tags">{post.data.tags.slice(0, 2).map((tag) => <a class="journal-tag" href={`/blog/?tag=${encodeURIComponent(tag)}`}>{tag}</a>)}{post.data.tags.length > 2 && <span class="journal-tag journal-tag--more" title={post.data.tags.slice(2).join('、')}>+{post.data.tags.length - 2}</span>}</div></div>
+</article>
+<script>
+  const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+  const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  document.querySelectorAll<HTMLElement>('.card-spotlight').forEach((card) => {
+    card.addEventListener('pointermove', (event) => {
+      if (!finePointer.matches || reducedMotion.matches) return;
+      const bounds = card.getBoundingClientRect();
+      card.style.setProperty('--spot-x', `${event.clientX - bounds.left}px`);
+      card.style.setProperty('--spot-y', `${event.clientY - bounds.top}px`);
+    });
+  });
+</script>

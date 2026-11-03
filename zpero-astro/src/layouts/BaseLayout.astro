@@ -11,14 +11,14 @@ interface Props {
   title?: string;
   description?: string;
   image?: ImageMetadata;
-  article?: boolean;
+  article?: boolean; journal?: boolean;
 }
 
 const {
   title = SITE.title,
   description = SITE.description,
   image,
-  article = false,
+  article = false, journal = false,
 } = Astro.props;
 
 const posts = await getPublishedPosts();
@@ -48,13 +48,14 @@ const ogImage = image ? new URL(image.src, Astro.site) : new URL('/images/og-def
     <meta name="twitter:image" content={ogImage} />
     <title>{title}</title>
   </head>
-  <body class="min-h-screen font-sans antialiased">
-    <div class="ambient-light" aria-hidden="true"></div>
+  <body class:list={["min-h-screen font-sans antialiased", journal && "journal-site"]}>
+    {!journal && <div class="ambient-light" aria-hidden="true"></div>}
     <Header />
-    <div class="relative mx-auto max-w-[1240px] px-5 sm:px-8 xl:px-10">
+    <div class:list={["relative mx-auto max-w-[1240px] px-5 sm:px-8 xl:px-10", journal && "journal-content"]}>
       <slot />
       <Footer />
     </div>
     <SearchDialog posts={posts} />
   </body>
 </html>
+

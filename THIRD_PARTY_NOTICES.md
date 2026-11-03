@@ -44,3 +44,19 @@ The homepage contribution heatmap reads the public contribution calendar HTML
 from `https://github.com/users/<username>/contributions` on the server, caches
 it for six hours, and does not require or store a GitHub token.
 
+
+## DansBlog V2.0.0
+
+The journal home layout, neutral card styling, column illustrations and pointer
+spotlight treatment are adapted from DansBlog V2.0.0:
+https://github.com/Dancncn/DansBlog/tree/V2.0.0
+Copyright (c) 2026 Dan Arnuox. Licensed under the MIT License.
+The full notice is retained in zpero-astro/public/fonts/DANSBLOG-LICENSE.txt.
+Branding, copy, cover images, four-column archive, filters and pagination are
+adapted for Zpero. No upstream personal wallpaper, avatar or article is reused.
+Alibaba PuHuiTi is subset from the font distributed with the reference project;
+its embedded license information is retained alongside the font.
+Instrument Serif is redistributed via @fontsource/instrument-serif under the
+SIL Open Font License; its license is retained in the fonts directory.
+The Alibaba subset covers GB2312 and characters in the current source; other
+characters fall back to the system font.
