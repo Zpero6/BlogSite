@@ -1,23 +1,47 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
-import Icon from '../../components/Icon.astro';
 import { getPublishedPosts } from '../../lib/posts';
-
+import '../../styles/discovery.css';
 const posts = await getPublishedPosts();
-const categories = [...new Set(posts.map((post) => post.data.category))];
+const categories = ['后端笔记', '人工智能', '项目沉淀', '生活随感'];
 ---
-
 <BaseLayout title="文章 · Zpero" description="Zpero 的技术笔记、项目实践和日常记录。">
-  <main class="subpage min-h-[76vh] pb-16 pt-[126px] sm:pt-[140px]">
-    <section aria-label="文章列表">
-      <header class="mb-6 flex flex-wrap items-center justify-between gap-x-5 gap-y-4 sm:mb-7">
-        <a href="/" class="inline-flex h-[36px] shrink-0 items-center gap-2 rounded-[8px] bg-zinc-100 px-2.5 pr-4 text-[12px] font-medium text-zinc-700 transition-colors hover:bg-zinc-200/75"><span class="flex h-[26px] w-[26px] items-center justify-center rounded-[5px] bg-white text-zinc-700 shadow-[0_1px_3px_rgba(0,0,0,.05)]"><Icon name="chevron" size={15} /></span>Back</a>
-        <nav class="order-3 flex min-w-0 flex-1 items-center justify-center gap-x-2.5 overflow-x-auto whitespace-nowrap pb-1 text-[12px] sm:text-[13px] lg:order-none lg:pb-0" aria-label="文章分类"><a href="/blog/" class="font-semibold text-[#171717]">最新</a>{categories.map((category) => <><span class="text-zinc-300">/</span><span class="text-zinc-500">{category}</span></>)}</nav>
-        <span class="inline-flex h-[36px] items-center rounded-[8px] bg-zinc-100 px-3.5 text-[11px] text-zinc-600">{String(posts.length).padStart(2, '0')} 篇文章</span>
-      </header>
-      <div class="grid grid-cols-1 items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-[18px] xl:gap-5">{posts.map((post) => <PostCard post={post} />)}</div>
-      <div class="mt-7 flex items-center justify-between text-[10px] text-zinc-400"><span>全部文章</span><span>SHOWING {String(posts.length).padStart(2, '0')}</span></div>
-    </section>
+  <main class="archive-page discovery-page">
+    <header class="archive-heading"><div><h1>文章</h1><p>把零散的知识，整理成可以回看的笔记。</p></div><span class="archive-total">共 {posts.length} 篇记录</span></header>
+    <nav class="category-filters" aria-label="文章分类">
+      {['全部', ...categories].map((category, index) => <button type="button" data-category={index === 0 ? '' : category} aria-pressed={index === 0 ? 'true' : 'false'}><span>{category}</span><span class="filter-count">{index === 0 ? posts.length : posts.filter((post) => post.data.category === category).length}</span></button>)}
+    </nav>
+    <div class="archive-results" aria-live="polite" aria-atomic="true"><span id="filter-summary">全部文章</span><span id="filter-count">{posts.length} 篇</span></div>
+    <div class:list={['archive-grid', posts.length <= 2 && 'archive-grid--few']}>
+      {posts.map((post) => <div class="archive-item" data-post-category={post.data.category}><PostCard post={post} /></div>)}
+    </div>
+    <div class="archive-empty" hidden><h2>这里还没有文章</h2><p>这个主题的笔记正在慢慢积累，先看看其他文章吧。</p><button type="button" id="reset-category">查看全部文章</button></div>
+    <noscript><p class="archive-noscript">启用 JavaScript 后可按分类筛选；下方已展示全部文章。</p></noscript>
   </main>
 </BaseLayout>
+<script>
+  const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-category]')];
+  const items = [...document.querySelectorAll<HTMLElement>('[data-post-category]')];
+  const applyCategory = (category: string, updateUrl = false) => {
+    const validCategory = buttons.some((button) => button.dataset.category === category) ? category : '';
+    buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.category === validCategory)));
+    let count = 0;
+    items.forEach((item) => { item.hidden = !!validCategory && item.dataset.postCategory !== validCategory; if (!item.hidden) count++; });
+    const empty = document.querySelector<HTMLElement>('.archive-empty');
+    if (empty) empty.hidden = count > 0;
+    const summary = document.getElementById('filter-summary');
+    const counter = document.getElementById('filter-count');
+    if (summary) summary.textContent = validCategory || '全部文章';
+    if (counter) counter.textContent = `${count} 篇`;
+    if (updateUrl) {
+      const url = new URL(location.href);
+      if (validCategory) url.searchParams.set('category', validCategory); else url.searchParams.delete('category');
+      history.pushState({}, '', url);
+    }
+  };
+  buttons.forEach((button) => button.addEventListener('click', () => applyCategory(button.dataset.category ?? '', true)));
+  document.getElementById('reset-category')?.addEventListener('click', () => applyCategory('', true));
+  addEventListener('popstate', () => applyCategory(new URL(location.href).searchParams.get('category') ?? ''));
+  applyCategory(new URL(location.href).searchParams.get('category') ?? '');
+</script>
