@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import hero from '../assets/covers/paper-clouds.webp';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { projects } from '../data/projects';
 import JournalColumns from '../components/JournalColumns.astro';
 import { getPublishedPosts } from '../lib/posts';
 import '../styles/discovery.css';
@@ -17,6 +19,8 @@ const posts = await getPublishedPosts();
     </section>
     <div class="journal-dot-band" aria-hidden="true"></div>
     <section class="journal-latest" aria-labelledby="posts-heading"><div class="journal-section-heading"><h2 id="posts-heading">最近文章</h2><a class="journal-button" href="/blog/">查看全部 <span aria-hidden="true">→</span></a></div><div class="journal-home-posts">{posts.slice(0, 6).map((post) => <PostCard post={post} preview />)}</div></section>
+    <section aria-labelledby="projects-heading"><div class="journal-section-heading"><h2 id="projects-heading">项目</h2><a class="journal-button" href="/projects/">查看全部 →</a></div><div class="journal-home-posts">{projects.map((project) => <ProjectCard project={project} preview />)}</div></section>
   </main>
 </BaseLayout>
+
 

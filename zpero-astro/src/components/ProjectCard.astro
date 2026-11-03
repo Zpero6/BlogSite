@@ -1,0 +1,11 @@
+---
+import type { Project } from '../data/projects';
+interface Props { project: Project; preview?: boolean }
+const { project, preview = false } = Astro.props;
+---
+<article id={preview ? undefined : project.id} class="note-card note-card--preview project-note card-spotlight">
+  <a class="note-card__link" href={preview ? `/projects/#${project.id}` : project.repository} target={preview ? undefined : '_blank'} rel={preview ? undefined : 'noopener noreferrer'}>
+    <div class="note-card__body"><span class="note-card__date">{project.status}</span><h2>{project.title}<span class="project-note__arrow" aria-hidden="true">↗</span></h2><p>{project.description}</p></div>
+  </a>
+  <div class="project-note__footer"><span>{project.tech.join(' · ')}</span><div><a href={project.repository} target="_blank" rel="noopener noreferrer">源码 ↗</a><a href={project.website} target="_blank" rel="noopener noreferrer">访问网站 ↗</a></div></div>
+</article>

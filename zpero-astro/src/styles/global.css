@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --canvas: #f8f8f3;
-  --surface: #fffef9;
-  --ink: #20201d;
-  --muted: #85857e;
-  --line: #e6e6dc;
-  --subtle: #f1f1e9;
+  --canvas: #fafafa;
+  --surface: #ffffff;
+  --ink: #27272a;
+  --muted: #71717a;
+  --line: #e4e4e7;
+  --subtle: #f4f4f5;
   --accent: #cbf033;
   --accent-ink: #4d5808;
   --paper-shadow: 0 20px 45px -38px rgb(52 51 38 / 28%);
@@ -190,7 +190,7 @@ button { cursor: pointer; }
 }
 
 /* Article reading layout */
-body:has(.article-page) { background: #fafaf8; }
+body:has(.article-page) { background: #fafafa; }
 body:has(.article-page) .ambient-light { display: none; }
 .article-page { font-family: Inter, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; }
 .article-column { max-width: 780px; }
