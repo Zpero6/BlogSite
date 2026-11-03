@@ -1,0 +1,23 @@
+---
+interface Props { label: string }
+const { label } = Astro.props;
+const groups = [
+  { tone: 'blue', pattern: /java|spring|并发|线程|后端/i },
+  { tone: 'sand', pattern: /mysql|sql|数据库|redis|索引|缓存/i },
+  { tone: 'violet', pattern: /ai|人工智能|模型|rag/i },
+  { tone: 'teal', pattern: /项目|工程|astro|架构|typescript/i },
+  { tone: 'rose', pattern: /生活|随感|日常/i },
+];
+const tones = ['blue', 'sand', 'violet', 'teal', 'rose'];
+const hash = Array.from(label).reduce((sum, char) => sum + (char.codePointAt(0) ?? 0), 0);
+const tone = groups.find((group) => group.pattern.test(label))?.tone ?? tones[hash % tones.length];
+---
+<span class:list={['topic-tag', `topic-tag--${tone}`]}>{label}</span>
+<style is:global>
+  .topic-tag { display: inline-flex; align-items: center; padding: 4px 9px; border-radius: 5px; font-size: 13px; font-weight: 500; line-height: 1.5; overflow-wrap: anywhere; }
+  .topic-tag--blue { background: #eaf0f7; color: #45617d; }
+  .topic-tag--sand { background: #f7efe3; color: #80613b; }
+  .topic-tag--violet { background: #f0ecf7; color: #6b5685; }
+  .topic-tag--teal { background: #e8f2f1; color: #426d69; }
+  .topic-tag--rose { background: #f7ecee; color: #885c69; }
+</style>

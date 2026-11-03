@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import type { BlogPost } from '../lib/posts';
 import { getReadingMinutes } from '../lib/posts';
 import { resolveCover } from '../lib/covers';
+import TopicTag from './TopicTag.astro';
 interface Props { post: BlogPost }
 const { post } = Astro.props;
 const cover = resolveCover(post.data.cover, post.id);
@@ -10,14 +11,13 @@ const date = post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', mo
 ---
 <a href={`/blog/${post.id}/`} class="note-card">
   <div class="note-card__image">
-    <Image src={cover} alt={post.data.coverAlt ?? ''} widths={[480, 760, 1100]} sizes="(max-width: 640px) 100vw, 50vw" loading="lazy" />
+    <Image src={cover} alt={post.data.coverAlt ?? ''} widths={[400, 640, 800]} sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, (min-width: 1440px) 25vw, 33vw" loading="lazy" />
   </div>
   <div class="note-card__body">
-    <div class="note-card__meta"><span class="category-badge">{post.data.category}</span><time datetime={post.data.pubDate.toISOString()}>{date}</time></div>
+    <span class="note-card__category">{post.data.category}</span>
     <h2>{post.data.title}</h2>
     <p>{post.data.description}</p>
-    <div class="note-card__tags">{post.data.tags.map((tag) => <span>#{tag}</span>)}</div>
-    <div class="note-card__foot"><span>{getReadingMinutes(post.body ?? '')} 分钟阅读</span><span class="note-card__read">阅读全文 <span aria-hidden="true">↗</span></span></div>
+    <div class="note-card__tags">{post.data.tags.map((tag) => <TopicTag label={tag} />)}</div>
+    <div class="note-card__meta"><time datetime={post.data.pubDate.toISOString()}>{date}</time><span>{getReadingMinutes(post.body ?? '')} 分钟阅读</span></div>
   </div>
 </a>
-

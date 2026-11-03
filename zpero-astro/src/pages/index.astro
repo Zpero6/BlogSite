@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import avatar from '../assets/avatar.jpg';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
+import TopicTag from '../components/TopicTag.astro';
 import { getPublishedPosts } from '../lib/posts';
 import { projects } from '../data/projects';
 import { SITE } from '../data/site';
@@ -20,7 +21,7 @@ const posts = await getPublishedPosts();
     </section>
     <section class="home-posts" aria-labelledby="posts-heading">
       <div class="discovery-section-head"><div><h2 id="posts-heading">最近文章<span class="section-count">{posts.length}</span></h2><p>整理知识，也记录思考的过程。</p></div><a href="/blog/">查看全部 <span aria-hidden="true">↗</span></a></div>
-      <div class="home-post-list">{posts.slice(0, 4).map((post) => <article class="home-post-row"><div class="home-post-row__meta"><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN').replaceAll('/', '.')}</time><a class="category-badge" href={`/blog/?category=${encodeURIComponent(post.data.category)}`}>{post.data.category}</a></div><a class="home-post-row__link" href={`/blog/${post.id}/`}><h3>{post.data.title}</h3><p>{post.data.description}</p><span class="home-post-row__arrow" aria-hidden="true">↗</span></a><div class="home-post-row__tags">{post.data.tags.map((tag) => <span>#{tag}</span>)}</div></article>)}</div>
+      <div class="home-post-list">{posts.slice(0, 4).map((post) => <article class="home-post-row"><div class="home-post-row__meta"><time datetime={post.data.pubDate.toISOString()}>{post.data.pubDate.toLocaleDateString('zh-CN').replaceAll('/', '.')}</time><a class="category-badge" href={`/blog/?category=${encodeURIComponent(post.data.category)}`}>{post.data.category}</a></div><a class="home-post-row__link" href={`/blog/${post.id}/`}><h3>{post.data.title}</h3><p>{post.data.description}</p><span class="home-post-row__arrow" aria-hidden="true">↗</span></a><div class="home-post-row__tags">{post.data.tags.map((tag) => <TopicTag label={tag} />)}</div></article>)}</div>
     </section>
     <section class="home-projects" aria-labelledby="projects-heading">
       <div class="discovery-section-head"><div><h2 id="projects-heading">项目与探索</h2><p>一些构建中的想法与设计。</p></div><a href="/projects/">查看项目 <span aria-hidden="true">↗</span></a></div>
@@ -28,3 +29,4 @@ const posts = await getPublishedPosts();
     </section>
   </main>
 </BaseLayout>
+

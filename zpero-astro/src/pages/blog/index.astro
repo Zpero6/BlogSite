@@ -13,7 +13,7 @@ const categories = ['后端笔记', '人工智能', '项目沉淀', '生活随�
       {['全部', ...categories].map((category, index) => <button type="button" data-category={index === 0 ? '' : category} aria-pressed={index === 0 ? 'true' : 'false'}><span>{category}</span><span class="filter-count">{index === 0 ? posts.length : posts.filter((post) => post.data.category === category).length}</span></button>)}
     </nav>
     <div class="archive-results" aria-live="polite" aria-atomic="true"><span id="filter-summary">全部文章</span><span id="filter-count">{posts.length} 篇</span></div>
-    <div class:list={['archive-grid', posts.length <= 2 && 'archive-grid--few']}>
+    <div class="archive-grid">
       {posts.map((post) => <div class="archive-item" data-post-category={post.data.category}><PostCard post={post} /></div>)}
     </div>
     <div class="archive-empty" hidden><h2>这里还没有文章</h2><p>这个主题的笔记正在慢慢积累，先看看其他文章吧。</p><button type="button" id="reset-category">查看全部文章</button></div>
@@ -45,3 +45,4 @@ const categories = ['后端笔记', '人工智能', '项目沉淀', '生活随�
   addEventListener('popstate', () => applyCategory(new URL(location.href).searchParams.get('category') ?? ''));
   applyCategory(new URL(location.href).searchParams.get('category') ?? '');
 </script>
+

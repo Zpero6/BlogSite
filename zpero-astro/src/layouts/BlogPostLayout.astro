@@ -6,6 +6,7 @@ import { getReadingMinutes } from '../lib/posts';
 import { resolveCover } from '../lib/covers';
 import BaseLayout from './BaseLayout.astro';
 import Icon from '../components/Icon.astro';
+import TopicTag from '../components/TopicTag.astro';
 
 interface Props {
   post: BlogPost;
@@ -33,7 +34,7 @@ const formattedDate = post.data.pubDate.toLocaleDateString('zh-CN', { year: 'num
         <h1 class="article-title">{post.data.title}</h1>
         <p class="article-summary">{post.data.description}</p>
         <div class="article-tags mt-6 flex flex-wrap gap-2.5" aria-label="文章标签">
-          {post.data.tags.map((tag) => <span class="article-tag">#{tag}</span>)}
+          {post.data.tags.map((tag) => <TopicTag label={tag} />)}
         </div>
         <div class="article-cover mt-10 aspect-video overflow-hidden bg-zinc-100">
           <Image src={cover} alt={post.data.coverAlt ?? post.data.title} widths={[760, 960, 1200]} sizes="(max-width: 760px) 100vw, 760px" class="h-full w-full object-cover" />
@@ -89,3 +90,4 @@ const formattedDate = post.data.pubDate.toLocaleDateString('zh-CN', { year: 'num
   }, { passive: true });
   updateToc();
 </script>
+
