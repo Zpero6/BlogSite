@@ -5,89 +5,42 @@ import type { BlogPost } from '../lib/posts';
 import { getReadingMinutes } from '../lib/posts';
 import { resolveCover } from '../lib/covers';
 import BaseLayout from './BaseLayout.astro';
-import Icon from '../components/Icon.astro';
-import TopicTag from '../components/TopicTag.astro';
-
-interface Props {
-  post: BlogPost;
-  headings: MarkdownHeading[];
-  nextPost?: BlogPost;
-}
-
+import PostCard from '../components/PostCard.astro';
+import '../styles/reading.css';
+interface Props { post: BlogPost; headings: MarkdownHeading[]; nextPost?: BlogPost }
 const { post, headings, nextPost } = Astro.props;
 const cover = resolveCover(post.data.cover, post.id);
+const normalize = (text: string) => text.replace(/\s/g, '').toLowerCase();
+const toc = headings.filter((h) => h.depth <= 4 && normalize(h.text) !== normalize(post.data.title));
+const minDepth = toc.length ? Math.min(...toc.map((h) => h.depth)) : 1;
 const minutes = getReadingMinutes(post.body ?? '');
-const toc = headings.filter((heading) => heading.depth === 2 || heading.depth === 3);
-const formattedDate = post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' });
+const chars = (post.body ?? '').replace(/!\[[^\]]*\]\([^)]*\)/g, '').replace(/\s/g, '').length;
+const date = (value: Date) => value.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
 ---
-
 <BaseLayout title={`${post.data.title} · Zpero`} description={post.data.description} image={cover} article>
-  <main class="article-page subpage mx-auto min-h-[76vh] max-w-[1136px] pb-20 pt-6 sm:pt-[42px]">
-    <div class="article-grid grid items-start">
-      <article class="article-column mx-auto w-full min-w-0 lg:mx-0">
-        <a href="/blog/" class="article-back mb-9"><span class="article-back__icon"><Icon name="arrow" size={13} /></span>返回文章列表</a>
-        <div class="article-meta mb-5 flex flex-wrap items-center gap-3 sm:gap-3.5">
-          <span class="article-category">{post.data.category}</span>
-          <time datetime={post.data.pubDate.toISOString()}>{formattedDate}</time>
-          <span>{minutes} MIN READ</span>
-        </div>
-        <h1 class="article-title">{post.data.title}</h1>
-        <p class="article-summary">{post.data.description}</p>
-        <div class="article-tags mt-6 flex flex-wrap gap-2.5" aria-label="文章标签">
-          {post.data.tags.map((tag) => <TopicTag label={tag} />)}
-        </div>
-        <div class="article-cover mt-10 aspect-video overflow-hidden bg-zinc-100">
-          <Image src={cover} alt={post.data.coverAlt ?? post.data.title} widths={[760, 960, 1200]} sizes="(max-width: 760px) 100vw, 760px" class="h-full w-full object-cover" />
-        </div>
-
-        {toc.length > 0 && (
-          <details class="article-toc article-toc--mobile my-10 lg:hidden">
-            <summary class="cursor-pointer text-[13px] font-semibold text-[#171717]">文章目录 <span class="ml-2 text-[11px] font-normal text-zinc-400">/ {toc.length} 个章节</span></summary>
-            <nav class="mt-4" aria-label="移动端文章目录">
-              {toc.map((heading) => <a href={`#${heading.slug}`} class:list={['toc-link', heading.depth === 3 && 'is-child']}>{heading.text}</a>)}
-            </nav>
-          </details>
-        )}
-
-        <div class="article-copy mt-12 lg:mt-14"><slot /></div>
-
-        <div class="mt-12 border-t border-[#171717]/10 pt-6">
-          <p class="text-[10px] leading-[1.8] text-[#171717]/35">文章与封面由 Git 管理，提交后自动生成静态页面。</p>
-          {nextPost && (
-            <a href={`/blog/${nextPost.id}/`} class="group mt-7 flex items-center justify-between gap-6 rounded-lg border border-zinc-200/70 bg-white px-5 py-4">
-              <span><span class="block text-[9px] text-[#171717]/40">继续阅读 / NEXT POST</span><strong class="mt-1 block text-[12px] font-semibold text-[#171717]/80 group-hover:text-[#171717]">{nextPost.data.title}</strong></span>
-              <Icon name="arrow" size={15} />
-            </a>
-          )}
-        </div>
-      </article>
-
-      {toc.length > 0 && (
-        <aside class="article-toc sticky top-[118px] hidden lg:block" aria-label="文章目录">
-          <div class="mb-1.5 flex items-center gap-2.5 text-[13px] font-bold text-[#171717]"><span class="h-1.5 w-1.5 rounded-full bg-[#CBF033]"></span>目录</div>
-          <p class="mb-5 text-[10px] font-semibold tracking-[.12em] text-[#171717]/32">TABLE OF CONTENTS</p>
-          <nav>{toc.map((heading) => <a href={`#${heading.slug}`} data-toc={heading.slug} class:list={['toc-link', heading.depth === 3 && 'is-child']}>{heading.text}</a>)}</nav>
-        </aside>
-      )}
-    </div>
+  <div class="reading-progress" role="progressbar" aria-label="文章阅读进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+  <main class="reading-shell">
+    <aside class="reading-sidebar" aria-label="文章目录">
+      {toc.length > 0 && <nav class="reading-toc"><h2>本文目录</h2><div class="reading-toc__scroll" data-reading-toc-scroll>{toc.map((h) => <a href={`#${h.slug}`} data-reading-toc={h.slug} style={`--toc-depth:${Math.min(2, h.depth - minDepth)}`}>{h.text}</a>)}</div></nav>}
+    </aside>
+    <article class="reading-article">
+      <header class="reading-heading">
+        <a class="reading-back" href="/blog/">← 返回文章</a>
+        <div class="reading-meta"><time datetime={post.data.pubDate.toISOString()}>{date(post.data.pubDate)}</time><span aria-hidden="true">·</span><span>约 {chars.toLocaleString('zh-CN')} 字符</span><span aria-hidden="true">·</span><span>{minutes} 分钟阅读</span>{post.data.updatedDate && <span>更新于 <time datetime={post.data.updatedDate.toISOString()}>{date(post.data.updatedDate)}</time></span>}</div>
+        <h1 id="reading-title">{post.data.title}</h1>
+        <p class="reading-description">{post.data.description}</p>
+        <div class="reading-tags" aria-label="文章主题">{post.data.tags.map((tag) => <a href={`/blog/?tag=${encodeURIComponent(tag)}`}>{tag}</a>)}</div>
+      </header>
+      <div class="reading-cover"><Image src={cover} alt={post.data.coverAlt ?? post.data.title} widths={[760, 1000, 1400]} sizes="(max-width: 767px) 100vw, 820px" loading="eager" /></div>
+      <div class="markdown-prose" id="reading-content"><slot /></div>
+      {nextPost && nextPost.id !== post.id && <section class="reading-related" aria-labelledby="related-heading"><h2 id="related-heading">继续阅读</h2><PostCard post={nextPost} preview /></section>}
+    </article>
+    <div class="reading-balance" aria-hidden="true"></div>
   </main>
+  {toc.length > 0 && <><button class="reading-toc-toggle" id="reading-toc-open" type="button" aria-haspopup="dialog" aria-controls="reading-toc-dialog" aria-expanded="false">☰ 目录</button><dialog class="reading-toc-dialog" id="reading-toc-dialog" aria-labelledby="reading-toc-title"><div class="reading-dialog-heading"><h2 id="reading-toc-title">本文目录</h2><button type="button" data-reading-close aria-label="关闭目录">×</button></div><nav class="reading-toc__scroll" data-reading-toc-scroll>{toc.map((h) => <a href={`#${h.slug}`} data-reading-toc={h.slug} style={`--toc-depth:${Math.min(2, h.depth - minDepth)}`}>{h.text}</a>)}</nav></dialog></>}
+  <button type="button" class="reading-top" id="reading-top" aria-label="返回顶部" hidden><svg viewBox="0 0 48 48" aria-hidden="true"><circle class="reading-top__track" cx="24" cy="24" r="21" /><circle class="reading-top__progress" cx="24" cy="24" r="21" /></svg><span aria-hidden="true">↑</span></button>
+  <dialog id="reading-lightbox" class="reading-lightbox" aria-label="图片预览"><div class="reading-lightbox__actions"><button type="button" id="reading-zoom" aria-pressed="false">放大原图</button><button type="button" data-reading-close aria-label="关闭图片预览">×</button></div><figure><img id="reading-lightbox-image" alt="" /><figcaption id="reading-lightbox-caption"></figcaption></figure></dialog>
+  <p class="sr-only" role="status" aria-live="polite" id="reading-status"></p>
+  <script>import '../scripts/reading';</script>
 </BaseLayout>
-
-<script>
-  const updateToc = () => {
-    const links = [...document.querySelectorAll<HTMLElement>('[data-toc]')];
-    const headings = links.map((link) => document.getElementById(link.dataset.toc ?? '')).filter(Boolean) as HTMLElement[];
-    if (!headings.length) return;
-    let current = headings[0].id;
-    for (const heading of headings) if (heading.getBoundingClientRect().top <= 170) current = heading.id;
-    links.forEach((link) => link.classList.toggle('is-current', link.dataset.toc === current));
-  };
-  let pending = false;
-  addEventListener('scroll', () => {
-    if (pending) return;
-    pending = true;
-    requestAnimationFrame(() => { pending = false; updateToc(); });
-  }, { passive: true });
-  updateToc();
-</script>
 

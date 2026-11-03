@@ -7,8 +7,10 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
   compressHTML: true,
+  markdown: { shikiConfig: { theme: 'github-light' } },
   integrations: [sitemap()],
   vite: {
     plugins: [tailwindcss()],
   },
 });
+
