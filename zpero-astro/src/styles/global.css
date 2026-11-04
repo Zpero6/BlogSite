@@ -72,3 +72,32 @@ button { cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* DansBlog-style desktop reading proportions: navigation left, text right. */
+@media (min-width: 1024px) {
+  .article-page { max-width: 1180px; }
+  .article-grid {
+    grid-template-columns: 232px minmax(0, 780px);
+    column-gap: 68px;
+    justify-content: center;
+  }
+  .article-column {
+    grid-column: 2;
+    grid-row: 1;
+    max-width: 780px;
+  }
+  .article-toc {
+    grid-column: 1;
+    grid-row: 1;
+    width: 232px;
+    margin-top: 112px;
+    padding: 22px 18px;
+    border: 1px solid rgb(49 48 40 / 7%);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 14px 32px -28px rgb(49 48 40 / 36%);
+  }
+  .article-toc nav { max-height: calc(100vh - 190px); }
+  .toc-link { font-size: 13px; line-height: 1.55; padding-top: 7px; padding-bottom: 7px; }
+  .toc-link.is-child { font-size: 12px; padding-left: 18px; }
+}
