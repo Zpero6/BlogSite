@@ -1,62 +1,24 @@
-# Third-party design reference
-
-The visual layout and glassmorphism direction of this project are adapted from:
-
-- Project: XinghuisamaBlogs
-- Source: https://github.com/heiehiehi/XinghuisamaBlogs
-- Upstream commit used: 8633e983371acc3b627b88b911143ff0fd31ea23
-- Author / licensor: heiehiehi and project contributors
-- License: Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
-- Changes: The upstream XHBlogs frontend source is used as the base. Branding, profile, wallpaper assets, articles, navigation, music panel, content modules and backend integration were changed for Zpero.
-
-No avatar, wallpaper, article, personal profile, music configuration, or other personalized asset from the reference project is included.
-
-## Wallpaper assets
-
-The five homepage wallpapers under `alice-blog-web/public/wallpapers/` were
-supplied by the site owner and are included with explicit permission for public
-repository and website display (confirmed 2026-10-26). They are not derived
-from the reference project and are not covered by its CC BY-NC 4.0 license.
-See `alice-blog-web/public/wallpapers/README.md` for the source mapping.
-
-## Menu illustrations
-
-The 11 semantic glyph SVGs under `alice-blog-web/public/images/nav/` are generated
-locally by `alice-blog-web/scripts/generate-nav-art.mjs`. They are original
-placeholder artwork, not copied from the reference site, and can be replaced
-per the instructions in that directory's README.
-
-## Technology brand icons
-
-The skills strip uses SVG marks from the `simple-icons` package (CC0-1.0).
-The technology names and logos are trademarks of their respective owners and
-are used only to identify the technologies the site owner uses.
-
-## Webmaster avatar
-
-The avatar files `alice-blog-web/public/images/zpero-avatar.webp` and
-`zpero-avatar.png` were generated from `站长头像.jpeg`, supplied by the site
-owner. They are not from the reference project.
-
-## GitHub contribution calendar
-
-The homepage contribution heatmap reads the public contribution calendar HTML
-from `https://github.com/users/<username>/contributions` on the server, caches
-it for six hours, and does not require or store a GitHub token.
-
+# Third-party notices
 
 ## DansBlog V2.0.0
 
-The journal home layout, neutral card styling, column illustrations and pointer
-spotlight treatment are adapted from DansBlog V2.0.0:
-https://github.com/Dancncn/DansBlog/tree/V2.0.0
-Copyright (c) 2026 Dan Arnuox. Licensed under the MIT License.
-The full notice is retained in zpero-astro/public/fonts/DANSBLOG-LICENSE.txt.
-Branding, copy, cover images, four-column archive, filters and pagination are
-adapted for Zpero. No upstream personal wallpaper, avatar or article is reused.
-Alibaba PuHuiTi is subset from the font distributed with the reference project;
-its embedded license information is retained alongside the font.
-Instrument Serif is redistributed via @fontsource/instrument-serif under the
-SIL Open Font License; its license is retained in the fonts directory.
-The Alibaba subset covers GB2312 and characters in the current source; other
-characters fall back to the system font.
+博客首页、文章列表、卡片和悬浮光效参考了 DansBlog V2.0.0：
+
+<https://github.com/Dancncn/DansBlog/tree/V2.0.0>
+
+Copyright (c) 2026 Dan Arnuox. Licensed under the MIT License. The full
+notice is retained in `zpero-astro/public/fonts/DANSBLOG-LICENSE.txt`.
+
+Zpero 对布局、文案、文章内容、封面、导航和配色进行了独立调整，未复用
+DansBlog 的个人壁纸、头像或文章内容。
+
+## Fonts
+
+- Alibaba PuHuiTi subset: license in `zpero-astro/public/fonts/ALIBABA-FONT-LICENSE.txt`.
+- Instrument Serif: redistributed under the SIL Open Font License; license in
+  `zpero-astro/public/fonts/INSTRUMENT-SERIF-LICENSE.txt`.
+
+## Site assets
+
+博客封面、头像、文章截图和装饰插画为站点自有或经授权使用的资源，随 Astro
+应用一同保存在 `zpero-astro` 内。
