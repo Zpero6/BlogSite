@@ -101,3 +101,49 @@ button { cursor: pointer; }
   .toc-link { font-size: 13px; line-height: 1.55; padding-top: 7px; padding-bottom: 7px; }
   .toc-link.is-child { font-size: 12px; padding-left: 18px; }
 }
+
+/* Wide article canvas tuned to the DansBlog reference layout. */
+@media (min-width: 1024px) {
+  .article-page {
+    max-width: 1700px;
+    padding-top: 140px;
+  }
+  .article-grid {
+    grid-template-columns: 340px minmax(0, 1230px);
+    column-gap: 72px;
+    justify-content: center;
+  }
+  .article-column {
+    max-width: 1230px;
+  }
+  .article-back {
+    display: none;
+  }
+  .article-toc {
+    width: 340px;
+    margin-top: 0;
+    padding: 24px 20px;
+    border-radius: 18px;
+  }
+  .article-toc nav {
+    max-height: calc(100vh - 250px);
+  }
+  .toc-link {
+    font-size: 15px;
+    line-height: 1.55;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
+  .toc-link.is-child {
+    font-size: 14px;
+    padding-left: 18px;
+  }
+  .article-title {
+    font-size: clamp(42px, 3.2vw, 58px);
+  }
+  .article-summary {
+    max-width: 1230px;
+    font-size: 19px;
+    line-height: 1.75;
+  }
+}
