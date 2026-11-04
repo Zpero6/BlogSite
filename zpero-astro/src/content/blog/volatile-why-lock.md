@@ -1,7 +1,7 @@
 ---
 title: "有了Volatile 为什么还要加锁？"
 description: "从可见性、有序性和原子性三个角度，理解 volatile 的能力边界，以及为什么复合操作仍然需要锁。"
-pubDate: 2026-10-30
+pubDate: 2026-02-18
 category: "后端笔记"
 tags: ["Java", "并发编程", "多线程"]
 cover: "volatile-why-lock.jpg"
