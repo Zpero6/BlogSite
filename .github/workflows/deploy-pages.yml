@@ -52,4 +52,4 @@ jobs:
           command: pages deploy zpero-astro/dist --project-name=zpero-site --branch=main
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
-# Production branch is configured as main in Cloudflare Pages.
+# Astro-only repository; production branch is main.
