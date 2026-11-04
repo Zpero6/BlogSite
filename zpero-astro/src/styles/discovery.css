@@ -48,6 +48,10 @@ body.journal-site { background: #fafafa; color: #27272a; font-family: "Alibaba P
 .note-card--preview { border-radius: 12px; }
 .note-card--preview .note-card__body { padding: 22px 22px 16px; }
 .note-card__date { color: #71717a; font-size: 13px; }
+.note-card__meta { display: flex; align-items: center; flex-wrap: wrap; gap: 7px; color: #71717a; font-size: 13px; line-height: 1.4; }
+.note-card__separator { color: #a1a1aa; }
+.note-card__duration { display: inline-flex; align-items: center; gap: 5px; }
+.note-card__duration svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.7; }
 .note-card--preview h2 { min-height: 0; margin-top: 10px; font-size: 20px; }
 .note-card--preview p { margin-top: 12px; color: #71717a; font-family: "Source Han Serif SC", "Noto Serif SC", "Songti SC", serif; font-size: 15px; line-height: 1.9; }
 .archive-page { max-width: 1280px; }

@@ -1,17 +1,25 @@
 ---
 import { Image } from 'astro:assets';
-import type { BlogPost } from '../lib/posts';
+import { getReadingMinutes, type BlogPost } from '../lib/posts';
 import { resolveCover } from '../lib/covers';
 interface Props { post: BlogPost; preview?: boolean }
 const { post, preview = false } = Astro.props;
 const cover = resolveCover(post.data.cover, post.id);
-const date = post.data.pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' });
+const date = post.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+const readingMinutes = getReadingMinutes(post.body ?? '');
 ---
 <article class:list={['note-card', 'card-spotlight', preview && 'note-card--preview']}>
   <a href={`/blog/${post.id}/`} class="note-card__link">
     {!preview && <div class="note-card__image"><Image src={cover} alt={post.data.coverAlt ?? ''} widths={[400, 640, 800]} sizes="(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 25vw" loading="lazy" /></div>}
     <div class="note-card__body">
-      <time class="note-card__date" datetime={post.data.pubDate.toISOString()}>{date}</time>
+      <div class="note-card__meta">
+        <time class="note-card__date" datetime={post.data.pubDate.toISOString()}>{date}</time>
+        <span aria-hidden="true" class="note-card__separator">·</span>
+        <span class="note-card__duration">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="8.5" /><path d="M12 7.5v5l3.2 2" /></svg>
+          <span>{readingMinutes} 分钟阅读</span>
+        </span>
+      </div>
       <h2>{post.data.title}</h2>
       {preview && <p>{post.data.description}</p>}
     </div>
