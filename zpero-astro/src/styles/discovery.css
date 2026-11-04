@@ -4,7 +4,8 @@ body.journal-site { background: #fafafa; color: #27272a; font-family: "Alibaba P
 .journal-site .journal-content { max-width: none; padding: 0 24px; }
 .journal-site .floating-nav { position: sticky; left: 0; top: 0; width: 100%; max-width: none !important; transform: none; border: 0; border-bottom: 1px solid #e4e4e780; border-radius: 0; background: #fafafae8; box-shadow: none; backdrop-filter: blur(16px); }
 .journal-site .floating-nav > nav { height: 76px; max-width: 1280px; margin: auto; padding: 0 24px; gap: 24px; }
-.journal-site .floating-nav > nav > a { font-family: Georgia, serif; font-size: 26px; font-weight: 400; letter-spacing: -.03em; margin-right: auto; }
+.journal-site .floating-nav > nav > a { font-family: Georgia, serif; font-size: 26px; font-weight: 400; letter-spacing: -.03em; margin-right: 0; }
+.journal-site .floating-nav > nav > div:first-of-type { margin-right: auto; }
 .journal-site .floating-nav > nav > a span { color: inherit; }
 .journal-site .floating-nav > nav > span { display: none; }
 .journal-site .floating-nav .nav-link { color: #71717a; font-size: 15px; border-radius: 10px; padding: 10px 16px; }

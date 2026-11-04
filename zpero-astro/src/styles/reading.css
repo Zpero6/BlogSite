@@ -1,5 +1,5 @@
 /* Reading layout and interactions adapted from DansBlog V2.0.0, MIT. */
-.reading-shell { display: grid; grid-template-columns: 240px minmax(0,820px) minmax(0,1fr); align-items: start; gap: 32px; max-width: 1400px; margin: auto; padding: 42px 0 32px; }
+.reading-shell { display: grid; grid-template-columns: 280px minmax(0,820px) minmax(0,1fr); align-items: start; gap: 40px; max-width: 1280px; margin: 32px auto 0; padding: 56px 32px 32px; }
 .reading-article { min-width: 0; }
 .reading-sidebar { position: sticky; top: 108px; min-width: 0; }
 .reading-toc { border: 1px solid #e4e4e7; border-radius: 16px; background: #ffffffed; padding: 14px; }
@@ -90,6 +90,6 @@ body:has(.reading-lightbox[open],.reading-toc-dialog[open]) { overflow: hidden; 
 .reading-lightbox.is-zoomed figure { align-items: flex-start; }
 .reading-lightbox.is-zoomed img { max-width: none; max-height: none; cursor: zoom-out; }
 .reading-lightbox figcaption { color: #d4d4d8; font-size: 13px; }
-@media (min-width:768px) and (max-width:1100px) { .reading-shell { grid-template-columns: 200px minmax(0,1fr); gap: 28px; } .reading-balance { display: none; } }
-@media (max-width:767px) { .reading-shell { display: block; padding-top: 24px; } .reading-sidebar,.reading-balance { display: none; } .reading-heading h1 { font-size: 29px; } .reading-meta { font-size: 12px; } .markdown-prose { font-size: 16px; } .markdown-prose h2 { font-size: 24px; } .markdown-prose h3 { font-size: 20px; } .reading-toc-toggle { display: block; position: fixed; left: 18px; bottom: 22px; z-index: 55; border: 1px solid #e4e4e7; border-radius: 999px; background: #fffffff2; padding: 10px 16px; color: #52525b; font-size: 14px; box-shadow: 0 8px 24px #0f172a12; } .reading-cover { border-radius: 12px; } .reading-lightbox { padding-inline: 14px; } }
+@media (min-width:768px) and (max-width:1100px) { .reading-shell { grid-template-columns: 220px minmax(0,1fr); gap: 28px; margin-top: 20px; padding-inline: 24px; } .reading-balance { display: none; } }
+@media (max-width:767px) { .reading-shell { display: block; margin: 0 auto; padding-top: 24px; } .reading-sidebar,.reading-balance { display: none; } .reading-heading h1 { font-size: 29px; } .reading-meta { font-size: 12px; } .markdown-prose { font-size: 16px; } .markdown-prose h2 { font-size: 24px; } .markdown-prose h3 { font-size: 20px; } .reading-toc-toggle { display: block; position: fixed; left: 18px; bottom: 22px; z-index: 55; border: 1px solid #e4e4e7; border-radius: 999px; background: #fffffff2; padding: 10px 16px; color: #52525b; font-size: 14px; box-shadow: 0 8px 24px #0f172a12; } .reading-cover { border-radius: 12px; } .reading-lightbox { padding-inline: 14px; } }
 @media (prefers-reduced-motion:reduce) { .reading-progress > span { transition: none; } }
