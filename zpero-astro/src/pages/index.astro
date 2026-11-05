@@ -1,6 +1,6 @@
 ---
 import { Image } from 'astro:assets';
-import hero from '../assets/covers/paper-clouds.webp';
+import hero from '../assets/covers/home-hero.png';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import ProjectCard from '../components/ProjectCard.astro';
@@ -12,7 +12,7 @@ const posts = await getPublishedPosts();
 ---
 <BaseLayout journal><JournalColumns />
   <main class="discovery-page journal-home">
-    <section class="journal-hero" aria-label="云景横幅"><Image src={hero} alt="云层与飞鸟构成的画作" widths={[800, 1200, 1800]} sizes="(max-width: 1056px) 100vw, 1024px" loading="eager" fetchpriority="high" /></section>
+    <section class="journal-hero" aria-label="首页艺术背景"><Image src={hero} alt="森林中的伊地知虹夏插画" widths={[800, 1200, 1800]} sizes="(max-width: 1056px) 100vw, 1024px" loading="eager" fetchpriority="high" /></section>
     <section class="journal-intro" aria-labelledby="profile-name">
       <div><h1 id="profile-name" class="journal-wordmark">Zpero<span>’s</span> <em>Journal</em></h1><p>写一些代码，也写下自己的理解。</p><div class="journal-pill-row"><span>后端笔记</span><span>人工智能</span><span>项目与生活</span></div><a class="journal-social" href="https://github.com/Zpero6" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a></div>
       <aside class="journal-terminal" aria-label="写作寄语"><div class="journal-terminal__bar"><i></i><i></i><i></i><span>notes / zpero</span></div><p><span class="terminal-prompt">❯</span> 把零散的知识，整理成自己的笔记。</p><span class="terminal-comment">// 持续学习，慢慢积累。</span></aside>
