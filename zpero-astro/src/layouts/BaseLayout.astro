@@ -7,7 +7,6 @@ import { getPublishedPosts } from '../lib/posts';
 import { SITE } from '../data/site';
 import '../styles/global.css';
 import '../styles/discovery.css';
-import '../styles/finishing.css';
 
 interface Props {
   title?: string;
@@ -53,8 +52,7 @@ const ogImage = image ? new URL(image.src, Astro.site) : new URL('/images/og-def
   <body class:list={["min-h-screen font-sans antialiased", journal && "journal-site"]}>
     {!journal && <div class="ambient-light" aria-hidden="true"></div>}
     <Header />
-    <a href="#page-content" class="skip-content">跳到内容</a>
-    <div id="page-content" tabindex="-1" class:list={["relative mx-auto max-w-[1240px] px-5 sm:px-8 xl:px-10", journal && "journal-content"]}>
+    <div class:list={["relative mx-auto max-w-[1240px] px-5 sm:px-8 xl:px-10", journal && "journal-content"]}>
       <slot />
       <Footer />
     </div>

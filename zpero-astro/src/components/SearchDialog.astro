@@ -17,10 +17,9 @@ const searchItems = posts.map((post) => ({
   <div class="w-full max-w-[480px] rounded-[14px] border border-zinc-200 bg-white p-5 shadow-[0_28px_70px_-24px_rgba(0,0,0,.22)]" role="dialog" aria-modal="true" aria-label="搜索文章">
     <div class="flex items-center gap-3 border-b border-[#171717]/10 pb-4 text-[#171717]/45">
       <Icon name="search" size={17} />
-      <input id="search-input" type="search" aria-label="搜索文章或技术关键词" placeholder="搜索文章或技术关键词..." autocomplete="off" class="min-w-0 flex-1 bg-transparent text-[16px] text-[#171717] outline-none placeholder:text-[#171717]/35" />
+      <input id="search-input" type="search" placeholder="搜索文章或技术关键词..." autocomplete="off" class="min-w-0 flex-1 bg-transparent text-[13px] text-[#171717] outline-none placeholder:text-[#171717]/35" />
       <button id="search-close" aria-label="关闭搜索" class="flex h-7 w-7 items-center justify-center rounded-full transition-colors hover:bg-zinc-100"><Icon name="x" size={16} /></button>
     </div>
-    <p id="search-count" class="pt-3 text-sm text-zinc-500" role="status" aria-live="polite"></p>
     <div id="search-results" class="max-h-[55vh] overflow-y-auto pt-2"></div>
   </div>
 </div>
@@ -38,10 +37,9 @@ const searchItems = posts.map((post) => ({
   const render = (value = '') => {
     const query = value.trim().toLocaleLowerCase();
     const matched = searchItems.filter((item) => !query || [item.title, item.description, item.category, ...item.tags].join(' ').toLocaleLowerCase().includes(query));
-    document.getElementById('search-count').textContent = query ? `找到 ${matched.length} 篇文章` : '输入标题、技术关键词或分类';
     results.innerHTML = matched.length ? matched.map((item) => `
       <a href="${item.href}" class="group flex w-full items-center justify-between gap-4 rounded-lg px-3 py-3 text-left transition-colors hover:bg-zinc-100">
-        <span class="min-w-0"><span class="block text-[15px] leading-relaxed font-semibold text-[#171717]/85">${escapeHtml(item.title)}</span><span class="mt-1 block text-[12px] text-[#171717]/60">文章 · ${escapeHtml(item.category)}</span></span>
+        <span class="min-w-0"><span class="block truncate text-[12px] font-semibold text-[#171717]/85">${escapeHtml(item.title)}</span><span class="mt-1 block text-[10px] text-[#171717]/40">文章 · ${escapeHtml(item.category)}</span></span>
         <span class="shrink-0 text-[#171717]/30 group-hover:text-[#171717]">→</span>
       </a>`).join('') : '<p class="px-3 py-7 text-center text-[12px] text-[#171717]/45">暂时没有找到相关内容。</p>';
   };
@@ -69,12 +67,6 @@ const searchItems = posts.map((post) => ({
   input?.addEventListener('input', (event) => render(event.target.value));
   overlay?.addEventListener('click', (event) => { if (event.target === overlay) close(); });
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Tab' && !overlay.classList.contains('hidden')) {
-      const focusable = [...overlay.querySelectorAll('input, button, a[href]')];
-      const first = focusable[0], last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
-    }
     if (event.key === 'Escape') close();
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') { event.preventDefault(); open(); }
   });
