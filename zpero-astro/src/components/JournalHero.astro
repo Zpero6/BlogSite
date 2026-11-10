@@ -1,0 +1,48 @@
+---
+import '../styles/home.css';
+---
+<section class="field-hero" aria-labelledby="home-title">
+  <svg class="field-hero__landscape" viewBox="0 0 1200 540" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="field-sky" x2="0" y2="1"><stop stop-color="#e5edf0"/><stop offset="1" stop-color="#f5f6f2"/></linearGradient>
+      <linearGradient id="field-mountain" x2="0" y2="1"><stop stop-color="#91adb5"/><stop offset="1" stop-color="#c9d9d9"/></linearGradient>
+      <pattern id="field-water" width="90" height="22" patternUnits="userSpaceOnUse"><path d="M0 11h36m18 0h9" stroke="#8ba9b2" stroke-width=".7" opacity=".3"/></pattern>
+    </defs>
+    <path fill="url(#field-sky)" d="M0 0h1200v540H0z"/>
+    <circle cx="925" cy="145" r="61" fill="#f9f7e8"/>
+    <g class="field-cloud" fill="none" stroke="#fff" stroke-width="2" opacity=".65"><path d="M670 98h150m-95 14h190m92 101h100m-140 12h90"/></g>
+    <path d="M480 361 682 174l96 90 92-47 126 117 71-29 133 71v164H480Z" fill="#d2dfe0"/>
+    <path d="m650 384 163-160 55 98 106-40 226 162v96H650Z" fill="url(#field-mountain)"/>
+    <path d="m682 174 20 89 76 1m35-40-22 121 77-23 106-40" fill="none" stroke="#f3f6f4" stroke-width="2" opacity=".65"/>
+    <path d="M0 426q250-30 460-1t740-10v125H0Z" fill="#dce7e6"/>
+    <path d="M0 440h1200v100H0z" fill="url(#field-water)"/>
+    <g fill="none" stroke="#6d8992" stroke-width="1.3" opacity=".65"><path d="m967 369 41-13 41 13m-71-3v44m60-44v44m-68 0h77m-65-30h51"/><path d="M980 412h58m-76 9h92"/></g>
+  </svg>
+  <div class="field-hero__copy">
+    <p class="field-signature">Zpero’s field notes</p>
+    <h1 id="home-title">把问题想透，<br/>把过程写下。</h1>
+    <p class="field-description">从一行代码到系统背后的原理。<br/>这里收集 Java 后端、并发编程与项目实践中的思考。</p>
+    <a class="field-cta" href="#latest">翻开手记 <span aria-hidden="true">↗</span></a>
+  </div>
+  <div class="field-hero__caption"><span>在代码之间，留一点风景。</span><button type="button" id="hero-motion" aria-pressed="false" hidden>暂停背景动画</button></div>
+</section>
+<script>
+  const hero = document.querySelector<HTMLElement>('.field-hero');
+  const button = document.querySelector<HTMLButtonElement>('#hero-motion');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  let paused = reduced.matches;
+  let visible = true;
+  const sync = () => {
+    hero?.classList.toggle('motion-paused', paused || reduced.matches || document.hidden || !visible);
+    if (button) {
+      button.hidden = reduced.matches;
+      button.setAttribute('aria-pressed', String(paused));
+      button.textContent = paused ? '播放背景动画' : '暂停背景动画';
+    }
+  };
+  button?.addEventListener('click', () => { paused = !paused; sync(); });
+  reduced.addEventListener('change', sync);
+  document.addEventListener('visibilitychange', sync);
+  if (hero) new IntersectionObserver(entries => { visible = entries[0].isIntersecting; sync(); }).observe(hero);
+  sync();
+</script>
