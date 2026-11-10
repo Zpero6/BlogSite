@@ -4,8 +4,8 @@ description: "从工作线程、任务队列和拒绝策略出发，理解 Java 
 pubDate: 2026-03-01
 category: "后端笔记"
 tags: ["Java", "并发编程", "线程池"]
-cover: "thread-pool-management.jpg"
-coverAlt: "世界名画风格的二次创作构成的线程池文章封面"
+cover: "thread-pool-management-winter.jpg"
+coverAlt: "冬日开阔风景构成的线程池文章封面"
 draft: false
 ---
 

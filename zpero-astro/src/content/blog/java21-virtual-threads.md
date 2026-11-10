@@ -4,8 +4,8 @@ description: "从平台线程的资源成本出发，理解 JDK 21 虚拟线程�
 pubDate: 2026-03-02
 category: "后端笔记"
 tags: ["Java", "并发编程", "虚拟线程"]
-cover: "java21-virtual-threads.png"
-coverAlt: "紫色线稿风格的二次元人物构成的虚拟线程文章封面"
+cover: "java21-virtual-threads-winter.jpg"
+coverAlt: "冬日围巾与柔和光影构成的虚拟线程文章封面"
 draft: false
 ---
 

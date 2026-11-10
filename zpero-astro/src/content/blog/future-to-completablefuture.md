@@ -4,8 +4,8 @@ description: "从线程池执行任务出发，理解 Future 的结果获取与 
 pubDate: 2026-03-03
 category: "后端笔记"
 tags: ["Java", "并发编程", "CompletableFuture"]
-cover: "future-to-completablefuture.jpg"
-coverAlt: "夕阳街景与二次元人物构成的异步编程文章封面"
+cover: "future-to-completablefuture-cat.jpg"
+coverAlt: "治愈系小黑猫构成的异步编程文章封面"
 draft: false
 ---
 

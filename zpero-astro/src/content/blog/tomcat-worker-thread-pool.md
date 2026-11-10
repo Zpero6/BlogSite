@@ -4,8 +4,8 @@ description: "沿着一次 HTTP 请求的执行链路，梳理 Tomcat Worker 线
 pubDate: 2026-03-04
 category: "后端笔记"
 tags: ["Java", "并发编程", "Tomcat"]
-cover: "tomcat-worker-thread-pool.jpg"
-coverAlt: "世界名画风格的二次创作构成的 Tomcat 线程文章封面"
+cover: "tomcat-worker-thread-pool-wall.jpg"
+coverAlt: "墙头与动漫人物构成的 Tomcat 线程文章封面"
 draft: false
 ---
 
