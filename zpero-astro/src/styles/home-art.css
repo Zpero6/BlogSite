@@ -1,0 +1,42 @@
+/* A quiet frame for the existing illustration; content and geometry stay intact. */
+body:has(.journal-home) {
+  background:
+    radial-gradient(ellipse 70% 620px at 8% 180px, #dce9e43d, transparent 75%),
+    radial-gradient(ellipse 60% 560px at 95% 450px, #dfe7ed38, transparent 75%),
+    #fafafa;
+}
+.journal-home .journal-hero {
+  position: relative;
+  isolation: isolate;
+  border-color: #7c948c33;
+  box-shadow: 0 22px 55px -36px #46625b66, 0 3px 12px #46625b08;
+}
+.journal-home .journal-hero::before,
+.journal-home .journal-hero::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+  border-radius: inherit;
+}
+.journal-home .journal-hero::before {
+  inset: 7px;
+  border: 1px solid #ffffff55;
+  border-radius: 10px;
+  box-shadow: 0 0 0 7px #ffffff06;
+}
+.journal-home .journal-hero::after {
+  inset: 0;
+  background: radial-gradient(ellipse 480px 280px at var(--art-x, 70%) var(--art-y, 25%), #fff8dc24, transparent 75%);
+  opacity: 0;
+  transition: opacity .65s ease;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .journal-home .journal-hero.is-art-lit::after { opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .journal-home .journal-hero img { translate: 0 var(--art-scroll, 0px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .journal-home .journal-hero::after { display: none; }
+}

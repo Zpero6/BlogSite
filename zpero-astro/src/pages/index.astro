@@ -8,6 +8,7 @@ import { projects } from '../data/projects';
 import JournalColumns from '../components/JournalColumns.astro';
 import { getPublishedPosts } from '../lib/posts';
 import '../styles/discovery.css';
+import '../styles/home-art.css';
 const posts = await getPublishedPosts();
 ---
 <BaseLayout journal><JournalColumns />
@@ -22,5 +23,6 @@ const posts = await getPublishedPosts();
     <section aria-labelledby="projects-heading"><div class="journal-section-heading"><h2 id="projects-heading">项目</h2><a class="journal-button" href="/projects/">查看全部 →</a></div><div class="journal-home-posts">{projects.map((project) => <ProjectCard project={project} preview />)}</div></section>
   </main>
 </BaseLayout>
+<script>import '../scripts/home-art';</script>
 
 
