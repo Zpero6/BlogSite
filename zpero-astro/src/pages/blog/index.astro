@@ -8,8 +8,8 @@ const categories = ['后端笔记', '人工智能', '项目沉淀', '生活随�
 ---
 <BaseLayout journal title="文章 · Zpero" description="Zpero 的技术笔记、项目实践和日常记录。">
   <main class="archive-page discovery-page">
+    <header class="archive-heading"><div><p>每次理解，都值得留下一页。</p><h1>文章手记</h1></div><p>关于后端原理、工程实践与学习过程。<br/>选一个主题，或者搜索一个你正在思考的问题。</p></header>
     <div class="archive-toolbar"><a class="journal-button" href="/">← 返回首页</a><nav class="category-filters" aria-label="文章分类">{['全部', ...categories].map((category, index) => <button type="button" data-category={index === 0 ? '' : category} aria-pressed={index === 0 ? 'true' : 'false'}>{category}</button>)}</nav><span class="archive-total">{posts.length} 篇文章</span></div>
-    <h1 class="sr-only">文章</h1>
     <div class="archive-results" aria-live="polite" aria-atomic="true"><span id="filter-summary">全部文章</span><button type="button" id="clear-tag" hidden>清除标签筛选 ×</button><span id="filter-count">{posts.length} 篇</span></div>
     <div class="archive-grid">{posts.map((post) => <div class="archive-item" data-post-category={post.data.category} data-post-tags={JSON.stringify(post.data.tags)}><PostCard post={post} /></div>)}</div>
     <div class="archive-empty" hidden><h2>这里还没有文章</h2><p>这个主题的笔记正在慢慢积累，先看看其他文章吧。</p><button class="journal-button" type="button" id="reset-category">查看全部文章</button></div>
